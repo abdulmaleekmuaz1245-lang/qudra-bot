@@ -1,13 +1,16 @@
 const express = require('express');
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
 const QRCode = require('qrcode');
-const { Boom } = require('@hapi/boom');
 
 const app = express();
 let qrImage = null;
 let botIsLive = false;
 const PORT = process.env.PORT || 10000;
 const RENDER_URL = process.env.RENDER_EXTERNAL_URL || 'https://qudra-bot.onrender.com';
+
+// CONFIG - YOUR NUMBERS
+const BOT_NUMBER = "2348121521859"; // Bot second number
+const OWNER_NUMBER = "2347043718956"; // Your main number
 
 setInterval(() => { fetch(RENDER_URL).catch(()=>{}); }, 14*60*1000);
 
@@ -19,15 +22,12 @@ async function startQudra() {
         browser: ["Qudra","Chrome","1.0"]
     });
 
-    // === PAIRING CODE - CHANGE YOUR NUMBER HERE ===
-    const MY_NUMBER = "2348100000000"; // <-- Put your WhatsApp number here! No +
-
+    // Pairing code for BOT number
     if (!sock.authState.creds.registered) {
         setTimeout(async () => {
             try {
-                let code = await sock.requestPairingCode(MY_NUMBER);
-                console.log(`\n\n====== QUDRA PAIRING CODE ======\nNUMBER: ${MY_NUMBER}\nCODE: ${code}\n==============================\n`);
-                console.log(`Go to WhatsApp > Settings > Linked Devices > Link with phone number > Enter ${code}`);
+                let code = await sock.requestPairingCode(BOT_NUMBER);
+                console.log(`\n\n========== QUDRA PAIRING ==========\nBOT NUMBER: ${BOT_NUMBER}\nCODE: ${code}\nOWNER: ${OWNER_NUMBER}\n===================================\n`);
             } catch(e) {
                 console.log("Pairing error:", e.message);
             }
@@ -45,7 +45,11 @@ async function startQudra() {
         } else if (connection === 'open') {
             botIsLive = true;
             qrImage = null;
-            console.log('QUDRA LIVE 24/7!');
+            console.log('✅ QUDRA LIVE 24/7!');
+            // Notify owner that bot is live
+            try {
+                await sock.sendMessage(OWNER_NUMBER + "@s.whatsapp.net", { text: "✅ Qudra is now LIVE 24/7! Bot number: " + BOT_NUMBER + " is active. Created by AbdulMalik, loyal forever." });
+            } catch {}
         }
     });
 
@@ -55,21 +59,12 @@ async function startQudra() {
         const from = msg.key.remoteJid;
         const text = msg.message.conversation || msg.message.extendedTextMessage?.text || "";
         if (!text) return;
+        const isOwner = from === OWNER_NUMBER + "@s.whatsapp.net";
+
         await sock.sendPresenceUpdate('composing', from);
+
         let reply = null;
-        if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
-            reply = `Qudra here! You said: ${text}. Created by AbdulMalik, loyal forever!`;
-        } else if (text.toLowerCase().includes("who created you")) {
-            reply = "I am Qudra, created by AbdulMalik - my loyal creator for 300 years legacy.";
-        } else {
-            reply = `You said: ${text}`;
-        }
-        if (reply) await sock.sendMessage(from, { text: reply });
-    });
-}
+        const lower = text.toLowerCase();
 
-startQudra();
-
-app.get('/', (req,res)=>{
-    if (botIsLive) return res.send("<h1 style='text-align:center;margin-top:100px'>✅ Qudra LIVE 24/7!</h1>");
-    if (qrImage) return res.send(`<center><h1>QR Available</h1><img src='${qrImage}'/><p>Or use Pairing Code from Render Logs</p></
+        if (lower === 'hi' || lower === 'hello') {
+            reply = isOwner ? `Welcome my Owner! Qudra here, fully active for you. You said: ${text}` : `Qudra here! You said: ${text}. Created by AbdulMalik,
