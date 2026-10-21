@@ -1,0 +1,1 @@
+{"name":"qudra-bot","version":"1.0.0","main":"index.js","scripts":{"start":"node index.js"},"dependencies":{"express":"^4.18.2","@whiskeysockets/baileys":"^6.7.8","qrcode":"^1.5.3","@hapi/boom":"^10.0.1"}}
