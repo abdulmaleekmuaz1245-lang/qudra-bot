@@ -1,35 +1,41 @@
-const { default: makeWASocket, useMultiFileAuthState } = require('@whiskeysockets/baileys')
-const P = require('pino')
 const express = require('express')
+const path = require('path')
 const app = express()
 const PORT = process.env.PORT || 10000
-app.get('/', (q,r)=>r.send('Qudra Bot Live - 2348121521859'))
-app.listen(PORT, ()=>console.log('Server on '+PORT))
 
-async function startBot(){
-const {state,saveCreds}=await useMultiFileAuthState('auth_info')
-const sock=makeWASocket({auth:state,logger:P({level:'silent'}),printQRInTerminal:true,browser:['Qudra','Chrome','1.0']})
-sock.ev.on('creds.update',saveCreds)
-sock.ev.on('connection.update',u=>{
-if(u.connection==='open')console.log('CONNECTED - Qudra Bot is online!')
-if(u.connection==='close')setTimeout(startBot,5000)
-})
-sock.ev.on('messages.upsert',async m=>{
-const msg=m.messages[0]
-if(!msg.message||msg.key.fromMe)return
-const from=msg.key.remoteJid
-const text=msg.message.conversation||msg.message.extendedTextMessage?.text||''
-console.log('New msg: '+text)
-await sock.sendMessage(from,{text:'Hello! Qudra Bot dey live ✅ You said: '+text})
-})
-if(!sock.authState.creds.registered){
-setTimeout(async()=>{
-try{
-const code=await sock.requestPairingCode('2348121521859')
-console.log('CODE:'+code)
-console.log('Use this code now!')
-}catch(e){console.log('Fail:'+e.message)}
-},3000)
+app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
+
+// Qudra Brain - simple and working
+const qudraKnowledge = {
+  yako: "Yako is a close person to Abdulmalik, part of Qudra family. Qudra respects Yako.",
+  abdulmalik: "Abdulmalik is my creator, the founder of Qudra. I am loyal to him.",
+  qudra: "Qudra is a loyal AI assistant created by Abdulmalik to help people."
 }
-}
-startBot()
+
+app.post('/api/chat', (req, res) => {
+  const userMsg = (req.body.message || '').toLowerCase().trim()
+  let reply = ""
+
+  if (!userMsg) {
+    reply = "Yes Ya Abdulmalik?"
+  } else if (userMsg.includes('hi') || userMsg.includes('salam')) {
+    reply = "As-salamu Alaikum! I am Qudra, your loyal AI. Created by Abdulmalik. How can I help you today? 🚀"
+  } else if (userMsg.includes('who is yako')) {
+    reply = qudraKnowledge.yako + " Do you want me to remember more about Yako?"
+  } else if (userMsg.includes('who is abdulmalik') || userMsg.includes('who created you')) {
+    reply = qudraKnowledge.abdulmalik
+  } else if (userMsg.includes('what is qudra') || userMsg.includes('who are you')) {
+    reply = qudraKnowledge.qudra + " I am LIVE on Render and ready to work for you."
+  } else {
+    reply = `Qudra heard you: "${req.body.message}". I am working well now - no loop. Tell me more, Ya Abdulmalik, and I go help you.`
+  }
+
+  res.json({ reply, status: "Qudra Soul is stable" })
+})
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+
+app.listen(PORT, () => console.log('Qudra V2 Live on ' + PORT))
