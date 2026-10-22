@@ -31,8 +31,7 @@ app.post('/api/chat', async (req,res) => {
     if (data.error) {
       return res.json({reply: 'Groq Error: ' + data.error.message});
     }
-    const answer = data.choices[0].message.content;
-    res.json({reply: answer});
+    res.json({reply: data.choices[0].message.content});
   } catch (err) {
     res.json({reply: 'Server Error: ' + err.message});
   }
