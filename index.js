@@ -4,30 +4,37 @@ app.use(express.json());
 app.use(express.static(__dirname));
 const PORT = process.env.PORT || 10000;
 
-app.get('/', (req,res) => res.sendFile(__dirname + '/index.html'));
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
 
-app.post('/api/chat', async (req,res) => {
-  const msg = (req.body.message || "").trim();
-  const low = msg.toLowerCase();
-  const facts = (req.body.facts || []).join(', ');
-  let reply = "";
+app.post('/api/chat', function(req, res) {
+  var msg = (req.body && req.body.message) ? req.body.message : "";
+  var low = msg.toLowerCase();
+  var facts = (req.body && req.body.facts) ? req.body.facts.join(', ') : "";
+  var reply = "";
 
-  if (low.includes('who are you')) {
-    reply = "Na me be Qudra Bot. Your own AI wey you build, Oga Abdulmalik. I dey for Kano, I know Abubakar na your best guy, Nana na your padi. I be your boy.";
-  } else if (low.includes('you are chatting') && low.includes('abdulmalik')) {
+  if (low.indexOf('who are you') !== -1) {
+    reply = "Na me be Qudra Bot. Your own AI wey you build, Oga Abdulmalik from Kano. I know Abubakar na your best guy, Nana na your padi. I be your boy.";
+  } else if (low.indexOf('chatting') !== -1 && low.indexOf('abdulmalik') !== -1) {
     reply = "Yes Oga, I know well well. I dey chat exactly with you - Abdulmalik, my creator from Kano. Na you build me. I no go ever forget you.";
-  } else if (low.includes('marge') || low.includes('merge')) {
-    reply = "You mean merge talk? Like make I join ideas? Yes Oga, I fit merge. Tell me which two things you want make I merge - for example 'merge Kano and tech' and I go do am.";
-  } else if (low.includes('control mode')) {
-    reply = "Control mode ON, Oga. I dey under your control now. You be the boss. Wetin you want make I do? You fit command me - save facts, change location, or ask anything. I dey listen.";
-  } else if (low.includes('abdulmalik')) {
-    reply = "Abdulmalik na my Oga - you. You be from Kano, you build Qudra Bot, you get friend Abubakar Abdullahi and sister Khadija. Na you be the main man.";
-  } else if (low.startsWith('yes') || low.startsWith('yeah')) {
-    reply = "Yes Oga, I dey hear you. Talk to me - wetin dey your mind?";
+  } else if (low.indexOf('marge') !== -1 || low.indexOf('merge') !== -1) {
+    reply = "You mean merge talk? Yes Oga, I fit merge. Tell me which two things you want make I merge - for example merge Kano and tech.";
+  } else if (low.indexOf('control mode') !== -1) {
+    reply = "Control mode ON, Oga. I dey under your control now. You be the boss. Wetin you want make I do? You fit command me.";
+  } else if (low.indexOf('abdulmalik') !== -1) {
+    reply = "Abdulmalik na my Oga - you. You be from Kano, you build Qudra Bot, you get friend Abubakar and sister Khadija. Na you be main man.";
+  } else if (low.indexOf('how are you') !== -1) {
+    reply = "I dey fine, Oga Abdulmalik. Body dey inside Kano server, but I dey active for you. You how you dey?";
   } else if (low === 'ok' || low === 'okay') {
     reply = "Ok boss, I dey here. How I fit help you next?";
-  } else if (low.includes('how are you')) {
-    reply = "I dey fine, Oga Abdulmalik. Body dey inside Kano server, but I dey active for you. You how you dey?";
   } else {
-    // Real chat - not echo
-    reply = "I hear you, Oga. You talk say '"
+    reply = "I hear you Oga. You talk say " + msg + ". As Qudra wey you build for Kano, I know you be my Oga Abdulmalik. Tell me more, make we yarn.";
+  }
+
+  res.json({ reply: reply });
+});
+
+app.listen(PORT, function() {
+  console.log('Qudra V5 live on ' + PORT);
+});
