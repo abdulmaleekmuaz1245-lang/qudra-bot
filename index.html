@@ -10,11 +10,25 @@
 const c=document.getElementById('c'),i=document.getElementById('i');
 let facts=JSON.parse(localStorage.getItem('qf')||'[]');
 function a(t,w){let d=document.createElement('div');d.className='m '+w;d.innerText=t;c.appendChild(d);c.scrollTop=c.scrollHeight}
-a('Qudra ready! I remember: '+(facts.join(', ')||'nothing yet')+'. Try: save Nana is my friend','b');
+a('Qudra ready! I remember: '+(facts.join(', ')||'nothing yet')+'. Type: save I live in Kano','b');
+function trySave(msg){
+  let lower=msg.toLowerCase();
+  if(lower.includes('save')){
+    let f=msg.substring(lower.indexOf('save')+4).replace(/^my /i,'').trim();
+    if(f.startsWith('as ')) f=f.slice(3);
+    if(f.length>2){
+      facts.push(f); localStorage.setItem('qf', JSON.stringify(facts));
+      a('✅ Saved! Now I know: '+f,'b');
+      if(f.toLowerCase().includes('kano')) a('✅ Location updated to Kano! Oga from Kano!','b');
+      return true;
+    }
+  }
+  return false;
+}
 async function s(){
  let msg=i.value.trim(); if(!msg)return; a(msg,'u'); i.value='';
- if(msg.toLowerCase().startsWith('save ')){let f=msg.slice(5);facts.push(f);localStorage.setItem('qf',JSON.stringify(facts));a('✅ Saved: '+f,'b');return;}
- try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,facts:facts})});let d=await r.json();a(d.reply,'b');}catch(e){a('Network too slow (0.22k/s), but I saved your msg. Try again','b');}
+ if(trySave(msg)) return;
+ try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,facts:facts})});let d=await r.json();a(d.reply,'b');}catch(e){a('I be Qudra by Abdulmalik from Kano! I hear you: '+msg,'b');}
 }
 i.addEventListener('keypress',e=>{if(e.key==='Enter')s()});
 </script></body></html>
