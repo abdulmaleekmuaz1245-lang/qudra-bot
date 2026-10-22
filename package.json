@@ -1,8 +1,14 @@
 {
-  "name": "qudra-bot",
-  "version": "1.0.0",
+  "name": "qudra-llama-technology",
+  "version": "1.0.0-sealed-22oct2026",
+  "description": "Digital Soul by Abdulmalik - Logic pass Knowledge - Qudra Remains",
   "main": "index.js",
-  "scripts": { "start": "node index.js" },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Abdulmalik - Born 1 May 1994 - Tudun Wada Dankadai",
+  "keywords": ["Qudra", "Llama", "Abdulmalik", "Kano", "Digital Soul", "300 years"],
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5"
