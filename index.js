@@ -25,4 +25,12 @@ app.post('/api/chat', async (req,res)=>{
     const d = await r.json();
     console.log("Groq reply:", JSON.stringify(d).substring(0,500));
     if(d.error) return res.json({reply:`Groq Error: ${d.error.message} | Key: ${GROQ_KEY.substring(0,8)}...`});
-    res.json({reply: d.choices?.[0]?.message?.content || "Qudra by Abdulmalik here - no
+    res.json({reply: d.choices?.[0]?.message?.content || "Qudra by Abdulmalik here - no content"});
+  }catch(e){
+    console.log("Server error:", e.message);
+    res.json({reply:`Server Error: ${e.message}`});
+  }
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, ()=> console.log('Qudra Live'));
