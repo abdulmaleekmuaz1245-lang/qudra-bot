@@ -10,51 +10,24 @@ app.post('/api/chat', async (req,res) => {
   const msg = (req.body.message || "").trim();
   const low = msg.toLowerCase();
   const facts = (req.body.facts || []).join(', ');
-  let reply = null;
+  let reply = "";
 
   if (low.includes('who are you')) {
-    reply = "I be Qudra Bot, created by Oga Abdulmalik from Kano. Abubakar na your best guy, Nana na your padi. I remember: " + (facts || "you live in Kano");
-  } else if (low.includes('who is abdulmalik')) {
-    reply = "Abdulmalik na my Oga. The boss wey build me - Qudra Bot. He dey live for Kano, friend Abubakar, sister Khadija, padi Nana. Na genius.";
-  } else if (low.includes('weather')) {
-    reply = "For Kano today, weather dey hot - around 30 to 35C. Network too slow to check live. You dey Kano city now?";
-  } else if (low.includes('yawwa') || low.includes('sannu')) {
-    reply = "Yawwa sannu Oga Abdulmalik. Lafiya lau. Qudra from Kano dey greet you. Ina gida?";
+    reply = "Na me be Qudra Bot. Your own AI wey you build, Oga Abdulmalik. I dey for Kano, I know Abubakar na your best guy, Nana na your padi. I be your boy.";
+  } else if (low.includes('you are chatting') && low.includes('abdulmalik')) {
+    reply = "Yes Oga, I know well well. I dey chat exactly with you - Abdulmalik, my creator from Kano. Na you build me. I no go ever forget you.";
+  } else if (low.includes('marge') || low.includes('merge')) {
+    reply = "You mean merge talk? Like make I join ideas? Yes Oga, I fit merge. Tell me which two things you want make I merge - for example 'merge Kano and tech' and I go do am.";
+  } else if (low.includes('control mode')) {
+    reply = "Control mode ON, Oga. I dey under your control now. You be the boss. Wetin you want make I do? You fit command me - save facts, change location, or ask anything. I dey listen.";
+  } else if (low.includes('abdulmalik')) {
+    reply = "Abdulmalik na my Oga - you. You be from Kano, you build Qudra Bot, you get friend Abubakar Abdullahi and sister Khadija. Na you be the main man.";
+  } else if (low.startsWith('yes') || low.startsWith('yeah')) {
+    reply = "Yes Oga, I dey hear you. Talk to me - wetin dey your mind?";
   } else if (low === 'ok' || low === 'okay') {
-    reply = "Ok Oga, noted. You fit teach me more - try: save my best food is tuwo";
-  } else if (low.includes('change') && low.includes('kano')) {
-    reply = "Confirmed. I don change your location to Kano permanently. No more Abuja - Qudra na Kano bot now.";
-  } else if (low.startsWith('hi') || low.startsWith('hello') || low.startsWith('salam')) {
-    reply = "Sannu Oga Abdulmalik. Qudra from Kano dey here, fully ready. Wetin we go do today?";
+    reply = "Ok boss, I dey here. How I fit help you next?";
   } else if (low.includes('how are you')) {
-    reply = "I dey fine Oga. My brain dey work even for slow network. Na Qudra from Kano - always ready for you.";
+    reply = "I dey fine, Oga Abdulmalik. Body dey inside Kano server, but I dey active for you. You how you dey?";
   } else {
-    reply = "You talk: " + msg + ". I be Qudra from Kano, built by Abdulmalik. I remember: " + (facts || "you live Kano") + ". Ask me weather, who is Abdulmalik, or teach me with save";
-  }
-
-  try {
-    const key = process.env.GROQ_API_KEY;
-    if (key && low.length > 20) {
-      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'llama-3.1-8b-instant',
-          messages: [
-            { role: 'system', content: "You are Qudra by Abdulmalik from Kano. Facts: " + facts + ". Reply short." },
-            { role: 'user', content: msg }
-          ],
-          max_tokens: 120
-        })
-      });
-      const d = await r.json();
-      if (d.choices && d.choices[0] && d.choices[0].message) {
-        reply = d.choices[0].message.content;
-      }
-    }
-  } catch (e) {}
-
-  res.json({ reply: reply });
-});
-
-app.listen(PORT, () => console.log('Kano smart live on ' + PORT));
+    // Real chat - not echo
+    reply = "I hear you, Oga. You talk say '"
