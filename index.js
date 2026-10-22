@@ -1,50 +1,61 @@
-const express=require('express');
-const app=express();
-app.get('/',(r,s)=>s.send('Qudra online'));
-app.listen(process.env.PORT||10000,()=>console.log('Port open'));
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 10000;
+const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = require('@whiskeysockets/baileys');
+const P = require('pino');
 
-const {default:makeWASocket,useMultiFileAuthState,fetchLatestBaileysVersion,makeCacheableSignalKeyStore}=require('@whiskeysockets/baileys');
-const BOT="2348121521859";
+const BOT_NUMBER = '2348121521859'; // your bot number, no +
 
-async function start(){
-const {version}=await fetchLatestBaileysVersion();
-const {state,saveCreds}=await useMultiFileAuthState('qudra_final_auth');
-const sock=makeWASocket({version,auth:{creds:state.creds,keys:makeCacheableSignalKeyStore(state.keys,console.log)},browser:["Qudra Bot","Chrome","1.0"],printQRInTerminal:false});
-sock.ev.on('creds.update',saveCreds);
+async function startBot() {
+    const { version } = await fetchLatestBaileysVersion();
+    const { state, saveCreds } = await useMultiFileAuthState('auth');
 
-if(!sock.authState.creds.registered){
-  console.log("Connected to WA, waiting 15sec before CODE...");
-  await new Promise(r=>setTimeout(r,15000));
-  try{
-    let code=await sock.requestPairingCode(BOT);
-    console.log("\n==== QUDRA CODE ====");
-    console.log(code.match(/.{1,4}/g)?.join("-") || code);
-    console.log("Raw CODE:"+code);
-    console.log("====================\n");
-  }catch(e){console.log("First try fail:"+e.message);}
+    const sock = makeWASocket({
+        version,
+        auth: {
+            creds: state.creds,
+            keys: makeCacheableSignalKeyStore(state.keys, P({ level: 'silent' }))
+        },
+        logger: P({ level: 'silent' }),
+        printQRInTerminal: false,
+        browser: ['Qudra Bot', 'Chrome', '1.0']
+    });
 
-  setInterval(async()=>{
-    try{
-      let code=await sock.requestPairingCode(BOT);
-      console.log("\n==== NEW CODE ====");
-      console.log(code.match(/.{1,4}/g)?.join("-") || code);
-      console.log("Raw CODE:"+code);
-    }catch(e){console.log("Retry:"+e.message)}
-  },60000);
+    sock.ev.on('creds.update', saveCreds);
+
+    sock.ev.on('connection.update', async (update) => {
+        const { connection, lastDisconnect } = update;
+        if (connection === 'close') {
+            console.log('Connection closed, restarting...');
+            startBot();
+        } else if (connection === 'open') {
+            console.log('✅ QUDRA BOT CONNECTED!');
+        }
+    });
+
+    // Pairing code - wait 15 sec after start
+    if (!sock.authState.creds.registered) {
+        setTimeout(async () => {
+            try {
+                const code = await sock.requestPairingCode(BOT_NUMBER);
+                console.log('==================================');
+                console.log('===== QUDRA CODE =====');
+                console.log(code);
+                console.log('Raw CODE:', code.replace(/-/g,''));
+                console.log('Use this in WhatsApp > Linked Devices > Link with phone number');
+                console.log('==================================');
+            } catch (e) {
+                console.log('Failed to get code:', e.message);
+            }
+        }, 15000);
+    }
 }
 
-sock.ev.on('connection.update',async(u)=>{
-  if(u.connection==='open') console.log('QUDRA CONNECTED! BY ABDULMALIK');
-  if(u.connection==='close'){
-    console.log("Connection closed, restarting in 5s...");
-    setTimeout(start,5000);
-  }
+app.get('/', (req, res) => {
+    res.send('Qudra Bot is running! Check logs for pairing code.');
 });
 
-sock.ev.on('messages.upsert',async m=>{
-  const msg=m.messages[0]; if(!msg?.message) return;
-  const txt=msg.message.conversation||msg.message.extendedTextMessage?.text||"";
-  if(txt) await sock.sendMessage(msg.key.remoteJid,{text:"Qudra by AbdulMalik: "+txt});
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
+    startBot();
 });
-}
-start();
