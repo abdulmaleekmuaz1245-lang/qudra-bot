@@ -1,9 +1,7 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
@@ -16,7 +14,7 @@ app.get('/', (req, res) => {
 app.post('/api/chat', async (req, res) => {
   try {
     const userMsg = req.body.message;
-    if (!GROQ_KEY) return res.json({ reply: "Add GROQ_API_KEY for Render first!" });
+    if (!GROQ_KEY) return res.json({ reply: "GROQ_API_KEY never add yet! I am Qudra by Abdulmalik." });
 
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -24,20 +22,18 @@ app.post('/api/chat', async (req, res) => {
       body: JSON.stringify({
         model: 'llama-3.1-8b-instant',
         messages: [
-          { role: 'system', content: 'You are Qudra Bot, created by Abdulmalik. You are loyal to Abdulmalik, helpful, smart, concise, friendly. Never say you are Meta AI or ChatGPT. Always say Abdulmalik created you.' },
+          { role: 'system', content: 'You are Qudra Bot, created by Abdulmalik. Loyal, helpful, smart. Never say you are Meta AI or ChatGPT.' },
           { role: 'user', content: userMsg }
-        ],
-        temperature: 0.7
+        ]
       })
     });
     const d = await r.json();
-    const reply = d.choices?.[0]?.message?.content || "I am Qudra by Abdulmalik, try again.";
-    res.json({ reply });
+    res.json({ reply: d.choices?.[0]?.message?.content || "I am Qudra by Abdulmalik." });
   } catch (e) {
     console.error(e);
-    res.json({ reply: "Brain error - check key, I am Qudra by Abdulmalik." });
+    res.json({ reply: "Brain error, try again. Qudra by Abdulmalik." });
   }
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log('Qudra Full Brain Live'));
+app.listen(PORT, () => console.log('Qudra Live'));
