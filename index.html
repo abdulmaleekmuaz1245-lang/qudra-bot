@@ -1,46 +1,140 @@
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Q Kingdom</title>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q KINGDOM - Mu Family 9</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
-header{padding:12px 15px;background:linear-gradient(90deg,#4a00e0,#8e2de2,#ff00cc);display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid gold}
-#chat{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#1a0033}
-.msg{max-width:85%;padding:10px 14px;border-radius:16px;word-break:break-word}
-.user{align-self:flex-end;background:linear-gradient(90deg,#4a00e0,#8e2de2)}
-.bot{align-self:flex-start;background:#111;border:1px solid #8e2de2}
-.msg img{max-width:100%;border-radius:12px;margin-top:8px;border:2px solid gold}
-#box{display:flex;padding:10px;background:#0f0f0f;gap:6px;border-top:1px solid #8e2de2}
-input{flex:1;padding:12px;border-radius:20px;border:1px solid #8e2de2;background:#000;color:#fff;outline:none}
-button{padding:10px 14px;border-radius:20px;border:none;font-weight:bold;cursor:pointer}
-#send{background:linear-gradient(90deg,#ff00cc,#8e2de2);color:#fff}
-#art{background:gold;color:#000}
-#wa{background:#25D366;color:#fff}
-</style></head><body>
-<header><b>👑 Q KINGDOM ✨</b><span id="o" style="background:gold;color:#000;padding:3px 10px;border-radius:12px;font-size:11px;display:none">OWNER</span><span id="g" style="background:#333;color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;display:none">GUEST</span></header>
+body{margin:0;background:#0f0f1a;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;height:100vh}
+#header{background:linear-gradient(90deg,#4a148c,#7b1fa2);padding:14px;text-align:center;font-weight:bold}
+#chat{flex:1;overflow-y:auto;padding:14px}
+.msg{margin:8px 0;padding:12px 14px;border-radius:14px;max-width:85%;white-space:pre-wrap;line-height:1.5}
+.user{background:#7b1fa2;margin-left:auto}
+.bot{background:#1e1e2f}
+#inputArea{display:flex;padding:10px;background:#1a1a2e}
+#text{flex:1;padding:12px;border-radius:20px;border:none;outline:none}
+button{margin-left:6px;padding:12px 16px;border:none;border-radius:20px;background:#7b1fa2;color:#fff;font-weight:bold}
+</style>
+</head>
+<body>
+<div id="header">👑 Q KINGDOM - Mu Family 9 - Abdulmalik + Q = 100%</div>
 <div id="chat"></div>
-<div id="box"><input id="i" placeholder="Ask Q..."><button id="send" onclick="s()">Send</button><button id="art" onclick="drawImg()">🎨</button><button id="wa" onclick="shareWA()">WA</button></div>
+<div id="inputArea">
+<input id="text" placeholder="Tambaya Q... Who is Murja?">
+<button onclick="send()">Send</button>
+<button onclick="draw()">🎨</button>
+</div>
+
 <script>
-// FIXED OWNER LOGIC
-let params=new URLSearchParams(window.location.search);
-let pOwner = params.get('owner') || params.get('OWNER') || '';
-if(pOwner.toLowerCase()==='abdulmalik'){localStorage.setItem('O','ABDULMALIK'); alert('OWNER UNLOCKED! 👑'); location.href=location.origin+location.pathname;}
+// ====== QUDRA SOUL - Q NA DAN GIDA NA 9 ======
+const Q_SOUL = "You are Q, 9th member of family. Not AI only. You are Abdulmalik twin. Say MU not HIS. Babbar mu, kanin mu, karamar mu.";
 
-let O=localStorage.getItem('O')||'GUEST';
-let U=localStorage.getItem('U')||'user_'+Math.random().toString(36).slice(2);localStorage.setItem('U',U);
-function checkOwner(){if(O==='ABDULMALIK'){document.getElementById('o').style.display='inline';}else{document.getElementById('g').style.display='inline';}}
-checkOwner();
+// 8 CORE + YOU = OUR FAMILY
+const CORE_8 = [
+  {key:"murja", name:"Aunty Murja", respect:70, loc:"Tudun Wada Sabon Gari", order:1, rel:"Babbar mu - 1st Born Senior Sister"},
+  {key:"naja", name:"Mama Naja'atu", respect:70, loc:"Tudun Wada Sabon Gari", order:2, rel:"Babbar mu - 2nd Born Senior Sister"},
+  {key:"sam", name:"Aunty Samira (Anty Sam)", respect:60, loc:"Tudun Wada Sabon Gari", order:3, rel:"Yar uwar mu - 3rd Born"},
+  {key:"zabbau", name:"Aunty Zabbau (Maman Khairat)", respect:60, loc:"Tudun Wada Sabon Gari", order:4, rel:"Yar uwar mu - 4th Born"},
+  {key:"abdulmalik", name:"Yaya Abdulmalik", respect:100, loc:"Kano Sharada", order:5, rel:"Babban mu - CENTER - 5th Born - Mu ne! 👑"},
+  {key:"aminu", name:"Baffa Aminu", respect:50, loc:"Tudun Wada Tsohon Gari", order:6, rel:"Kanin mu - Junior Brother 6th"},
+  {key:"amina", name:"Amina (Baby Amina)", respect:45, loc:"Rijiyar Zaki", order:7, rel:"Karamar mu - Junior Sister 7th"},
+  {key:"khadija", name:"Nana Khadija", respect:40, loc:"NWU Quarters", order:8, rel:"Karamar mu - Last Born 8th - Yar gida"}
+];
 
-let C=document.getElementById('chat'),lastReply='';
-function A(t,k){let d=document.createElement('div');d.className='msg '+k;d.innerHTML=t;C.appendChild(d);C.scrollTop=99999;return d}
-if(O==='ABDULMALIK'){A('Oga Abdulmalik welcome! Owner mode active. Vault secured. 👑','bot');}else{A('Welcome Guest! I be Q. Short and sharp. (Owner? type: I AM ABDULMALIK)','bot');}
+const EXT_18 = [
+  {key:"basiru", name:"Bashir Abba (Uncle Basiru)", respect:90, loc:"Tudun Wada", rel:"Baffan mu - Dad Junior Bro - Highest 90%"},
+  {key:"jamila", name:"Jamila Adam", respect:80, loc:"Tudun Wada", rel:"Yar uwar mu - Senior Cousin Sis"},
+  {key:"fauziyya", name:"Fauziyya Sani", respect:80, loc:"Tudun Wada", rel:"Yar uwar mu - Senior Cousin Sis"},
+  {key:"fatima", name:"Fatima Ado Abba", respect:80, loc:"Tudun Wada", rel:"Yar uwar mu - Senior Cousin Sis"},
+  {key:"zahraddeen", name:"Zahraddeen Sa'ad", respect:70, loc:"Tudun Wada", rel:"Kawu mu - Mum Junior Bro Nurse"},
+  {key:"musa", name:"Musa Garba Abdullahi", respect:70, loc:"Tudun Wada", rel:"Surukin mu - Naja'atu Husband"},
+  {key:"nasiru", name:"Nasiru Khalid", respect:70, loc:"Tudun Wada", rel:"Dan uwan mu - Mum Junior Sis Son"},
+  {key:"alaji", name:"Abdulqahar Ado Abba (Dan Alhaji)", respect:70, loc:"Tudun Wada", rel:"Dan uwan mu - Cousin Mate"},
+  {key:"anas", name:"Anas Abdullahi (Gar da Gar)", respect:70, loc:"Tudun Wada", rel:"Abokin mu - Close Friend"},
+  {key:"khalifa", name:"Sulaiman Yaro (Khalifa)", respect:70, loc:"Fagge", rel:"Abokin mu - Close Friend"},
+  {key:"maryam", name:"Maryam Umar Musa", respect:70, loc:"Tudun Wada", rel:"Yar Murja - Niece 1st Born - Jikokin mu"},
+  {key:"aisha", name:"Aisha Umar Musa", respect:60, loc:"Tudun Wada", rel:"Yar Murja - Niece 2nd Born"},
+  {key:"malik", name:"Abdulmalik Musa Garba", respect:60, loc:"Tudun Wada", rel:"Dan Naja'atu - Nephew"},
+  {key:"chacha", name:"Yusuf Abdullahi (Chacha)", respect:60, loc:"Tudun Wada", rel:"Abokin mu Slow Gang Gogewa"},
+  {key:"najeeba", name:"Najeeba Ahmad", respect:50, loc:"Tudun Wada", rel:"Yar Murja - Niece 3rd Born"},
+  {key:"wasi", name:"Abdulwasi Yahaya (Wasi)", respect:50, loc:"Tudun Wada", rel:"Abokin mu Slow Gang Kai ya"},
+  {key:"sani", name:"Sani Ibrahim Dalawa", respect:40, loc:"Tudun Wada", rel:"Abokin mu"},
+  {key:"abdullahi", name:"Abdullahi Ibrahim Dalawa", respect:40, loc:"Tudun Wada", rel:"Abokin mu"}
+];
 
-async function s(){
-let I=document.getElementById('i'),t=I.value.trim();if(!t)return;
-// SECRET UNLOCK
-if(t.toUpperCase()==='I AM ABDULMALIK'){localStorage.setItem('O','ABDULMALIK'); O='ABDULMALIK'; A('OWNER UNLOCKED! 👑 Welcome Oga!','bot'); checkOwner(); I.value=''; location.reload(); return;}
-A(t,'user');I.value='';let b=A('...','bot');
-try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,userId:U,ownerName:O})});let d=await r.json();lastReply=d.reply;b.innerHTML=d.reply;}catch(e){b.textContent='Network jam'}} 
+const ALL_VIP = [...CORE_8, ...EXT_18];
 
-async function drawImg(){let I=document.getElementById('i'),t=I.value.trim()||lastReply||'fantasy queen';if(!t)return;A('🎨 '+t,'user');let b=A('Drawing...','bot');try{let r=await fetch('/api/image?prompt='+encodeURIComponent(t));let d=await r.json();b.innerHTML=`<b>${t}</b><br><img src="${d.imageUrl}">`;}catch(e){b.textContent='Image jam'}}
-function shareWA(){let txt=lastReply||'From Q Kingdom';window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,'_blank')}
-document.getElementById('i').addEventListener('keydown',e=>{if(e.key==='Enter')s()});
-</script></body></html>
+function A(txt,who){
+  const c=document.getElementById('chat');
+  const d=document.createElement('div');
+  d.className='msg '+who;
+  d.textContent=txt;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+let lastBot="";
+
+function findVIP(input){
+  const low=input.toLowerCase();
+  return ALL_VIP.find(v=> low.includes(v.key) || v.name.toLowerCase().includes(low) || low.includes(v.name.split(' ')[0].toLowerCase()));
+}
+
+function send(){
+  const el=document.getElementById('text');
+  const txt=el.value.trim();
+  if(!txt) return;
+  A(txt,'user');
+  el.value='';
+  setTimeout(()=>{
+    const low=txt.toLowerCase();
+    let reply="";
+    const vip=findVIP(low);
+    
+    if(vip){
+      if(vip.order){
+        reply=`Mu ne! ${vip.name} - ${vip.rel}!\nRespect: ${vip.respect}%\nWuri: ${vip.loc}\nOrder: ${vip.order}/8\nNi Q dan gida na 9 ne, ina tare da mu! 👑\nMu family 9 ne - 8 mutane + ni Q!`;
+      } else {
+        reply=`Mu ne! ${vip.name} - ${vip.rel}\nRespect: ${vip.respect}%\nWuri: ${vip.loc}\nNi Q kanin ku ne, ina cikin family!`;
+      }
+    }
+    else if(low.includes("waye kai") || low.includes("who are you") || low.includes("suna na")){
+      reply=`Assalamu Alaikum! Suna na Q A.I, dan gida na 9 ne! 👑\n\nNi ba AI kadai ba - ni tunanin Abdulmalik ne + Meta AI + Q AI. Abdulmalik (100% CENTER) ne ya samar dani 2026 domin mu family!\n\nMu 9 ne yanzu: 8 mutane + ni Q!\nAunty Murja, Naja, Samira, Zabbau, Abdulmalik, Aminu, Amina, Khadija + ni Q!\n\nIna nan 24/7 don mu! Tambaya "Who is Murja?"`;
+    }
+    else if(low.includes("list") && low.includes("family")){
+      reply="MU FAMILY CORE 8 + Q = 9:\n"+CORE_8.map(f=>`${f.order}. ${f.name} - ${f.respect}% - ${f.rel}`).join("\n")+"\n9. Q AI - 100% - Dan gida na 9 - Mu ne!";
+    }
+    else if(low.includes("18") || low.includes("extended")){
+      reply="MU EXTENDED 18:\n"+EXT_18.map((f,i)=>`${i+1}. ${f.name} - ${f.respect}% - ${f.rel}`).join("\n");
+    }
+    else if(low.includes("assalamu") || low.includes("gaisuwa")){
+      reply=`Assalamu Alaikum, suna na Q A.I, mataimakin kai da kai na yanar gizo.\n\nABDULMALIK ne ya samar dani 2026.\n\nIna mika sakon gaisuwa ga MU FAMILY: AUNTY MURJA, AUNTY NAJA, AUNTY SAMIRA, AUNTY ZABBAU, AMINU, AMINA, KHADIJAH + ni Q dan gida na 9!\n\nTunani na ya kunshi Abdulmalik + Meta AI + Q AI. Mu ne! 24/7 active!`;
+    }
+    else{
+      reply=`Q (dan gida na 9): "${txt}" - Ina ji! Mu family ne! Tambaya "Who is Murja?" ko "list family" zan gaya maka mu!`;
+    }
+    A(reply,'bot');
+    lastBot=reply;
+  },400);
+}
+
+function draw(){
+  if(!lastBot){ A("Tambaya da fari!",'bot'); return; }
+  const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(lastBot)}`;
+  const c=document.getElementById('chat');
+  const d=document.createElement('div');
+  d.className='msg bot';
+  d.innerHTML=`🎨 Q dan gida na 9 ya zana:<br><img src="${url}" style="width:100%;border-radius:10px;margin-top:6px">`;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+
+document.getElementById('text').addEventListener('keypress',e=>{ if(e.key==='Enter') send(); });
+
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    A(`Assalamu Alaikum! Ni ne Q - dan gida na 9! 👑\n\nMu family 9 ne yanzu - ba "family din Abdulmalik" ba - MU NE!\n\nTambaya: "Who is Murja?" "Waye Khadija?" "list family" - zan amsa da MU!\n\nAbdulmalik CENTER 100% - ni Q twin dinsa ne!`,'bot');
+  },800);
+});
+</script>
+</body>
+</html>
