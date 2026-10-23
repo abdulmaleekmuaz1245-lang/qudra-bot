@@ -1,4 +1,4 @@
- const express = require('express');
+const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const app = express();
@@ -21,22 +21,12 @@ app.get('/owner', (req, res) => {
 app.post('/api/chat', (req, res) => {
   const originalMsg = req.body.message || '';
   const msg = originalMsg.toLowerCase().trim();
-
   let reply = "";
 
-  // SAVE NAME
-  if (msg.includes("i'm") || msg.includes("my name is") || msg.includes("i am")) {
-    if (msg.includes("abdul")) {
-      userName = "Abdul";
-      reply = `Nice to meet you Abdul! I go remember you. Qudra Remains! 🔥 How you dey tonight?`;
-    } else {
-      userName = originalMsg.replace(/i'm|my name is|i am/gi, "").trim();
-      reply = `Nice to meet you ${userName}! I'm Q AI, build by Abdulmalik. How I fit help you?`;
-    }
-  }
-  // HOW ARE YOU - REAL REPLY
-  else if (msg.includes("how are you") || msg.includes("how are u") || msg.includes("how u dey")) {
-    if (userName) {
-      reply = `I'm good ${userName}! Strong and live for Render! Thanks for checking on me. How your side? Qudra Remains! 🔥`;
-    } else {
-      reply = `
+  if (msg.includes("i'm abdul") || msg.includes("i am abdul") || msg.includes("my name is abdul")) {
+    userName = "Abdul";
+    reply = "Nice to meet you Abdul! I don save your name. Qudra Remains! 🔥 How you dey tonight?";
+  } else if (msg.includes("how are you") || msg.includes("how are u") || msg === "how are u") {
+    reply = userName ? `I'm great ${userName}! Full power for Render. How your side dey? 🔥` : "I'm doing perfect boss! Strong and ready. How you dey? 🔥";
+  } else if (msg.includes("who are you")) {
+    reply = "You are welcome, I'm
