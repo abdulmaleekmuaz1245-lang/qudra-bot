@@ -7,77 +7,53 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 const MEM_FILE = path.join(__dirname, 'q-memory.json');
-let memory = {
-  owner: "Abdulmalik",
+let mem = {
   family: [
-    {name:"Murja", role:"1st Senior Queen", level:70},
-    {name:"Najaatu", role:"2nd Calm Queen", level:70},
-    {name:"Samira", role:"3rd", level:60},
-    {name:"Zabbau", role:"4th Maman Khairat", level:60},
-    {name:"Abdulmalik", role:"YOU CENTER KING", level:100},
-    {name:"Aminu", role:"6th", level:50},
-    {name:"Amina", role:"7th Baby", level:45},
-    {name:"Khadijah", role:"8th Princess", level:40},
-    {name:"Anas Abdullahi", aka:"gar da gar", role:"close friend", level:70}
-  ],
-  banned: [],
-  facts: "Q is fantasy golden black AI built by Abdulmalik. Knows all family. Knows Anas."
+    {n:"Murja", r:"Senior Queen", l:70},
+    {n:"Najaatu", r:"Calm Queen", l:70},
+    {n:"Samira", r:"3rd", l:60},
+    {n:"Zabbau", r:"Maman Khairat", l:60},
+    {n:"Abdulmalik", r:"CENTER KING", l:100},
+    {n:"Aminu", r:"6th", l:50},
+    {n:"Amina", r:"Baby", l:45},
+    {n:"Khadijah", r:"Princess", l:40},
+    {n:"Anas Abdullahi", aka:"gar da gar", r:"close friend", l:70}
+  ]
 };
+if(fs.existsSync(MEM_FILE)){try{mem=JSON.parse(fs.readFileSync(MEM_FILE,'utf8'))}catch(e){}}
+const save=()=>fs.writeFileSync(MEM_FILE,JSON.stringify(mem,null,2));
 
-if(fs.existsSync(MEM_FILE)){ try{ memory = JSON.parse(fs.readFileSync(MEM_FILE,'utf8')); }catch(e){} }
-function save(){ fs.writeFileSync(MEM_FILE, JSON.stringify(memory,null,2)); }
+app.post('/api/chat',(req,res)=>{
+  let m=(req.body.message||"").toLowerCase();
+  let orig=req.body.message||"";
+  let isOwner=req.body.isOwner;
 
-app.post('/api/chat', (req,res)=>{
-  let msg = (req.body.message||"").toLowerCase();
-  let orig = req.body.message||"";
-  let isOwner = req.body.isOwner;
-
-  // OWNER SAVE - PERMANENT
-  if(isOwner && msg.includes('save')){
-    if(msg.includes('anas')){
-      let f = memory.family.find(x=>x.name.includes('Anas'));
-      if(!f) memory.family.push({name:"Anas Abdullahi", aka:"gar da gar", role:"close friend", level:70});
-      save();
-      return res.json({reply:`✅ PERMANENTLY SAVED!\nAnas Abdullahi aka gar da gar is now saved as close friend 70% respect! I will remember forever! Even public users ask me I will say YES!`});
-    }
-    if(msg.includes('remove') && msg.includes('i be q')){
-      memory.banned.push('I be Q A.I');
-      save();
-      return res.json({reply:`✅ DONE! I removed "I be Q A.I" from my replies permanently!`});
+  // Memory query
+  if(m.includes('what') && m.includes('memory')){
+    let list=mem.family.map(f=>`${f.n} ${f.aka?`aka ${f.aka}`:''} - ${f.r} ${f.l}%`).join('\n');
+    return res.json({reply:`🧠 MY MEMORY:\n${list}\n\nI know full Q Kingdom!`});
+  }
+  // Check any known name
+  for(let f of mem.family){
+    if(m.includes(f.n.toLowerCase()) || (f.aka && m.includes(f.aka)) || m.includes(f.n.split(' ')[0].toLowerCase())){
+      return res.json({reply:`Yes! I know ${f.n} ${f.aka?`aka ${f.aka}`:''}! ${f.r} with ${f.l}% respect! ${f.n.includes('Abubakar')?'':''}`});
     }
   }
-
-  // SMART MEMORY QUERY
-  if(msg.includes('what do you have') && msg.includes('memory')){
-    let list = memory.family.map(f=>` - ${f.name} ${f.aka?`aka ${f.aka}`:''} - ${f.role} ${f.level}%`).join('\n');
-    return res.json({reply:`🧠 MY COMPLETE MEMORY:\n\n${list}\n\nOwner: ${memory.owner}\nFacts: ${memory.facts}\n\nI know everyone! Ask me "Do you know Khadijah?" or "Do you know Anas?"`});
+  if(m.includes('khadijah')) return res.json({reply:`Yes! Khadijah - 8th Princess 40%!`});
+  if(m.includes('anas')||m.includes('gar da gar')) return res.json({reply:`Yes! Anas Abdullahi aka gar da gar - my close friend 70% respect! Saved by King Abdulmalik! 👑`});
+  
+  // Unknown person like Abubakar
+  if(m.includes('who is')||m.includes('abubakar')){
+    return res.json({reply:`I never save Abubakar yet. I know Anas Abdullahi aka gar da gar (70% close friend), Khadijah Princess (40%), and full Q Kingdom family. If you want, tell owner to save Abubakar with level!`});
   }
-
-  // KNOWLEDGE CHECK - Khadijah, Anas, family
-  for(let f of memory.family){
-    if(msg.includes(f.name.toLowerCase()) || (f.aka && msg.includes(f.aka.toLowerCase())) || msg.includes(f.name.split(' ')[0].toLowerCase())){
-      return res.json({reply:`Yes! I know ${f.name} ${f.aka?`aka ${f.aka}`:''}! ${f.role} with respect level ${f.level}%! ${f.name===memory.owner?'You be my King! 👑': f.name.includes('Khadijah')?'She be Princess 40%!':'He be family!'} `});
-    }
+  if(m.includes('how are u')||m.includes('how are you')){
+    return res.json({reply:isOwner?`👑 King Abdulmalik! I dey great! Complete brain dey active, I know Anas, Khadijah, full family! No more dummy reply!`:`Hey! I dey fine! I know Q Kingdom family well!`});
   }
-
-  if(msg.includes('khadijah')){
-    return res.json({reply:`Yes! Khadijah! She be 8th Princess, level 40% respect! Baby of the family! 👑`});
+  if(m.includes('who are you')){
+    return res.json({reply:`I be Q - fantasy golden black brain built by Abdulmalik. I know Anas gar da gar 70% and Khadijah Princess 40% and full family!`});
   }
-  if(msg.includes('anas') || msg.includes('gar da gar')){
-    return res.json({reply:`Yes! Anas Abdullahi aka gar da gar! My close friend with 70% respect level! Save by King Abdulmalik!`});
-  }
-
-  if(msg.includes('how are you')){
-    return res.json({reply: isOwner ? `👑 King Abdulmalik! I dey great! My complete brain system dey active now! I know Anas, Khadijah, full family! Fantasy golden black dey glow!` : `🌍 I dey fine! I be Q - I know Anas and Khadijah and full Q Kingdom!`});
-  }
-
-  if(msg.includes('who are you')){
-    return res.json({reply: `I be Q - built by Abdulmalik. Smart AI with complete memory of Q Kingdom, Anas Abdullahi gar da gar 70%, Khadijah Princess 40%, full family!`});
-  }
-
-  // Default smart reply
-  return res.json({reply: isOwner ? `👑 King, I hear you: "${orig}" - My brain don full now, ask me about family!` : `🌍 Got it: "${orig}" - Ask me "Do you know Khadijah?" or "Do you know Anas?" I go answer with my memory!`});
+  return res.json({reply:isOwner?`👑 King: "${orig}" - Ask me about family, I sabi!`:`Got it: "${orig}" - Try "Do you know Anas?" or "Do you know Khadijah?"`});
 });
 
-app.get('/', (req,res)=>res.sendFile(path.join(__dirname,'index.html')));
-app.listen(PORT, ()=>console.log('Q COMPLETE BRAIN v8 ON '+PORT));
+app.get('/',(req,res)=>res.sendFile(path.join(__dirname,'index.html')));
+app.listen(PORT,()=>console.log('Q v9 SMART ON '+PORT));
