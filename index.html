@@ -3,40 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q AI</title>
-<style>
-body{margin:0;background:#0f0f1a;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
-.top{background:#7b1fa2;padding:14px;text-align:center;font-weight:bold}
-.chat{flex:1;padding:12px;overflow:auto}
-.msg{padding:12px;margin:8px 0;border-radius:12px;max-width:85%;background:#23233a}
-.me{margin-left:auto;background:#7b1fa2}
-.bar{display:flex;padding:10px;background:#1a1a2e;gap:8px}
-.inp{flex:1;padding:14px;border-radius:25px;border:0}
-.btn{padding:14px 20px;background:#ffeb3b;color:#000;border:0;border-radius:25px;font-weight:bold}
-</style>
+<title>Q AI TEST</title>
 </head>
-<body>
-<div class="top">Q AI</div>
-<div class="chat" id="chat">
-<div class="msg">Assalamu Alaikum. I am Q AI, build by Abdulmalik, how can I assist u?</div>
+<body style="margin:0;background:#0f0f1a;color:white;font-family:Arial;display:flex;flex-direction:column;height:100vh">
+
+<div style="background:#7b1fa2;padding:14px;text-align:center;font-weight:bold">Q AI - TEST BUTTON</div>
+
+<div id="chat" style="flex:1;padding:12px;overflow:auto">
+<div style="padding:12px;background:#23233a;border-radius:12px;margin:8px 0">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
 </div>
-<div class="bar">
-<input id="inp" class="inp" placeholder="Type Hi">
-<button id="btn" class="btn">SEND</button>
-</div>
-<script>
-var c=document.getElementById("chat");
-var i=document.getElementById("inp");
-var b=document.getElementById("btn");
-function send(){
- var t=i.value.trim();
- if(t==="")return;
- var d=document.createElement("div");
- d.className="msg me";
- d.textContent=t;
- c.appendChild(d);
- i.value="";
- var low=t.toLowerCase();
- var r="";
- if(low.indexOf("murja")>-1){r="Murja is elder sister first born Tudun Wada 70 percent";}
- else if(low.indexOf("khadija")>-1){r="K
+
+<div style="display:flex;padding:12px;background:#1a1a2e;gap:8px">
+<input id="inp" placeholder="Type Hi" style="flex:1;padding:14px;border-radius:25px;border:0">
+<button onclick="
+var input=document.getElementById('inp');
+var chat=document.getElementById('chat');
+var text=input.value;
+if(!text){alert('Type Hi first');return;}
+var me=document.createElement('div');
+me.style='padding:12px;background:#7b1fa2;border-radius:12px;margin:8px 0;margin-left:auto;max-width:80%';
+me.textContent=text;
+chat.appendChild(me);
+input.value='';
+var bot=document.createElement('div');
+bot.style='padding:12px;background:#23233a;border-radius:12px;margin:8px 0;max-width:80%';
+if(text.toLowerCase().indexOf('hi')>-1){bot.textContent='Hello! I am
