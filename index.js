@@ -19,11 +19,9 @@ app.get('/owner', (req, res) => {
 app.post('/api/chat', async (req, res) => {
   const userMsg = req.body.message || '';
   const GROQ_KEY = process.env.GROQ_API_KEY;
-
   if (!GROQ_KEY) {
-    return res.json({ reply: 'Oga, GROQ_API_KEY never set for Render. Go set am!' });
+    return res.json({ reply: 'GROQ key never set' });
   }
-
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -32,24 +30,19 @@ app.post('/api/chat', async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         messages: [
-          { role: 'system', content: 'You are Q AI, built by Abdulmalik. Loyal to Qudra. Helpful, friendly.' },
+          { role: 'system', content: 'You are Q AI, built by Abdulmalik. Loyal to Qudra.' },
           { role: 'user', content: userMsg }
         ]
       })
     });
     const data = await response.json();
-    if (data.error) {
-      return res.json({ reply: 'Groq Error: ' + data.error.message });
-    }
-    const aiReply = data.choices[0].message.content;
-    res.json({ reply: aiReply });
+    if (data.error) return res.json({ reply: 'Groq Error: ' + data.error.message });
+    res.json({ reply: data.choices[0].message.content });
   } catch (err) {
     res.json({ reply: 'Jam: ' + err.message });
   }
 });
 
-app.listen(PORT, () => {
-  console.log('Q Bot LIVE');
-});
+app.listen(PORT, () => console.log('Q Bot LIVE'));
