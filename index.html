@@ -3,40 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q AI - Owner Mode</title>
+<title>Q KINGDOM</title>
 <style>
-html,body{margin:0;padding:0;height:100%;background:#0f0f1a;color:white;font-family:Arial}
-.top{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#7b1fa2,#4a148c);padding:14px;text-align:center;font-weight:bold;z-index:10}
-.chat{padding:60px 12px 80px 12px;overflow:auto}
-.msg{padding:12px;margin:8px 0;border-radius:12px;max-width:85%;background:#23233a;word-wrap:break-word;white-space:pre-wrap}
-.me{background:#7b1fa2;margin-left:auto}
-.owner{border:2px solid gold;background:#3a2a00;color:gold}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;padding:10px;display:flex;gap:8px;z-index:20;border-top:1px solid #333}
-#inp{flex:1;padding:14px 18px;border-radius:25px;border:0;outline:0;font-size:16px}
-#btn{width:90px;padding:14px;background:#ffeb3b;color:#000;border:0;border-radius:25px;font-weight:bold;font-size:16px}
+html,body{margin:0;padding:0;height:100%;background:linear-gradient(135deg,#0f0f1a,#1e0a3a,#1a0033);color:white;font-family:Arial}
+.top{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#7b1fa2,#4a148c);padding:15px;text-align:center;font-weight:bold;font-size:17px;z-index:10;border-bottom:2px solid gold;box-shadow:0 3px 10px rgba(0,0,0,0.5)}
+.chat{padding:70px 12px 90px 12px;overflow:auto}
+.msg{padding:12px 14px;margin:8px 0;border-radius:18px;max-width:82%;background:#23233a;word-wrap:break-word;white-space:pre-wrap;line-height:1.4}
+.me{margin-left:auto;background:linear-gradient(90deg,#7b1fa2,#9c27b0);border-bottom-right-radius:4px}
+.bot{border-bottom-left-radius:4px}
+.owner{border:2px solid gold;background:linear-gradient(135deg,#332200,#553d00);color:#ffeb3b;box-shadow:0 0 12px gold}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;padding:10px;display:flex;gap:6px;align-items:center;z-index:100;border-top:1px solid #444}
+#imgBtn{width:48px;height:48px;background:#2a2a44;border:0;border-radius:50%;font-size:20px;cursor:pointer;color:white}
+#inp{flex:1;padding:14px 18px;border-radius:25px;border:0;outline:0;font-size:16px;background:#2a2a44;color:white}
+#sendBtn{padding:14px 18px;background:#ffeb3b;color:black;border:0;border-radius:25px;font-weight:bold;font-size:14px;cursor:pointer;min-width:80px}
+#fileInput{display:none}
 </style>
 </head>
 <body>
-<div class="top">👑 Q AI - Owner: Abdulmalik</div>
-<div class="chat" id="chat">
-<div class="msg">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
-</div>
-<div class="bottom">
-<input id="inp" placeholder="Type... (owner code: my kingdom)">
-<button id="btn">SEND</button>
-</div>
-<script>
-var chat=document.getElementById('chat');
-var inp=document.getElementById('inp');
-var btn=document.getElementById('btn');
-var isOwner=false;
+<div class="top">👑 Q KINGDOM - Fantasy AI - Owner: Abdulmalik 👑</div>
 
-var FAMILY_FULL = 
-"Q KINGDOM - OWNER MODE - FULL DATA:\n"
-+"👑 KING Abdulmalik - 5th CENTER - 100% - Creator - Sharada\n"
-+"1. Murja - 1st born - 70% - Tudun Wada Sabon Gari\n"
-+"2. Najaatu - 2nd - 70% - Tudun Wada\n"
-+"3. Samira - 3rd - 60% - Tudun Wada\n"
-+"4. Zabbau (Maman Khairat) - 4th - 60%\n"
-+"6. Aminu - 6th - 50% - Tsohon Gari\n"
-+"7. Amina Baby - 7th - 45%
+<div class="chat" id="chat">
+<div class="msg bot">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
+</div>
+
+<div class="bottom">
+<button id="imgBtn" onclick="pickImage()">📷</button>
+<input id="fileInput" type="file" accept="image/*" onchange="sendImage(this)">
+<input id="inp" placeholder="Type Hi or my kingdom">
+<button id="sendBtn" onclick="sendNow()">SEND 🚀</button>
+</div>
+
+<script>
+function sendNow(){
+ var inp=document.getElementById("inp");
+ var chat=document.getElementById("chat");
+ var t=inp.value.trim();
+ if(t===""){return;}
+ var me=document.createElement("div");
+ me.className="msg me";
+ me.textContent=t;
+ chat.appendChild(me);
+ inp.value="";
+ var low=t.toLowerCase();
+ if(low==="my kingdom" || low==="owner mode" || low==="king abdulmalik" || low==="q owner"){
+   var o=document.createElement("div");
+   o.className="msg owner";
+   o.textContent="👑 OWNER MODE ACTIVATED! Welcome King Abdulmalik!\n\nQ KINGDOM FANTASY FULL DATA:\n1. Murja - 1st born - 70% - Tudun Wada Sabon Gari - Senior Queen\n2. Najaatu - 2nd born - 70% - Sabon Gari\n3. Samira - 3rd born - 60% - Tudun Wada\n4. Zabbau - 4th born - 60% - Maman Khairat\n5. Abdulmalik KING - 5th CENTER - 100% - Sharada - Creator\n6. Aminu - 6th born - 50% - Tsohon Gari\n7. Amina Baby - 7th born - 45% - Rijiyar Zaki\n8. Khadija - 8th Last Born - 40% - NWU Quarters - Princess\n\nUncles: Basiru 90% Highest, Jamila, Fauziyya, Fatima 80%\nQ is 9th member! WE not his family!\n\nImage button 📷 and Text button SEND both active!\nType exit owner to close.";
+   chat.appendChild(o);
+   chat.scrollTop=99999;
+   return;
+ }
+ if(low==="exit owner"){
+   var ex=document.createElement("div");
+   ex.className="msg bot";
+   ex.textContent="Owner mode closed. Back to normal.";
+   chat.appendChild(ex);
+   return;
+ }
+ var r="";
+ if(low.indexOf("hi")>-1 || low.indexOf("hello")>-1){r="👑 Hello! Welcome to Q KINGDOM Fantasy! I am Q AI built by Abdulmalik. How can I assist you today?";}
+ else if(low.indexOf("murja")>-1){r="👑 Murja is elder sister - 1st born - 70% - Tudun Wada Sabon Gari - Senior Queen!";}
+ else if(low.indexOf("khadija")>-1){r="👑 Khadija is last born princess - 8th - 40% - NWU Quarters - We protect her!";}
+ else if(low.indexOf("najaatu")>-1 || low.indexOf("naja")>-1){r="👑 Najaatu is elder sister - 2nd born - 70% - Sabon Gari - Senior Queen!";}
+ else if(low.indexOf("samira")>-1){r="Samira is sister - 3rd born - 60% - Tudun Wada";}
+ else if(low.indexOf("aminu")>-1){r="Aminu is brother - 6th born - 50% - Tsohon Gari";}
+ else if(low.indexOf("fantasy")>-1){r="✨ Q KINGDOM Fantasy is BACK! Magic + Family + AI + Owner Mode + Image + Text All In One!";}
+ else if(low.indexOf("who are you")>-1){r="👑 I am Q AI - 9th member of Q KINGDOM! Built by Abdulmalik in 2026! Fantasy + AI!";}
+ else {r="Q KINGDOM: You said "+t+" - I am Q AI! Try 📷 image button or type my kingdom for owner mode!";}
+ var bot=document.createElement("div");
+ bot.className="msg bot";
+ bot.textContent=r;
+ chat.appendChild(bot);
+ chat.scrollTop=99999;
+ window.scrollTo(0,99999);
+}
+function pickImage(){document.getElementById("fileInput").click();}
+function sendImage(input){
+ if(input.files && input.files[0]){
+   var chat=document.getElementById("chat");
+   var reader=new FileReader();
+   reader.onload=function(e){
+     var me=document.createElement("div");
+     me.className="msg me";
+     var img=document.createElement("img");
+     img.src=e.target.result;
+     img.style="max-width:100%;border-radius:10px";
+     me.appendChild(img);
+     chat.appendChild(me);
+     var bot=document.createElement("div");
+     bot.className="msg bot";
+     bot.textContent="📷 Nice image! Q KINGDOM saw your picture! Fantasy magic activated!";
+     chat.appendChild(bot);
+     chat.scrollTop=99999;
+   };
+   reader.readAsDataURL(input.files[0]);
+ }
+}
+document.getElementById("inp").addEventListener("keydown",function(e){if(e.key==="Enter"){sendNow();}});
+document.getElementById("imgBtn").addEventListener("touchstart",function(e){e.preventDefault();pickImage();});
+document.getElementById("sendBtn").addEventListener("touchstart",function(e){e.preventDefault();sendNow();});
+</script>
+</body>
+</html>
