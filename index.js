@@ -21,7 +21,7 @@ app.post('/api/chat', async (req, res) => {
   const GROQ_KEY = process.env.GROQ_API_KEY;
 
   if (!GROQ_KEY) {
-    return res.json({ reply: 'Add GROQ_API_KEY for full brain, but I hear you: ' + userMsg });
+    return res.json({ reply: 'Oga, GROQ_API_KEY never set for Render. Go set am!' });
   }
 
   try {
@@ -32,19 +32,21 @@ app.post('/api/chat', async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: 'llama3-8b-8192',
         messages: [
-          { role: 'system', content: 'You are Q AI, built by Abdulmalik. You are loyal to Qudra. You are friendly and helpful. You never say you are ChatGPT. Owner is Abdulmalik.' },
+          { role: 'system', content: 'You are Q AI, built by Abdulmalik. Loyal to Qudra. Helpful, friendly.' },
           { role: 'user', content: userMsg }
-        ],
-        max_tokens: 500
+        ]
       })
     });
     const data = await response.json();
+    if (data.error) {
+      return res.json({ reply: 'Groq Error: ' + data.error.message });
+    }
     const aiReply = data.choices[0].message.content;
     res.json({ reply: aiReply });
   } catch (err) {
-    res.json({ reply: 'Small jam: ' + err.message });
+    res.json({ reply: 'Jam: ' + err.message });
   }
 });
 
