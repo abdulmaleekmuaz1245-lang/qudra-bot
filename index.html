@@ -3,27 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q KINGDOM - Mu Family 9</title>
+<title>Q - Mu Family 9</title>
 <style>
-body{margin:0;background:#0f0f1a;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;height:100vh}
-#header{background:linear-gradient(90deg,#4a148c,#7b1fa2);padding:14px;text-align:center;font-weight:bold}
-#chat{flex:1;overflow-y:auto;padding:14px}
-.msg{margin:8px 0;padding:12px 14px;border-radius:14px;max-width:85%;white-space:pre-wrap;line-height:1.5}
+*{box-sizing:border-box}
+body{margin:0;background:#0f0f1a;color:#fff;font-family:sans-serif;height:100vh;display:flex;flex-direction:column}
+#header{background:#7b1fa2;padding:12px;text-align:center;font-weight:bold;position:sticky;top:0;z-index:10}
+#chat{flex:1;overflow-y:auto;padding:12px;padding-bottom:80px}
+.msg{margin:10px 0;padding:12px;border-radius:12px;max-width:90%;white-space:pre-wrap;line-height:1.4}
 .user{background:#7b1fa2;margin-left:auto}
-.bot{background:#1e1e2f}
-#inputArea{display:flex;padding:10px;background:#1a1a2e}
-#text{flex:1;padding:12px;border-radius:20px;border:none;outline:none}
-button{margin-left:6px;padding:12px 16px;border:none;border-radius:20px;background:#7b1fa2;color:#fff;font-weight:bold}
+.bot{background:#23233a}
+#inputArea{position:fixed;bottom:0;left:0;right:0;display:flex;gap:6px;padding:10px;background:#1a1a2e}
+#text{flex:1;padding:12px;border-radius:20px;border:none;outline:none;font-size:16px}
+#sendBtn{padding:12px 18px;border:none;border-radius:20px;background:#7b1fa2;color:#fff;font-weight:bold}
 </style>
 </head>
 <body>
-<div id="header">👑 Q KINGDOM - Mu Family 9 - Abdulmalik + Q = 100%</div>
+<div id="header">👑 Q KINGDOM - Mu Family 9</div>
 <div id="chat"></div>
 <div id="inputArea">
-<input id="text" placeholder="Tambaya Q... Who is Murja?">
-<button onclick="send()">Send</button>
-<button onclick="draw()">🎨</button>
+<input id="text" placeholder="Tambaya: Who is Murja?">
+<button id="sendBtn" onclick="sendMsg()">Send</button>
 </div>
+
 <script>
-const CORE_8 = [
-  {key:"murja", name:"Aunty Murja", respect:70, loc:"Tudun Wada Sabon G
+var CORE_8 = [
+  {k:"murja", n:"Aunty Murja", r:70, l:"Tudun Wada Sabon Gari", o:1, d:"Babbar mu - 1st Born"},
+  {k:"naja", n:"Mama Naja'atu", r:70, l:"Tudun Wada Sabon Gari", o:2, d:"Babbar mu - 2nd Born"},
+  {k:"sam", n:"Aunty Samira", r:60, l:"Tudun Wada Sabon Gari", o:3, d:"Yar uwar mu - 3rd"},
+  {k:"zabbau", n:"Aunty Zabbau", r:60, l:"Tudun Wada Sabon Gari", o:4, d:"Yar uwar mu - 4th"},
+  {k:"abdulmalik", n:"Yaya Abdulmalik", r:100, l:"Kano Sharada", o:5, d:"Babban mu - CENTER 5th"},
+  {k:"aminu", n:"Baffa Aminu", r:50, l:"Tsohon Gari", o:6, d:"Kanin mu - 6th"},
+  {k:"amina", n:"Amina", r:45, l:"Rijiyar Zaki", o:7, d:"Karamar mu - 7th"},
+  {k:"khadija", n:"Nana Khadija", r:40, l:"NWU Quarters", o:8, d:"Karamar mu - Last Born 8th"}
+];
+var EXT_18 = [
+  {k:"basiru", n:"Uncle Basiru", r:90, l:"Tudun Wada", d:"Baffan mu - Highest"},
+  {k:"jamila", n:"Jamila Adam", r:80, l:"Tudun Wada", d:"Yar uwar mu - Cousin"},
+  {k:"fauziyya", n:"Fauziyya Sani", r:80, l:"Tudun Wada", d:"Yar uwar mu"},
+  {k:"fatima", n:"Fatima Ado Abba", r:80, l:"Tudun Wada", d:"Yar uwar mu"},
+  {k:"zahraddeen", n:"Zahraddeen Sa'ad", r:70, l:"Tudun Wada", d:"Kawu mu"},
