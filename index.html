@@ -8,12 +8,12 @@
 body{margin:0;background:#0f0f1a;color:white;font-family:Arial;height:100vh;display:flex;flex-direction:column}
 #top{background:#7b1fa2;padding:14px;text-align:center;font-weight:bold}
 #chat{flex:1;padding:12px;overflow:auto}
-.m{padding:12px;margin:8px 0;border-radius:12px;max-width:88%;line-height:1.4}
+.m{padding:12px;margin:8px 0;border-radius:12px;max-width:85%;line-height:1.4;word-wrap:break-word}
 .me{background:#7b1fa2;margin-left:auto}
 .bot{background:#23233a}
-#botbar{display:flex;padding:10px;background:#1a1a2e;gap:8px}
-#msg{flex:1;padding:12px;border-radius:20px;border:none}
-#btn{padding:12px 20px;background:#7b1fa2;color:white;border:none;border-radius:20px;font-weight:bold}
+#bar{display:flex;padding:12px;background:#1a1a2e;gap:10px;align-items:center}
+#txt{flex:1;padding:14px;border-radius:25px;border:none;outline:none;font-size:16px}
+#sendBtn{padding:14px 22px;background:#7b1fa2;color:white;border:none;border-radius:25px;font-weight:bold;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -21,30 +21,34 @@ body{margin:0;background:#0f0f1a;color:white;font-family:Arial;height:100vh;disp
 <div id="chat">
 <div class="m bot">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
 </div>
-<div id="botbar">
-<input id="msg" placeholder="Ask anything...">
-<button id="btn" onclick="go()">Send</button>
+<div id="bar">
+<input id="txt" type="text" placeholder="Type Hi...">
+<button id="sendBtn" type="button">Send</button>
 </div>
 <script>
-var chat=document.getElementById('chat');
-function add(t,c){
- var d=document.createElement('div');
- d.className='m '+c;
- d.innerText=t;
- chat.appendChild(d);
- chat.scrollTop=100000;
+var chatBox=document.getElementById('chat');
+function addLine(text, cls){
+ var div=document.createElement('div');
+ div.className='m '+cls;
+ div.textContent=text;
+ chatBox.appendChild(div);
+ chatBox.scrollTop=chatBox.scrollHeight;
 }
-function go(){
- var i=document.getElementById('msg');
- var t=i.value;
- if(!t) return;
- add(t,'me');
- i.value='';
+function sendNow(){
+ var input=document.getElementById('txt');
+ var t=input.value.trim();
+ if(t==='') return;
+ addLine(t,'me');
+ input.value='';
+ input.focus();
  var low=t.toLowerCase();
- var reply='';
- if(low.indexOf('murja')>-1) reply='Murja is elder sister - 1st born - Tudun Wada Sabon Gari - 70% respect - Senior sister.';
- else if(low.indexOf('naja')>-1) reply='Naja is elder sister - 2nd born - 70% - Sabon Gari.';
- else if(low.indexOf('sam')>-1) reply='Samira is sister - 3rd born - 60% - Tudun Wada.';
- else if(low.indexOf('zabbau')>-1 || low.indexOf('khairat')>-1) reply='Zabbau (Maman Khairat) is sister - 4th born - 60%.';
- else if(low.indexOf('abdulmalik')>-1) reply='Abdulmalik is my creator - 5th born CENTER - 100% - He built me in 2026.';
- else if(low.indexOf('aminu')>-1) reply='Aminu is brother - 6th born -
+ var ans='';
+ if(low.indexOf('murja')!==-1) ans='Murja is elder sister - 1st born - Tudun Wada Sabon Gari - 70% respect.';
+ else if(low.indexOf('naja')!==-1) ans='Naja is elder sister - 2nd born - 70% - Sabon Gari.';
+ else if(low.indexOf('khadija')!==-1) ans='Khadija is last born sister - 8th - 40% - NWU Quarters - youngest.';
+ else if(low.indexOf('sam')!==-1) ans='Samira is sister - 3rd born - 60% - Tudun Wada.';
+ else if(low.indexOf('zabbau')!==-1 || low.indexOf('khairat')!==-1) ans='Zabbau (Maman Khairat) is sister - 4th born - 60%.';
+ else if(low.indexOf('aminu')!==-1) ans='Aminu is brother - 6th born - 50% - Tsohon Gari.';
+ else if(low.indexOf('amina')!==-1) ans='Amina is sister - 7th born - 45% - Rijiyar Zaki.';
+ else if(low.indexOf('abdulmalik')!==-1) ans='Abdulmalik is my creator - 5th born CENTER - 100% - He built me in 2026.';
+ else if(low.indexOf('hi')!==-1 || low.indexOf
