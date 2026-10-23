@@ -2,29 +2,62 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q AI TEST</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Q AI</title>
+<style>
+html,body{margin:0;padding:0;height:100%;background:#0f0f1a;color:white;font-family:Arial}
+.top{position:fixed;top:0;left:0;right:0;background:#7b1fa2;padding:14px;text-align:center;font-weight:bold;z-index:10}
+.chat{padding:60px 12px 80px 12px;overflow:auto}
+.msg{padding:12px;margin:8px 0;border-radius:12px;max-width:85%;background:#23233a;word-wrap:break-word}
+.me{background:#7b1fa2;margin-left:auto}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;padding:10px;display:flex;gap:8px;z-index:20;border-top:1px solid #333}
+#inp{flex:1;padding:14px 18px;border-radius:25px;border:0;outline:0;font-size:16px}
+#btn{width:90px;padding:14px;background:#ffeb3b;color:#000;border:0;border-radius:25px;font-weight:bold;font-size:16px}
+</style>
 </head>
-<body style="margin:0;background:#0f0f1a;color:white;font-family:Arial;display:flex;flex-direction:column;height:100vh">
+<body>
+<div class="top">👑 Q AI - Built by Abdulmalik</div>
 
-<div style="background:#7b1fa2;padding:14px;text-align:center;font-weight:bold">Q AI - TEST BUTTON</div>
-
-<div id="chat" style="flex:1;padding:12px;overflow:auto">
-<div style="padding:12px;background:#23233a;border-radius:12px;margin:8px 0">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
+<div class="chat" id="chat">
+<div class="msg">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
 </div>
 
-<div style="display:flex;padding:12px;background:#1a1a2e;gap:8px">
-<input id="inp" placeholder="Type Hi" style="flex:1;padding:14px;border-radius:25px;border:0">
-<button onclick="
-var input=document.getElementById('inp');
+<div class="bottom">
+<input id="inp" placeholder="Type Hi here...">
+<button id="btn">SEND</button>
+</div>
+
+<script>
 var chat=document.getElementById('chat');
-var text=input.value;
-if(!text){alert('Type Hi first');return;}
-var me=document.createElement('div');
-me.style='padding:12px;background:#7b1fa2;border-radius:12px;margin:8px 0;margin-left:auto;max-width:80%';
-me.textContent=text;
-chat.appendChild(me);
-input.value='';
-var bot=document.createElement('div');
-bot.style='padding:12px;background:#23233a;border-radius:12px;margin:8px 0;max-width:80%';
-if(text.toLowerCase().indexOf('hi')>-1){bot.textContent='Hello! I am
+var inp=document.getElementById('inp');
+var btn=document.getElementById('btn');
+
+function sendMsg(){
+ var t=inp.value.trim();
+ if(!t) return;
+ var m=document.createElement('div');
+ m.className='msg me';
+ m.textContent=t;
+ chat.appendChild(m);
+ inp.value='';
+ var low=t.toLowerCase();
+ var r='';
+ if(low.indexOf('murja')>-1) r='Murja is elder sister - 1st born - 70% - Tudun Wada Sabon Gari';
+ else if(low.indexOf('hi')>-1 || low.indexOf('hello')>-1) r='Hello! I am Q AI built by Abdulmalik. How can I assist you today?';
+ else if(low.indexOf('khadija')>-1) r='Khadija is last born - 8th - 40% - NWU Quarters';
+ else if(low.indexOf('who are you')>-1) r='I am Q AI built by Abdulmalik in 2026';
+ else r='You said: '+t+' - I am Q AI. Ask me anything!';
+ var b=document.createElement('div');
+ b.className='msg';
+ b.textContent=r;
+ chat.appendChild(b);
+ window.scrollTo(0,99999);
+ chat.scrollTop=99999;
+}
+
+btn.onclick=sendMsg;
+inp.onkeydown=function(e){ if(e.key==='Enter'){ sendMsg(); } };
+</script>
+
+</body>
+</html>
