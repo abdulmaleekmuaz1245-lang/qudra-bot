@@ -18,5 +18,7 @@ app.get('/owner', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`👑 Q v3.0 RUNNING ON ${PORT} - Owner persistent!`);
+  console.log(`👑 Q A.I v6.0 DESIGN RUNNING ON ${PORT}`);
+  console.log(`🌍 Public: /?public`);
+  console.log(`👑 Owner: /?owner`);
 });
