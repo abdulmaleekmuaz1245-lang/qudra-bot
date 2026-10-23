@@ -3,31 +3,34 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
 header{padding:12px 15px;background:linear-gradient(90deg,#4a00e0,#8e2de2,#ff00cc);display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid gold;box-shadow:0 0 20px #8e2de2}
-header b{font-size:17px;text-shadow:0 0 10px gold}
+header b{font-size:16px;text-shadow:0 0 10px gold}
 #chat{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:radial-gradient(circle at 20% 30%, #1a0033 0%, #000 65%)}
 .msg{max-width:85%;padding:10px 14px;border-radius:16px;word-break:break-word;line-height:1.4}
-.user{align-self:flex-end;background:linear-gradient(90deg,#4a00e0,#8e2de2);box-shadow:0 0 12px #8e2de2}
-.bot{align-self:flex-start;background:#111;border:1px solid #8e2de2;box-shadow:0 0 12px #4a00e0}
+.user{align-self:flex-end;background:linear-gradient(90deg,#4a00e0,#8e2de2)}
+.bot{align-self:flex-start;background:#111;border:1px solid #8e2de2}
 .msg img{max-width:100%;border-radius:12px;margin-top:8px;border:2px solid gold}
-#box{display:flex;padding:10px;background:#0f0f0f;gap:6px;border-top:1px solid #8e2de2;align-items:center}
+#box{display:flex;padding:10px;background:#0f0f0f;gap:6px;border-top:1px solid #8e2de2}
 input{flex:1;padding:12px;border-radius:20px;border:1px solid #8e2de2;background:#000;color:#fff;outline:none}
 button{padding:10px 14px;border-radius:20px;border:none;font-weight:bold;cursor:pointer}
 #send{background:linear-gradient(90deg,#ff00cc,#8e2de2);color:#fff}
 #art{background:gold;color:#000}
-#wa{background:#25D366;color:#fff;font-size:18px}
+#wa{background:#25D366;color:#fff}
 </style></head><body>
-<header><b>👑 Q FANTASY KINGDOM ✨</b><span id="o" style="background:gold;color:#000;padding:3px 10px;border-radius:12px;font-size:11px;display:none;font-weight:bold">OWNER ABDULMALIK</span></header>
+<header><b>👑 Q FANTASY KINGDOM ✨</b><span id="o" style="background:gold;color:#000;padding:3px 10px;border-radius:12px;font-size:11px;display:none;font-weight:bold">OWNER</span><span id="g" style="background:#333;color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;display:none">GUEST</span></header>
 <div id="chat"></div>
-<div id="box"><input id="i" placeholder="Ask Q, draw, or remember..."><button id="send" onclick="s()">Send</button><button id="art" onclick="drawImg()">🎨</button><button id="wa" onclick="shareWA()">WA</button></div>
+<div id="box"><input id="i" placeholder="Ask Q or type draw..."><button id="send" onclick="s()">Send</button><button id="art" onclick="drawImg()">🎨</button><button id="wa" onclick="shareWA()">WA</button></div>
 <script>
-let O=localStorage.getItem('O')||'ABDULMALIK';localStorage.setItem('O',O);let U=localStorage.getItem('U')||'abdulmalik_'+Math.random().toString(36).slice(2);localStorage.setItem('U',U);
-if(O==='ABDULMALIK')document.getElementById('o').style.display='inline';
+let params=new URLSearchParams(window.location.search);
+if(params.get('owner')==='ABDULMALIK'){localStorage.setItem('O','ABDULMALIK');}
+let O=localStorage.getItem('O')||'GUEST';
+let U=localStorage.getItem('U')||'user_'+Math.random().toString(36).slice(2);localStorage.setItem('U',U);
+if(O==='ABDULMALIK'){document.getElementById('o').style.display='inline';}else{document.getElementById('g').style.display='inline';}
 let C=document.getElementById('chat'),lastReply='';
-function A(t,k,isHTML){let d=document.createElement('div');d.className='msg '+k;if(isHTML)d.innerHTML=t;else d.textContent=t;C.appendChild(d);C.scrollTop=99999;return d}
-A('Oga Abdulmalik! Kingdom don upgrade! 👑 Now I fit draw image 🎨 and share for WhatsApp! Try: draw Khadija as queen','bot');
-async function s(){let I=document.getElementById('i'),t=I.value.trim();if(!t)return;A(t,'user');I.value='';let b=A('Q dey think...','bot');try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,userId:U,ownerName:O})});let d=await r.json();lastReply=d.reply;b.textContent=d.reply;}catch(e){b.textContent='Network jam'}} 
-async function drawImg(){let I=document.getElementById('i'),t=I.value.trim()||lastReply||'fantasy queen';if(!t)return;A('🎨 Drawing: '+t,'user');let b=A('Q dey draw... wait 5 sec...','bot');try{let r=await fetch('/api/image?prompt='+encodeURIComponent(t));let d=await r.json();b.innerHTML=`<b>${t}</b><br><img src="${d.imageUrl}"><br><a href="${d.imageUrl}" target="_blank" style="color:gold">Open Full Image</a> | <a href="#" onclick="shareWAImg('${d.imageUrl}');return false" style="color:#25D366">Share to WA</a>`;C.scrollTop=99999;}catch(e){b.textContent='Image jam'}}
-function shareWA(){let txt=lastReply||document.getElementById('i').value||'From Q Fantasy Kingdom 👑';let url=`https://wa.me/?text=${encodeURIComponent(txt+'\n\n- Q Fantasy Kingdom')}`;window.open(url,'_blank')}
-function shareWAImg(imgUrl){let url=`https://wa.me/?text=${encodeURIComponent('Check my AI drawing 👑 '+imgUrl)}`;window.open(url,'_blank')}
+function A(t,k){let d=document.createElement('div');d.className='msg '+k;d.innerHTML=t;C.appendChild(d);C.scrollTop=99999;return d}
+if(O==='ABDULMALIK'){A('Welcome back Oga Abdulmalik! 👑 Vault protected! Only you see Khadija gist.','bot');}else{A('Welcome Guest to Q Fantasy Kingdom! ✨ I am Q. You are guest mode.','bot');}
+async function s(){let I=document.getElementById('i'),t=I.value.trim();if(!t)return;A(t,'user');I.value='';let b=A('Q dey think...','bot');try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,userId:U,ownerName:O})});let d=await r.json();lastReply=d.reply;b.innerHTML=d.reply;}catch(e){b.textContent='Network jam'}} 
+async function drawImg(){let I=document.getElementById('i'),t=I.value.trim()||lastReply||'fantasy queen';if(!t)return;A('🎨 Drawing: '+t,'user');let b=A('Q dey draw... wait...','bot');try{let r=await fetch('/api/image?prompt='+encodeURIComponent(t));let d=await r.json();b.innerHTML=`<b>${t}</b><br><img src="${d.imageUrl}"><br><a href="${d.imageUrl}" target="_blank" style="color:gold">Open</a> | <a href="#" onclick="shareWAImg('${d.imageUrl}');return false" style="color:#25D366">Share WA</a>`;}catch(e){b.textContent='Image jam'}}
+function shareWA(){let txt=lastReply||document.getElementById('i').value||'From Q Fantasy Kingdom 👑';window.open(`https://wa.me/?text=${encodeURIComponent(txt+' - Q Fantasy')}`,'_blank')}
+function shareWAImg(imgUrl){window.open(`https://wa.me/?text=${encodeURIComponent('Check my AI drawing 👑 '+imgUrl)}`,'_blank')}
 document.getElementById('i').addEventListener('keydown',e=>{if(e.key==='Enter')s()});
 </script></body></html>
