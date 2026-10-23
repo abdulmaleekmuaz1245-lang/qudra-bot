@@ -1,31 +1,28 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q OWNER CONTROL</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUDRA OWNER</title>
 <style>
-body{margin:0;background:#0a0a0a;color:#fff;font-family:Arial;padding:15px}
-.box{max-width:420px;margin:20px auto;background:#1a1a1a;padding:20px;border-radius:15px;border:2px solid #ff6a00}
-.stat{background:#222;padding:12px;margin:10px 0;border-radius:8px;border-left:4px solid #ff6a00;font-size:14px}
-h2{color:#ff6a00;text-align:center;margin:5px}
-button{width:100%;padding:14px;border-radius:10px;border:none;color:#fff;font-weight:bold;margin-top:10px;cursor:pointer}
-.green{color:#00ff88;text-align:center;font-weight:bold}
+body{background:#000;color:#00ff88;font-family:monospace;padding:20px;text-align:center}
+.box{border:2px solid #00ff88;padding:20px;border-radius:15px;margin-top:50px}
+h1{font-size:28px}
 </style>
 </head>
 <body>
 <div class="box">
-<h2>🔓 QUDRA OWNER PANEL</h2>
-<p class="green">✅ OWNER: Abdulmalik - ACCESS GRANTED</p>
-<div class="stat">👑 Owner: Abdulmalik - Q AI Builder</div>
-<div class="stat">🤖 Intro: "You are welcome, I'm Q AI, build by Abdulmalik,"</div>
-<div class="stat">⚡ Power: 13.1V - QUDRA Llama Technology</div>
-<div class="stat">✅ API: Groq Connected</div>
-<div class="stat">🌐 URL: qudra-bot-k49s.onrender.com</div>
-<div class="stat">⏰ <span id="time"></span></div>
-<button onclick="location.href='/'" style="background:#0084ff">💬 GO TO Q CHAT</button>
-<button onclick="alert('Intro don set! Q go start with: You are welcome, I am Q AI, build by Abdulmalik,')" style="background:#00c853">✅ CONFIRM NEW INTRO</button>
-<p style="font-size:11px;text-align:center;color:#777;margin-top:15px">You be Owner as Abdulmalik - Qudra Remains</p>
+<h1>🔓 QUDRA OWNER PANEL</h1>
+<p>✅ OWNER: Abdulmalik - ACCESS GRANTED</p>
+<p>✅ NO KEY REQUIRED</p>
+<p>✅ Status: LIVE</p>
+<hr>
+<p>Bot: qudra-bot-k49s.onrender.com</p>
+<p>Time: <span id="t"></span></p>
+<p>Qudra Remains! 🔥</p>
 </div>
-<script>document.getElementById('time').textContent="Live: "+new Date().toLocaleString();</script>
+<script>
+document.getElementById('t').innerText = new Date().toLocaleString();
+</script>
 </body>
 </html>
