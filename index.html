@@ -3,11 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q KINGDOM</title>
+<title>Q AI</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(135deg,#0f0f1a,#1a0033);color:white;font-family:Arial;height:100vh;display:flex;flex-direction:column}
-#top{background:linear-gradient(90deg,#7b1fa2,#4a148c);padding:15px;text-align:center;font-weight:bold;font-size:19px;box-shadow:0 2px 10px rgba(0,0,0,0.5)}
-#chat{flex:1;padding:14px;overflow-y:auto}
-.bubble{padding:13px 15px;margin:10px 0;border-radius:18px;max-width:85%;line-height:1.5;animation:pop 0.3s}
-@keyframes pop{from{transform:scale
+body{margin:0;background:#0f0f1a;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
+.top{background:#7b1fa2;padding:14px;text-align:center;font-weight:bold}
+.chat{flex:1;padding:12px;overflow:auto}
+.msg{padding:12px;margin:8px 0;border-radius:12px;max-width:85%;background:#23233a}
+.me{margin-left:auto;background:#7b1fa2}
+.bar{display:flex;padding:10px;background:#1a1a2e;gap:8px}
+.inp{flex:1;padding:14px;border-radius:25px;border:0}
+.btn{padding:14px 20px;background:#ffeb3b;color:#000;border:0;border-radius:25px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="top">Q AI</div>
+<div class="chat" id="chat">
+<div class="msg">Assalamu Alaikum. I am Q AI, build by Abdulmalik, how can I assist u?</div>
+</div>
+<div class="bar">
+<input id="inp" class="inp" placeholder="Type Hi">
+<button id="btn" class="btn">SEND</button>
+</div>
+<script>
+var c=document.getElementById("chat");
+var i=document.getElementById("inp");
+var b=document.getElementById("btn");
+function send(){
+ var t=i.value.trim();
+ if(t==="")return;
+ var d=document.createElement("div");
+ d.className="msg me";
+ d.textContent=t;
+ c.appendChild(d);
+ i.value="";
+ var low=t.toLowerCase();
+ var r="";
+ if(low.indexOf("murja")>-1){r="Murja is elder sister first born Tudun Wada 70 percent";}
+ else if(low.indexOf("khadija")>-1){r="K
