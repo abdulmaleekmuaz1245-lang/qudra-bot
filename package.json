@@ -1,13 +1,15 @@
 {
-  "name": "qudra-bot-v2",
+  "name": "q-kingdom-control-center",
   "version": "2.0.0",
-  "description": "Q AI Full Brain by Abdulmalik",
+  "description": "Q Kingdom - Full Function Brain System - Owner Control Center - Fantasy Golden Black",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
