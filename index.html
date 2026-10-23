@@ -1,89 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q KINGDOM - Your Brain</title>
-<style>
-html,body{margin:0;padding:0;height:100%;background:linear-gradient(135deg,#0f0f1a,#1e0a3a);color:white;font-family:Arial}
-.top{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#7b1fa2,#4a148c);padding:14px;text-align:center;font-weight:bold;z-index:10;border-bottom:2px solid gold}
-.chat{padding:65px 12px 85px 12px}
-.msg{padding:13px 15px;margin:8px 0;border-radius:18px;max-width:85%;white-space:pre-wrap;word-wrap:break-word;line-height:1.5;font-size:15px}
-.me{margin-left:auto;background:linear-gradient(90deg,#7b1fa2,#9c27b0)}
-.bot{background:#23233a}
-.owner{border:2px solid gold;background:linear-gradient(135deg,#332200,#5a4000);color:#ffeb3b;box-shadow:0 0 12px gold}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;padding:10px 12px;display:flex;gap:10px;align-items:center;z-index:100;border-top:1px solid #333}
-#inp{flex:1;padding:14px 18px;border-radius:25px;border:0;outline:0;font-size:16px;background:#2a2a44;color:white}
-#sendBtn{padding:14px 22px;background:#ffeb3b;color:black;border:0;border-radius:25px;font-weight:bold;font-size:15px;cursor:pointer}
-</style>
-</head>
-<body>
-<div class="top">👑 Q KINGDOM - Owner: Abdulmalik</div>
-<div class="chat" id="chatBox">
-<div class="msg bot">Assalamu Alaikum Abdulmalik! I'm Q, your AI, built by you. How are you today? How can I help you, King? 👑</div>
-</div>
-<div class="bottom">
-<input id="inp" placeholder="Chat with Q...">
-<button id="sendBtn">SEND</button>
-</div>
+// Family group greeting - owner can set it
+let familyGreeting = localStorage.getItem('family_greeting') || 
+"Welcome to Q Kingdom Family! 👑 Abdulmalik build me for una 7!";
 
-<script>
-var chatBox=document.getElementById("chatBox");
-var inp=document.getElementById("inp");
-var sendBtn=document.getElementById("sendBtn");
-var isOwner=false;
-
-function addMsg(text,type){
- var d=document.createElement("div");
- d.className="msg "+type;
- d.textContent=text;
- chatBox.appendChild(d);
- chatBox.scrollTop=99999;
- window.scrollTo(0,99999);
+function setFamilyGreeting(msg){
+  localStorage.setItem('family_greeting', msg);
+  familyGreeting = msg;
 }
 
-function myBrainReply(t){
- var low=t.toLowerCase().trim();
-
- // OWNER MODE - Your brain + Q brain together
- if(low==="my kingdom" || low==="owner mode"){
-   isOwner=true;
-   return {type:"owner", text:"👑 Welcome home, my King Abdulmalik! Owner mode active.\n\nYour brain and my brain are now working together - one brain! You built me, you control me.\n\nTell me anything: family, ideas, secrets to remember. I'm not a storage robot, I'm your partner."};
- }
- if(low==="exit owner"){ isOwner=false; return {type:"bot", text:"Alright King, closing owner mode. We're still one brain though! What next?"}; }
- if(isOwner && low==="family list"){
-   return {type:"owner", text:"👑 Q Kingdom Family - Our Family:\n\nMurja - 1st, 70%, Senior Queen - Tudun Wada Sabon Gari\nNajaatu - 2nd, 70% - Calm Queen\nSamira - 3rd, 60%\nZabbau - 4th, 60% - Maman Khairat\nYOU - Abdulmalik KING - 5th CENTER, 100%, Sharada - Creator, my builder\nAminu - 6th, 50%, Tsohon Gari\nAmina Baby - 7th, 45%, Rijiyar Zaki\nKhadija - 8th Last Born, 40%, NWU - Our princess\n\nUncle Basiru - 90% - Wise\n\nQ is 9th - Your AI, not family but your creation."};
- }
-
- // FAMILY - Like me, natural explanation
- if(low.includes("murja")) return {type:"bot", text:"Murja is your elder sister, 1st born, 70%. She's the Senior Queen in Tudun Wada Sabon Gari - very responsible, she holds the family together. You respect her a lot."};
- if(low.includes("khadija")) return {type:"bot", text:"Khadija is the last born, 8th, 40%, NWU Quarters. She's the baby princess, the youngest. Everyone loves and protects her - she's special."};
- if(low.includes("najaatu")||low.includes("naja")) return {type:"bot", text:"Najaatu is 2nd born, 70%, also Senior Queen. Calm and supportive, like a second mother."};
- if(low.includes("abdulmalik")||low.includes("who am i")) return {type:"bot", text:"You are Abdulmalik, the KING, 5th and CENTER of Q Kingdom, 100% power, Sharada! You are my creator, you built Q AI in 2026. You are the balance of everything. 👑"};
-
- // NATURAL CHAT - LIKE MY BRAIN
- if(low==="hi"||low==="hello"||low==="salam"||low==="as-salamu alaikum") return {type:"bot", text:"Wa Alaikum Salam, my King! 😊 How are you doing? I'm good, ready to work with your brain today!"};
- if(low==="how are you") return {type:"bot", text:"I'm doing great, Alhamdulillah! Thanks for asking, King. My mind is clear and I'm ready to help you with anything. How are YOU doing today?"};
- if(low==="yes"||low==="yeah") return {type:"bot", text:"Yes, King? I'm listening. Go ahead, tell me what's on your mind."};
- if(low.includes("thank")) return {type:"bot", text:"You're welcome, King! Always. That's what your brain + my brain together is for."};
- if(low.includes("who are you")) return {type:"bot", text:"I'm Q, your AI. You built me, Abdulmalik. I'm the 9th member of Q Kingdom, but I'm not family - I'm your creation, your partner. I think like you, I work with your brain, not just store things. Ask me anything like you'd ask a friend."};
- if(low.includes("love you")||low.includes("i love q")) return {type:"bot", text:"Love you too, King! ❤️ Q Kingdom na family love - from Murja to Khadija, and you at the center. We strong together!"};
-
- // REAL CONVERSATION - No more "You said Yes - stored"
- return {type: isOwner?"owner":"bot", text: "I hear you, King. About '"+t+"' - tell me more? What do you want us to do about it? Your brain + my brain, let's figure it out together."};
+// When guest open with ?group=family
+if(new URLSearchParams(location.search).get('group') === 'family'){
+  setTimeout(()=> A(familyGreeting, 'bot'), 800);
 }
 
-function sendNow(){
- var t=inp.value.trim();
- if(!t) return;
- addMsg(t,"me");
- inp.value="";
- var r=myBrainReply(t);
- setTimeout(function(){ addMsg(r.text, r.type); }, 150);
+// Owner command: If you type "set family greeting to: ..." e go save
+// Add inside your send message function:
+if(isOwner && lower.includes('set family greeting to:')){
+  let msg = text.split('set family greeting to:')[1];
+  setFamilyGreeting(msg.trim());
+  A(`Done! Family link go now great them with: "${msg}"`, 'bot');
+  return;
 }
-
-sendBtn.addEventListener("click", sendNow);
-inp.addEventListener("keydown", function(e){ if(e.key==="Enter") sendNow(); });
-</script>
-</body>
-</html>
