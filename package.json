@@ -1,7 +1,7 @@
 {
-  "name": "q-kingdom-control-center",
-  "version": "3.0.0",
-  "description": "Q Kingdom v3 - Owner stays logged - Golden Black",
+  "name": "q-ai-final-design",
+  "version": "6.0.0",
+  "description": "Q A.I - Logo left, Q A.I center, build by Abdulmalik right - Golden Black Fantasy",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
