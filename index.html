@@ -1,38 +1,7 @@
-<!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Q V2 - Knows Owner</title>
-<style>body{margin:0;font-family:Arial;background:#0a0a0a;color:#fff;display:flex;flex-direction:column;height:100vh}
-header{padding:12px;background:#111;border-bottom:1px solid #222;display:flex;justify-content:space-between}
-#chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:80%;padding:10px 14px;border-radius:14px}
-.user{align-self:flex-end;background:#1e90ff} .bot{align-self:flex-start;background:#1f1f1f;border:1px solid #333}
-#box{display:flex;padding:10px;background:#111;gap:8px} input{flex:1;padding:12px;border-radius:20px;border:1px solid #333;background:#1a1a1a;color:#fff}
-button{padding:10px 18px;border-radius:20px;border:none;background:#1e90ff;color:#fff;font-weight:bold}
-#ownerBadge{background:gold;color:#000;padding:2px 8px;border-radius:10px;font-size:11px;display:none}</style>
-</head><body>
-<header><b>🧠 Q V2</b><div><span id="ownerBadge">OWNER 👑</span><span style="font-size:12px;color:#0f0"> ● LIVE</span></div></header>
-<div id="chat"></div>
-<div id="box"><input id="inp" placeholder="Ask Q..."><button onclick="send()">Send</button></div>
-<script>
-let ownerName = localStorage.getItem('Q_OWNER') || '';
-let uid = localStorage.getItem('Q_UID') || '';
-if(!uid){ uid = 'abdulmalik_owner_' + Math.random().toString(36).slice(2); localStorage.setItem('Q_UID', uid); }
-if(!ownerName){ ownerName = prompt('First time: Who be you? Type ABDULMALIK if na you build Q') || 'guest'; localStorage.setItem('Q_OWNER', ownerName.toUpperCase()); }
-if(ownerName==='ABDULMALIK') document.getElementById('ownerBadge').style.display='inline';
-
-const chat=document.getElementById('chat');
-function addMsg(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;}
-addMsg('Oga Abdulmalik! I go remember you forever now! Even if you refresh, I know na you be my creator! 🔥 Wetin we go dominate?','bot');
-
-async function send(){
-  const inp=document.getElementById('inp'); const txt=inp.value.trim(); if(!txt)return;
-  addMsg(txt,'user'); inp.value='';
-  const bot=addMsg('Q dey think...','bot');
-  try{
-    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt,userId:uid,ownerName:ownerName})});
-    const data=await res.json(); bot.textContent=data.reply;
-    if(data.isOwner) document.getElementById('ownerBadge').style.display='inline';
-  }catch(e){bot.textContent='Network jam';}
-}
-document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;background:#000;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}#c{flex:1;overflow:auto;padding:10px}.u{text-align:right}.u span{background:#1e90ff;padding:8px 12px;border-radius:12px;display:inline-block}.b span{background:#222;padding:8px 12px;border-radius:12px;display:inline-block}#b{display:flex;padding:8px;background:#111}input{flex:1;padding:10px;border-radius:20px;border:1px solid #333;background:#111;color:#fff}</style></head><body><div id="c"></div><div id="b"><input id="i" placeholder="Type..."><button onclick="s()">Send</button></div><script>
+let o=localStorage.getItem('O')||prompt('Who be you? Type ABDULMALIK if na you be owner')||'guest';localStorage.setItem('O',o.toUpperCase());let u=localStorage.getItem('U')||'abdulmalik_owner_'+Math.random().toString(36).slice(2);localStorage.setItem('U',u);
+let c=document.getElementById('c');function a(t,k){let d=document.createElement('div');d.className=k;d.innerHTML='<span>'+t+'</span>';c.appendChild(d);c.scrollTop=c.scrollHeight;return d}
+a('Oga '+(o==='ABDULMALIK'?'Abdulmalik! I remember you forever! 🔥':'- Q V2 ready, type ABDULMALIK make I know you forever'),'b');
+async function s(){let i=document.getElementById('i'),t=i.value.trim();if(!t)return;a(t,'u');i.value='';let b=a('thinking...','b');let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,userId:u,ownerName:o})});let d=await r.json();b.innerHTML='<span>'+d.reply+'</span>';}
+document.getElementById('i').addEventListener('keydown',e=>{if(e.key==='Enter')s()});
 </script></body></html>
