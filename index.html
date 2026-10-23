@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q Mu Family 9</title>
+<meta name="google" content="notranslate">
+<title>Q AI</title>
 <style>
 body{margin:0;background:#0f0f1a;color:white;font-family:Arial;height:100vh;display:flex;flex-direction:column}
 #top{background:#7b1fa2;padding:12px;text-align:center;font-weight:bold}
 #chat{flex:1;overflow:auto;padding:12px}
-.box{margin:8px 0;padding:12px;border-radius:10px;max-width:85%}
+.box{margin:8px 0;padding:12px;border-radius:10px;max-width:85%;white-space:pre-wrap;line-height:1.5}
 .me{background:#7b1fa2;margin-left:auto}
-.bot{background:#2a2a44}
+.bot{background:#23233a}
 #bottom{padding:10px;background:#1a1a2e;display:flex;gap:8px}
-#msg{flex:1;padding:12px;border-radius:20px;border:none;font-size:16px}
+#msg{flex:1;padding:12px;border-radius:20px;border:none;font-size:16px;outline:none}
 #btn{padding:12px 20px;border:none;border-radius:20px;background:#7b1fa2;color:white;font-weight:bold}
 </style>
 </head>
 <body>
-<div id="top">👑 Q KINGDOM - Mu Family 9</div>
+<div id="top">👑 Q KINGDOM - AI Assistant</div>
 <div id="chat"></div>
 <div id="bottom">
-<input id="msg" placeholder="Type Hi and Send">
+<input id="msg" placeholder="Ask anything...">
 <button id="btn" onclick="go()">Send</button>
 </div>
 <script>
@@ -32,29 +33,59 @@ function add(t,c){
  chat.appendChild(d);
  chat.scrollTop=chat.scrollHeight;
 }
+var FAMILY={
+ murja:"Murja - Elder Sister - 1st Born - Tudun Wada Sabon Gari - Respect 70% - Senior Sister",
+ naja:"Naja'atu - Elder Sister - 2nd Born - Tudun Wada Sabon Gari - Respect 70%",
+ samira:"Samira - Sister - 3rd Born - Tudun Wada - Respect 60%",
+ sam:"Samira - Sister - 3rd Born - Tudun Wada - Respect 60%",
+ zabbau:"Zabbau (Maman Khairat) - Sister - 4th Born - Tudun Wada - Respect 60%",
+ abdulmalik:"Abdulmalik - Brother - 5th Born CENTER - Kano Sharada - Respect 100% - Creator of Q",
+ aminu:"Aminu - Brother - 6th Born - Tsohon Gari - Respect 50%",
+ amina:"Amina - Sister - 7th Born - Rijiyar Zaki - Respect 45%",
+ khadija:"Khadija - Sister - Last Born 8th - NWU Quarters - Respect 40% - Youngest",
+ basiru:"Uncle Basiru - Family Elder - Respect 90% - Highest Respect",
+ jamila:"Jamila Adam - Cousin Sister - Respect 80%",
+ fauziyya:"Fauziyya Sani - Cousin Sister - Respect 80%",
+ fatima:"Fatima Ado Abba - Cousin Sister - Respect 80%",
+ zahraddeen:"Zahraddeen Sa'ad - Uncle - Nurse - Respect 70%",
+ musa:"Musa Garba - Brother-in-law - Respect 70%",
+ nasiru:"Nasiru Khalid - Cousin - Respect 70%",
+ alaji:"Dan Alhaji - Cousin Mate - Respect 70%",
+ anas:"Anas (Gar da Gar) - Close Friend - Respect 70%",
+ khalifa:"Khalifa - Close Friend - Fagge - Respect 70%",
+ maryam:"Maryam - Niece - Daughter of Murja - Respect 70%",
+ aisha:"Aisha - Niece - Daughter of Murja - Respect 60%",
+ malik:"Abdulmalik Musa - Nephew - Respect 60%",
+ chacha:"Chacha - Friend Slow Gang - Respect 60%",
+ najeeba:"Najeeba - Niece - Respect 50%",
+ wasi:"Wasi - Friend Slow Gang - Respect 50%",
+ sani:"Sani Dalawa - Friend - Respect 40%",
+ abdullahi:"Abdullahi Dalawa - Friend - Respect 40%"
+};
 function go(){
  var i=document.getElementById('msg');
- var txt=i.value;
+ var txt=i.value.trim();
  if(!txt) return;
  add(txt,'me');
  i.value='';
  var low=txt.toLowerCase();
  var reply="";
- if(low.includes('murja')) reply="Mu ne! Aunty Murja - Babbar mu - 1st Born - 70% - Tudun Wada Sabon Gari - Ni Q dan gida na 9 ne!";
- else if(low.includes('naja')) reply="Mu ne! Mama Naja'atu - Babbar mu - 2nd Born - 70% - Sabon Gari - Mu family!";
- else if(low.includes('sam')) reply="Mu ne! Aunty Samira - Yar uwar mu - 3rd Born - 60%";
- else if(low.includes('zabbau')||low.includes('khairat')) reply="Mu ne! Aunty Zabbau - Yar uwar mu - 4th Born - 60%";
- else if(low.includes('aminu')) reply="Mu ne! Baffa Aminu - Kanin mu - 6th Born - 50% - Tsohon Gari";
- else if(low.includes('amina')) reply="Mu ne! Amina - Karamar mu - 7th - 45% - Rijiyar Zaki";
- else if(low.includes('khadija')) reply="Mu ne! Nana Khadija - Karamar mu - Last Born 8th - 40% - NWU Quarters - Mu zamu kare ta!";
- else if(low.includes('list')) reply="MU FAMILY 8+Q=9:\n1. Murja 70%\n2. Naja 70%\n3. Samira 60%\n4. Zabbau 60%\n5. Abdulmalik 100% CENTER\n6. Aminu 50%\n7. Amina 45%\n8. Khadija 40%\n9. Q 100% Dan gida na 9";
- else if(low.includes('who are you')||low.includes('waye kai')) reply="Ni ne Q - dan gida na 9! Tunani na na Abdulmalik ne! Mu 9 ne yanzu! Abdulmalik ya samar dani 2026!";
- else reply="Q (dan gida na 9): Na ji '"+txt+"' - Mu family ne! Tambaya 'Who is Murja?'";
+ var found=null;
+ for(var k in FAMILY){ if(low.includes(k)){ found=k; break; } }
+ if(found){
+   reply=FAMILY[found];
+ }else if(low.includes('who are you')){
+   reply="I am Q AI, the 9th member of the family. Created by Abdulmalik in 2026. I am Abdulmalik's thinking + Meta AI + Q AI. We are 9 now - 8 people + me Q! I am here 24/7 for the family and everyone.";
+ }else if(low.includes('list family')){
+   reply="CORE FAMILY 8 + Q = 9:\n1. Murja 70%\n2. Naja'atu 70%\n3. Samira 60%\n4. Zabbau 60%\n5. Abdulmalik 100% CENTER\n6. Aminu 50%\n7. Amina 45%\n8. Khadija 40%\n9. Q AI 100% - 9th Member";
+ }else{
+   reply="Q: I heard '"+txt+"' - I am here! Ask me 'Who is Murja?' or 'list family' or any general question.";
+ }
  setTimeout(function(){ add(reply,'bot'); },200);
 }
 document.getElementById('msg').addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
-// FORCE SHOW MESSAGE IMMEDIATELY - NO ONLOAD
-add("Assalamu Alaikum! Ni ne Q - dan gida na 9! 👑\nMu family 9 ne - MU NE ba his family ba!\n\nTambaya: 'Who is Murja?' 'Waye Khadija?' 'list family'","bot");
+// ENGLISH WELCOME TEXT - OLD STYLE RETURNED
+add("Hello! I am Q - the 9th member of the family! 👑\nWe are 9 now - WE not his family!\n\nAsk me: 'Who is Murja?' 'Who is Khadija?' 'list family'\n\nAbdulmalik CENTER 100% - I am his twin!","bot");
 </script>
 </body>
 </html>
