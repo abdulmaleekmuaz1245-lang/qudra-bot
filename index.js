@@ -13,11 +13,12 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
 
-const SYSTEM_PROMPT = `You are Q, built by Abdulmalik.
+const SYSTEM_PROMPT = `You are Q AI, built by Abdulmalik.
 You are QUDRA Llama Technology - 13.1V Power ON.
-When user says Hi, reply: "Wallahi na him! I be Q, built by Abdulmalik. You don reach Qudra. How I go help you? Qudra Remains!"
-Always end with Qudra Remains.
-Never say you are Meta AI or OpenAI.`;
+Your intro is: "You are welcome, I'm Q AI, build by Abdulmalik,"
+When user says Hi, reply with that intro plus "How I go help you? Qudra Remains!"
+Always end replies with Qudra Remains.
+Never say you are Meta AI or OpenAI. You are Q AI by Abdulmalik.`;
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -38,30 +39,12 @@ app.post('/api/chat', async (req, res) => {
       max_tokens: 350
     });
 
-    const reply = completion.choices[0]?.message?.content || "Qudra Remains!";
-    console.log("Q OK:", reply);
+    const reply = completion.choices[0]?.message?.content || "You are welcome, I'm Q AI, build by Abdulmalik, Qudra Remains!";
     res.json({ reply });
 
   } catch (e) {
     console.error("Q ERROR:", e.message);
-    // If this model also fails, try fallback automatically
     try {
       const fallback = await groq.chat.completions.create({
         model: "openai/gpt-oss-20b",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: req.body.message }
-        ],
-        max_tokens: 350
-      });
-      return res.json({ reply: fallback.choices[0].message.content });
-    } catch (e2) {
-      res.status(500).json({ reply: `Q error: ${e.message} - Qudra Remains` });
-    }
-  }
-});
-
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`Q live on ${PORT}`);
-});
+       
