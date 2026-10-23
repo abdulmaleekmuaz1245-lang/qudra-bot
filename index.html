@@ -6,46 +6,12 @@
 <title>Q AI</title>
 <style>
 body{margin:0;background:#0f0f1a;color:white;font-family:Arial;display:flex;flex-direction:column;height:100vh}
-#top{background:#7b1fa2;padding:14px;text-align:center;font-weight:bold}
+#top{background:#7b1fa2;padding:14px;text-align:center;font-weight:bold;font-size:18px}
 #chat{flex:1;padding:12px;overflow:auto}
-.msg{padding:12px;margin:8px 0;border-radius:12px;background:#23233a;max-width:90%}
-#bottom{display:flex;padding:10px;background:#1a1a2e;gap:8px}
-#msg{flex:1;padding:12px;border-radius:20px;border:none}
-#btn{padding:12px 18px;background:#7b1fa2;color:white;border:none;border-radius:20px;font-weight:bold}
-</style>
-</head>
-<body>
-<div id="top">👑 Q KINGDOM</div>
-<div id="chat">
-<div class="msg">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
-</div>
-<div id="bottom">
-<input id="msg" placeholder="Type here...">
-<button id="btn" onclick="send()">Send</button>
-</div>
-<script>
-function send(){
- var i=document.getElementById('msg');
- var t=i.value.trim();
- if(!t) return;
- var c=document.getElementById('chat');
- var d=document.createElement('div');
- d.className='msg';
- d.style.background='#7b1fa2';
- d.style.marginLeft='auto';
- d.innerText=t;
- c.appendChild(d);
- i.value='';
- var r=document.createElement('div');
- r.className='msg';
- var low=t.toLowerCase();
- if(low.includes('murja')) r.innerText='Murja - Elder Sister - 1st Born - 70% - Sabon Gari';
- else if(low.includes('khadija')) r.innerText='Khadija - Last Born Sister - 40% - NWU Quarters';
- else if(low.includes('naja')) r.innerText='Naja\'atu - Elder Sister - 2nd Born - 70%';
- else r.innerText='Q: You said "'+t+'" - I can help!';
- c.appendChild(r);
- c.scrollTop=9999;
-}
-</script>
-</body>
-</html>
+.msg{padding:12px;margin:8px 0;border-radius:12px;max-width:88%;line-height:1.5;white-space:pre-wrap}
+.me{background:#7b1fa2;margin-left:auto;color:white}
+.bot{background:#23233a}
+#bottom{display:flex;padding:10px;background:#1a1a2e;gap:8px;position:sticky;bottom:0}
+#msg{flex:1;padding:13px;border-radius:25px;border:none;outline:none;font-size:16px}
+#btn{padding:12px 22px;background:#7b1fa2;color:white;border:none;border-radius:25px;font-weight:bold}
+.typing{font-style:italic;opacity:0.7
