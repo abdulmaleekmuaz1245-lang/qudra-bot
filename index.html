@@ -3,7 +3,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
 header{padding:12px 15px;background:linear-gradient(90deg,#4a00e0,#8e2de2,#ff00cc);display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid gold}
-#chat{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:radial-gradient(circle at 20% 30%, #1a0033 0%, #000 70%)}
+#chat{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#1a0033}
 .msg{max-width:85%;padding:10px 14px;border-radius:16px;word-break:break-word}
 .user{align-self:flex-end;background:linear-gradient(90deg,#4a00e0,#8e2de2)}
 .bot{align-self:flex-start;background:#111;border:1px solid #8e2de2}
@@ -19,16 +19,28 @@ button{padding:10px 14px;border-radius:20px;border:none;font-weight:bold;cursor:
 <div id="chat"></div>
 <div id="box"><input id="i" placeholder="Ask Q..."><button id="send" onclick="s()">Send</button><button id="art" onclick="drawImg()">🎨</button><button id="wa" onclick="shareWA()">WA</button></div>
 <script>
+// FIXED OWNER LOGIC
 let params=new URLSearchParams(window.location.search);
-if(params.get('owner')==='ABDULMALIK'){localStorage.setItem('O','ABDULMALIK');}
+let pOwner = params.get('owner') || params.get('OWNER') || '';
+if(pOwner.toLowerCase()==='abdulmalik'){localStorage.setItem('O','ABDULMALIK'); alert('OWNER UNLOCKED! 👑'); location.href=location.origin+location.pathname;}
+
 let O=localStorage.getItem('O')||'GUEST';
 let U=localStorage.getItem('U')||'user_'+Math.random().toString(36).slice(2);localStorage.setItem('U',U);
-if(O==='ABDULMALIK'){document.getElementById('o').style.display='inline';}else{document.getElementById('g').style.display='inline';}
+function checkOwner(){if(O==='ABDULMALIK'){document.getElementById('o').style.display='inline';}else{document.getElementById('g').style.display='inline';}}
+checkOwner();
+
 let C=document.getElementById('chat'),lastReply='';
 function A(t,k){let d=document.createElement('div');d.className='msg '+k;d.innerHTML=t;C.appendChild(d);C.scrollTop=99999;return d}
-if(O==='ABDULMALIK'){A('Oga Abdulmalik welcome! I dey short now, no too much talk. 👑','bot');}else{A('Welcome Guest! I be Q, short and sharp.','bot');}
-async function s(){let I=document.getElementById('i'),t=I.value.trim();if(!t)return;A(t,'user');I.value='';let b=A('...','bot');try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,userId:U,ownerName:O})});let d=await r.json();lastReply=d.reply;b.innerHTML=d.reply;}catch(e){b.textContent='Network jam'}} 
-async function drawImg(){let I=document.getElementById('i'),t=I.value.trim()||lastReply||'fantasy queen';if(!t)return;A('🎨 '+t,'user');let b=A('Drawing...','bot');try{let r=await fetch('/api/image?prompt='+encodeURIComponent(t));let d=await r.json();b.innerHTML=`<b>${t}</b><br><img src="${d.imageUrl}"><br><a href="${d.imageUrl}" target="_blank" style="color:gold">Open</a>`;}catch(e){b.textContent='Image jam'}}
-function shareWA(){let txt=lastReply||document.getElementById('i').value||'From Q Kingdom 👑';window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,'_blank')}
+if(O==='ABDULMALIK'){A('Oga Abdulmalik welcome! Owner mode active. Vault secured. 👑','bot');}else{A('Welcome Guest! I be Q. Short and sharp. (Owner? type: I AM ABDULMALIK)','bot');}
+
+async function s(){
+let I=document.getElementById('i'),t=I.value.trim();if(!t)return;
+// SECRET UNLOCK
+if(t.toUpperCase()==='I AM ABDULMALIK'){localStorage.setItem('O','ABDULMALIK'); O='ABDULMALIK'; A('OWNER UNLOCKED! 👑 Welcome Oga!','bot'); checkOwner(); I.value=''; location.reload(); return;}
+A(t,'user');I.value='';let b=A('...','bot');
+try{let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,userId:U,ownerName:O})});let d=await r.json();lastReply=d.reply;b.innerHTML=d.reply;}catch(e){b.textContent='Network jam'}} 
+
+async function drawImg(){let I=document.getElementById('i'),t=I.value.trim()||lastReply||'fantasy queen';if(!t)return;A('🎨 '+t,'user');let b=A('Drawing...','bot');try{let r=await fetch('/api/image?prompt='+encodeURIComponent(t));let d=await r.json();b.innerHTML=`<b>${t}</b><br><img src="${d.imageUrl}">`;}catch(e){b.textContent='Image jam'}}
+function shareWA(){let txt=lastReply||'From Q Kingdom';window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,'_blank')}
 document.getElementById('i').addEventListener('keydown',e=>{if(e.key==='Enter')s()});
 </script></body></html>
