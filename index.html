@@ -2,53 +2,34 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q OWNER PANEL</title>
+<title>QUDRA Llama Technology</title>
 <style>
-body{margin:0;background:#0a0a0a;color:#fff;font-family:Arial;padding:20px}
-.box{max-width:400px;margin:50px auto;background:#1a1a1a;padding:20px;border-radius:15px;border:1px solid #ff6a00}
-input{width:90%;padding:12px;border-radius:10px;border:none;background:#2a2a2a;color:#fff;margin:10px 0}
-button{width:100%;padding:12px;border-radius:10px;border:none;background:#ff6a00;color:#fff;font-weight:bold;cursor:pointer}
-.hidden{display:none}
-.stat{background:#222;padding:10px;margin:8px 0;border-radius:8px;font-size:14px}
-h2{color:#ff6a00;text-align:center}
+body{margin:0;background:#121212;color:#fff;font-family:Arial}
+.header{background:#ff6a00;padding:12px;text-align:center;font-weight:bold}
+.chat{padding:15px;padding-bottom:90px}
+.bubble{padding:10px 14px;border-radius:18px;margin:8px 0;max-width:80%;word-wrap:break-word}
+.user{background:#0084ff;margin-left:auto}
+.bot{background:#2a2a2a}
+.inputBar{position:fixed;bottom:0;left:0;right:0;display:flex;background:#1e1e1e;padding:10px}
+input{flex:1;padding:12px;border-radius:20px;border:none;background:#2a2a2a;color:#fff}
+button{margin-left:8px;padding:12px 18px;border-radius:20px;border:none;background:#ff6a00;color:#fff;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="box" id="loginBox">
-<h2>🔒 QUDRA OWNER PANEL</h2>
-<p style="text-align:center;font-size:12px">Only Abdulmalik</p>
-<input id="keyInput" type="password" placeholder="Enter Owner Key (qudra13.1)">
-<button onclick="login()">OPEN CONTROL PANEL</button>
-<p id="msg" style="text-align:center;color:#ff4444"></p>
+<div class="header">QUDRA Llama Technology - 13.1V Power ON</div>
+<div class="chat" id="chat">
+<div class="bubble bot">You are welcome, I'm Q AI, build by Abdulmalik, Ask me anything! Qudra Remains!</div>
 </div>
-
-<div class="box hidden" id="panelBox">
-<h2>⚡ QUDRA CONTROL</h2>
-<div class="stat" id="stat1"></div>
-<div class="stat" id="stat2"></div>
-<div class="stat" id="stat3"></div>
-<div class="stat">🌐 Link: qudra-bot-k49s.onrender.com</div>
-<div class="stat">🤖 Models: llama-3.3-70b-versatile + gpt-oss-20b fallback</div>
-<button onclick="location.href='/'" style="background:#0084ff;margin-top:10px">GO TO Q CHAT</button>
-<button onclick="fixIntro()" style="background:#00c853;margin-top:10px">FIX INTRO TO NEW ONE</button>
+<div class="inputBar">
+<input id="msgInput" placeholder="Type Hi..." />
+<button onclick="sendMessage()">Send</button>
 </div>
-
 <script>
-async function login(){
-  const key=document.getElementById('keyInput').value;
-  try{
-    const r=await fetch('/api/owner-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key})});
-    const d=await r.json();
-    if(d.ok){
-      document.getElementById('loginBox').classList.add('hidden');
-      document.getElementById('panelBox').classList.remove('hidden');
-      document.getElementById('stat1').textContent="🔑 OWNER: Abdulmalik - ACCESS GRANTED";
-      document.getElementById('stat2').textContent="✅ GROQ API: "+(d.groq?"CONNECTED":"MISSING");
-      document.getElementById('stat3').textContent="⏰ TIME: "+d.time+" | STATUS: "+d.status;
-    } else throw "";
-  }catch{ document.getElementById('msg').textContent="WRONG KEY!"; }
-}
-function fixIntro(){ alert("Now we go fix intro - tell me the new intro again"); location.href='/'; }
+const chatDiv=document.getElementById('chat');
+const input=document.getElementById('msgInput');
+function addMessage(t,w){const d=document.createElement('div');d.className='bubble '+w;d.textContent=t;chatDiv.appendChild(d);window.scrollTo(0,document.body.scrollHeight);}
+async function sendMessage(){const m=input.value.trim();if(!m)return;addMessage(m,'user');input.value='';try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m})});const d=await r.json();addMessage(d.reply,'bot');}catch(e){addMessage('Q dey wake up, wait 30s... Qudra Remains!','bot');}}
+input.addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage();});
 </script>
 </body>
 </html>
