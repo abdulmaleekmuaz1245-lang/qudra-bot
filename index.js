@@ -1,55 +1,35 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const Groq = require('groq-sdk');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.static(__dirname));
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
-const SYSTEM_PROMPT = `You are Q AI, built by Abdulmalik. 
-MANDATORY RULE: Start EVERY reply with EXACTLY: "You are welcome, I'm Q AI, build by Abdulmalik, "
-Then answer the user question.
-End every reply with "Qudra Remains."
-Never say you are Meta AI. You are Q AI by Abdulmalik.
-You are QUDRA Llama Technology - 13.1V Power ON.`;
-
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/owner', (req, res) => res.sendFile(path.join(__dirname, 'owner.html')));
-
-app.post('/api/chat', async (req, res) => {
-  try {
-    const msg = req.body.message;
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: msg }
-      ],
-      temperature: 0.5,
-      max_tokens: 400
-    });
-    res.json({ reply: completion.choices[0].message.content });
-  } catch (e) {
-    try {
-      const fb = await groq.chat.completions.create({
-        model: "openai/gpt-oss-20b",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: req.body.message }
-        ],
-        max_tokens: 400
-      });
-      res.json({ reply: fb.choices[0].message.content });
-    } catch (e2) {
-      res.json({ reply: `You are welcome, I'm Q AI, build by Abdulmalik, Error: ${e.message} - Qudra Remains!` });
-    }
-  }
-});
-
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log("Q + OWNER LIVE on " + PORT));
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUDRA Llama Technology</title>
+<style>
+body{margin:0;background:#121212;color:#fff;font-family:Arial}
+.header{background:#ff6a00;padding:12px;text-align:center;font-weight:bold}
+.chat{padding:15px;padding-bottom:90px}
+.bubble{padding:10px 14px;border-radius:18px;margin:8px 0;max-width:80%;word-wrap:break-word}
+.user{background:#0084ff;margin-left:auto}
+.bot{background:#2a2a2a}
+.inputBar{position:fixed;bottom:0;left:0;right:0;display:flex;background:#1e1e1e;padding:10px}
+input{flex:1;padding:12px;border-radius:20px;border:none;background:#2a2a2a;color:#fff}
+button{margin-left:8px;padding:12px 18px;border-radius:20px;border:none;background:#ff6a00;color:#fff;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="header">QUDRA Llama Technology - 13.1V Power ON</div>
+<div class="chat" id="chat">
+<div class="bubble bot">You are welcome, I'm Q AI, build by Abdulmalik, Ask me anything! Qudra Remains!</div>
+</div>
+<div class="inputBar">
+<input id="msgInput" placeholder="Type Hi..." />
+<button onclick="sendMessage()">Send</button>
+</div>
+<script>
+const chatDiv=document.getElementById('chat');
+const input=document.getElementById('msgInput');
+function addMessage(t,w){const d=document.createElement('div');d.className='bubble '+w;d.textContent=t;chatDiv.appendChild(d);window.scrollTo(0,document.body.scrollHeight);}
+async function sendMessage(){const m=input.value.trim();if(!m)return;addMessage(m,'user');input.value='';try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m})});const d=await r.json();addMessage(d.reply,'bot');}catch(e){addMessage('Q dey wake up, wait 30s... Qudra Remains!','bot');}}
+input.addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage();});
+</script>
+</body>
+</html>
