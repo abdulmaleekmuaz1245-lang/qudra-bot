@@ -23,10 +23,24 @@ app.post('/api/chat', (req, res) => {
   const msg = originalMsg.toLowerCase().trim();
   let reply = "";
 
-  if (msg.includes("i'm abdul") || msg.includes("i am abdul") || msg.includes("my name is abdul")) {
-    userName = "Abdul";
-    reply = "Nice to meet you Abdul! I don save your name. Qudra Remains! 🔥 How you dey tonight?";
-  } else if (msg.includes("how are you") || msg.includes("how are u") || msg === "how are u") {
-    reply = userName ? `I'm great ${userName}! Full power for Render. How your side dey? 🔥` : "I'm doing perfect boss! Strong and ready. How you dey? 🔥";
-  } else if (msg.includes("who are you")) {
-    reply = "You are welcome, I'm
+  if (msg.includes('abdul')) {
+    userName = 'Abdul';
+    reply = 'Nice to meet you Abdul! I don save your name. Qudra Remains! How you dey tonight?';
+  } else if (msg.includes('how are you') || msg.includes('how are u') || msg.includes('how u dey')) {
+    reply = userName ? 'I am great ' + userName + '! Full power for Render. How your side dey?' : 'I am doing perfect boss! Strong and ready. How you dey?';
+  } else if (msg.includes('who are you')) {
+    reply = 'You are welcome, I am Q AI, build by Abdulmalik - your loyal assistant!';
+  } else if (msg === 'hi' || msg === 'hello' || msg === 'hey') {
+    reply = 'You are welcome, I am Q AI, build by Abdulmalik, how can I assist you today?';
+  } else if (msg.includes('qudra')) {
+    reply = 'Qudra Remains! We dey together!';
+  } else {
+    reply = userName ? 'I hear you ' + userName + ', make we talk am well. Wetin you think?' : 'I hear you boss, talk to me more about am. I dey listen.';
+  }
+
+  res.json({ reply: reply });
+});
+
+app.listen(PORT, () => {
+  console.log('Q Bot LIVE');
+});
