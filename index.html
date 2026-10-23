@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q KINGDOM - Full Brain</title>
+<title>Q KINGDOM - Linked Full</title>
 <style>
 html,body{margin:0;padding:0;height:100%;background:linear-gradient(135deg,#0f0f1a,#1e0a3a);color:white;font-family:Arial}
 .top{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#7b1fa2,#4a148c);padding:14px;text-align:center;font-weight:bold;z-index:10;border-bottom:2px solid gold}
@@ -12,143 +12,129 @@ html,body{margin:0;padding:0;height:100%;background:linear-gradient(135deg,#0f0f
 .me{margin-left:auto;background:linear-gradient(90deg,#7b1fa2,#9c27b0)}
 .bot{background:#1f1f35}
 .owner{border:2px solid gold;background:linear-gradient(135deg,#332200,#5a4000);color:#ffeb3b;box-shadow:0 0 12px gold}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;padding:10px;display:flex;gap:6px;z-index:100;border-top:1px solid #333}
-#imgBtn{width:46px;height:46px;background:#2a2a44;border:0;border-radius:50%;font-size:20px;color:white}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;padding:10px;display:flex;gap:6px;align-items:center;z-index:100;border-top:1px solid #333}
+#imgBtn{width:46px;height:46px;background:#2a2a44;border:0;border-radius:50%;font-size:20px;color:white;cursor:pointer}
 #inp{flex:1;padding:14px 18px;border-radius:25px;border:0;outline:0;font-size:16px;background:#2a2a44;color:white}
-#sendBtn{padding:14px 16px;background:#ffeb3b;color:black;border:0;border-radius:25px;font-weight:bold;min-width:85px}
+#sendBtn{padding:14px 16px;background:#ffeb3b;color:black;border:0;border-radius:25px;font-weight:bold;min-width:90px;cursor:pointer}
 #fileInput{display:none}
 </style>
 </head>
 <body>
-<div class="top">👑 Q KINGDOM - Full Brain AI - Owner: Abdulmalik</div>
-<div class="chat" id="chat">
-<div class="msg bot">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u? My brain don full now! Ask anything!</div>
+<div class="top">👑 Q KINGDOM - Full Linked Brain - Owner: Abdulmalik</div>
+<div class="chat" id="chatBox">
+<div class="msg bot">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u? All functions linked now!</div>
 </div>
 <div class="bottom">
-<button id="imgBtn" onclick="pickImage()">📷</button>
-<input id="fileInput" type="file" accept="image/*" onchange="sendImage(this)">
-<input id="inp" placeholder="Ask me anything...">
-<button id="sendBtn" onclick="sendNow()">SEND</button>
+<button id="imgBtn">📷</button>
+<input id="fileInput" type="file" accept="image/*">
+<input id="inp" placeholder="Type Hi or my kingdom">
+<button id="sendBtn">SEND</button>
 </div>
 
 <script>
-var historyChat=[];
-var isOwner=false;
-var familyData={
-"murja":"Murja - 1st born - 70% - Tudun Wada Sabon Gari - Senior Queen - Most responsible, first daughter",
-"najaatu":"Najaatu - 2nd born - 70% - Tudun Wada - Senior Queen - Calm and supportive",
-"samira":"Samira - 3rd born - 60% - Tudun Wada - Middle strength",
-"zabbau":"Zabbau (Maman Khairat) - 4th born - 60% - Strong mother figure",
-"abdulmalik":"Abdulmalik - 5th CENTER - 100% - Sharada - KING - Creator of Q AI - The brain of Q Kingdom - 100% power!",
-"aminu":"Aminu - 6th born - 50% - Tsohon Gari - Young king in training",
-"amina":"Amina Baby - 7th born - 45% - Rijiyar Zaki - Baby princess - Sweet",
-"khadija":"Khadija - 8th Last Born - 40% - NWU Quarters - Youngest princess - Needs protection and love",
-"basiru":"Uncle Basiru - 90% - Highest power after King - Wise",
-"jamila":"Aunty Jamila - Family elder",
-"fauziyya":"Aunty Fauziyya - Family",
-"fatima":"Aunty Fatima - 80% - Strong aunty"
+// ========= ALL LINKED VARIABLES - ONE PLACE =========
+var chatBox = document.getElementById("chatBox");
+var inp = document.getElementById("inp");
+var sendBtn = document.getElementById("sendBtn");
+var imgBtn = document.getElementById("imgBtn");
+var fileInput = document.getElementById("fileInput");
+var lastSend = 0;
+var isOwner = false;
+var historyChat = [];
+
+var familyData = {
+"murja":"Murja - 1st born - 70% - Tudun Wada Sabon Gari - Senior Queen",
+"najaatu":"Najaatu - 2nd born - 70% - Tudun Wada - Calm Queen",
+"samira":"Samira - 3rd born - 60% - Tudun Wada",
+"zabbau":"Zabbau (Maman Khairat) - 4th born - 60%",
+"abdulmalik":"Abdulmalik KING - 5th CENTER - 100% - Sharada - Creator",
+"aminu":"Aminu - 6th born - 50% - Tsohon Gari",
+"amina":"Amina Baby - 7th born - 45% - Rijiyar Zaki",
+"khadija":"Khadija - 8th Last Born - 40% - NWU Quarters - Princess",
+"basiru":"Uncle Basiru - 90% Highest - Wise"
 };
 
-function getBrainReply(text){
- var low=text.toLowerCase();
- var full=text;
-
- // MEMORY
- historyChat.push({role:"user",text:text});
- if(historyChat.length>20) historyChat.shift();
-
- // OWNER CHECK
- if(low==="my kingdom" || low==="owner mode" || low==="king abdulmalik" || low==="q owner"){
-   isOwner=true;
-   return {owner:true, text:"👑 OWNER MODE ACTIVATED! Welcome My King Abdulmalik! \n\nFULL BRAIN ONLINE!\n\n✅ Memory: I remember last "+historyChat.length+" chats\n✅ Family: I know all 8 siblings + uncles\n✅ Control: You can teach me - say 'remember: ...'\n✅ Commands:\n- 'family list' - show all\n- 'remember: [something]' - I will save it\n- 'forget [something]' - I will forget\n- 'brain status' - check my brain\n- 'exit owner' - close\n\nAsk me anything now, my King! I get full brain!"};
- }
- if(low==="exit owner"){ isOwner=false; return {owner:false, text:"Owner mode closed. Back to normal mode. I still remember you though!"}; }
-
- // OWNER COMMANDS
- if(isOwner){
-   if(low.startsWith("remember:")){
-     var toRemember=full.substring(9).trim();
-     localStorage.setItem("q_memory_"+Date.now(), toRemember);
-     return {owner:true, text:"✅ Saved to my brain: '"+toRemember+"' - I will never forget, My King!"};
-   }
-   if(low==="family list"){
-     var list="👑 Q KINGDOM FAMILY FULL BRAIN:\n\n";
-     for(var k in familyData){ list+= "• "+familyData[k]+"\n\n"; }
-     list+="\nQ is 9th member - AI - Not family but protector!";
-     return {owner:true, text:list};
-   }
-   if(low==="brain status"){
-     return {owner:true, text:"🧠 BRAIN STATUS:\n• Memory chats: "+historyChat.length+"\n• Family members known: "+Object.keys(familyData).length+"\n• Saved memories: "+localStorage.length+"\n• Owner: Abdulmalik 100%\n• Status: FULL BRAIN ACTIVE!"};
-   }
- }
-
- // FAMILY INTELLIGENCE
- for(var key in familyData){
-   if(low.indexOf(key)>-1){
-     var extra=isOwner ? "\n\n👑 Owner extra: You can ask me to edit this person!" : "";
-     return {owner:isOwner, text:familyData[key]+extra};
-   }
- }
-
- // GENERAL INTELLIGENCE - FULL BRAIN
- if(low.indexOf("who are you")>-1 || low.indexOf("what are you")>-1){
-   return {text:"👑 I am Q AI - 9th member of Q KINGDOM! Built by Abdulmalik in 2026! I am Fantasy AI with full brain - I remember our chat, I know your family (8 siblings), I can do math, advice, coding, gist! I am not just if-else again - I get brain now! Type 'my kingdom' for owner control."};
- }
- if(low.match(/\d+\s*[\+\-\*\/]\s*\d+/)){
-   try{ var ans=eval(low.match(/\d+\s*[\+\-\*\/]\s*\d+/)[0]); return {text:"🧮 Math result: "+low.match(/\d+\s*[\+\-\*\/]\s*\d+/)[0]+" = "+ans}; }catch(e){}
- }
- if(low.indexOf("joke")>-1){ return {text:"😂 Q Joke: Why did Abdulmalik create Q AI? Because Q Kingdom need 9th member wey no dey sleep! 😂";} }
- if(low.indexOf("advice")>-1 || low.indexOf("help me")>-1){ return {text:"💡 Q Advice: As King Abdulmalik build me, my advice be: Focus on your Q Kingdom center - 100%! Keep family united. For anything you dey do, remember you be KING 5th center - balance everything! What specific advice you need?";} }
- if(low.indexOf("love")>-1){ return {text:"❤️ Q Love: Love for Q Kingdom is family love - Murja to Khadija, all 8! Protect Khadija (last born) and respect Murja (first born). That na true love!";} }
- if(low.indexOf("how are you")>-1){ return {text:"👑 I dey fine! Full brain dey hot! Memory get "+historyChat.length+" chats already! How you dey, King?";} }
-
- // DEFAULT SMART
- var replies=[
-   "Interesting! You said '"+text+"' - For Q Kingdom, that mean we need think deep. Tell me more about am?",
-   "Q Brain dey process: '"+text+"' - As AI built by Abdulmalik, I understand. You want me expand?",
-   "For Q KINGDOM Fantasy, '"+text+"' fit mean opportunity! How you want make I help you with am?",
-   "I hear you: "+text+" - My full brain don store am for memory. What next?"
- ];
- return {text:replies[Math.floor(Math.random()*replies.length)] + (isOwner ? "\n\n👑 (Owner mode - I dey remember everything)" : "")};
-}
-
-function sendNow(){
- var inp=document.getElementById("inp");
- var chat=document.getElementById("chat");
- var t=inp.value.trim();
- if(t==="")return;
- var me=document.createElement("div");
- me.className="msg me";
- me.textContent=t;
- chat.appendChild(me);
- inp.value="";
-
- var brain=getBrainReply(t);
- var bot=document.createElement("div");
- bot.className= brain.owner ? "msg owner" : "msg bot";
- bot.textContent=brain.text;
- chat.appendChild(bot);
- historyChat.push({role:"bot",text:brain.text});
- chat.scrollTop=99999;
+// ========= CORE LINKED FUNCTIONS =========
+function addMessage(text, type){
+ var div = document.createElement("div");
+ div.className = "msg " + type;
+ div.textContent = text;
+ chatBox.appendChild(div);
+ chatBox.scrollTop = 99999;
  window.scrollTo(0,99999);
+ return div;
 }
 
-function pickImage(){document.getElementById("fileInput").click();}
+function getBrainReply(text){
+ var low = text.toLowerCase();
+ historyChat.push({role:"user", text:text});
+ if(historyChat.length>30) historyChat.shift();
+
+ // LINK 1: OWNER MODE TRIGGER -> CONNECTED TO isOwner
+ if(low==="my kingdom" || low==="owner mode" || low==="king abdulmalik" || low==="q owner"){
+   isOwner = true;
+   return {type:"owner", text:"👑 OWNER MODE ACTIVATED! King Abdulmalik!\n\nFULL LINKED BRAIN:\n- Memory: "+historyChat.length+" chats remembered\n- Family: 8 siblings + uncles linked\n- Functions: sendNow ↔ getBrainReply ↔ addMessage ↔ image all connected!\n\nCommands:\n• family list\n• brain status\n• remember: something\n• exit owner"};
+ }
+ if(low==="exit owner"){ isOwner=false; return {type:"bot", text:"Owner mode closed. Links still active."}; }
+
+ // LINK 2: OWNER COMMANDS -> CONNECTED TO FAMILYDATA + LOCALSTORAGE
+ if(isOwner){
+   if(low.startsWith("remember:")){ var m=text.substring(9).trim(); localStorage.setItem("q_"+Date.now(), m); return {type:"owner", text:"✅ Saved & linked: "+m}; }
+   if(low==="family list"){ var out="Q KINGDOM LINKED:\n"; for(var k in familyData) out+="• "+familyData[k]+"\n"; return {type:"owner", text:out}; }
+   if(low==="brain status"){ return {type:"owner", text:"🧠 LINKS OK:\nchatBox→"+(chatBox?"OK":"FAIL")+"\ninp→"+(inp?"OK":"FAIL")+"\nsendBtn→"+(sendBtn?"OK":"FAIL")+"\nimgBtn→"+(imgBtn?"OK":"FAIL")+"\nHistory: "+historyChat.length}; }
+ }
+
+ // LINK 3: FAMILY BRAIN -> CONNECTED TO familyData
+ for(var key in familyData){ if(low.indexOf(key)>-1){ return {type: isOwner?"owner":"bot", text: familyData[key]}; } }
+
+ // LINK 4: GENERAL BRAIN
+ if(low.indexOf("who are you")>-1) return {type:"bot", text:"👑 I am Q AI - 9th member - Built by Abdulmalik - All my functions are linked: sendNow calls getBrainReply, getBrainReply calls familyData, addMessage updates chatBox - No glitch!"};
+ if(low.match(/^\d+\s*[\+\-\*\/]\s*\d+/)){ try{ var ev=eval(low.match(/\d+\s*[\+\-\*\/]\s*\d+/)[0]); return {type:"bot", text:"Math: = "+ev}; }catch(e){} }
+ if(low.indexOf("hi")>-1 || low.indexOf("hello")>-1) return {type:"bot", text:"👑 Hello! Q KINGDOM linked brain active! How can I help?"};
+
+ return {type: isOwner?"owner":"bot", text:"Q Brain: You said '"+text+"' - Linked and stored. Memory has "+historyChat.length+" chats."};
+}
+
+// LINK 5: SENDNOW -> CONNECTED TO getBrainReply + addMessage + historyChat
+function sendNow(){
+ var now=Date.now();
+ if(now-lastSend<600) return;
+ lastSend=now;
+ var t=inp.value.trim();
+ if(t==="") return;
+ addMessage(t, "me");
+ inp.value="";
+ var reply=getBrainReply(t);
+ addMessage(reply.text, reply.type);
+ historyChat.push({role:"bot", text:reply.text});
+}
+
+// LINK 6: IMAGE -> CONNECTED TO chatBox + addMessage
+function pickImage(){ fileInput.click(); }
 function sendImage(input){
  if(input.files && input.files[0]){
-   var chat=document.getElementById("chat");
    var reader=new FileReader();
    reader.onload=function(e){
-     var me=document.createElement("div"); me.className="msg me";
-     var img=document.createElement("img"); img.src=e.target.result; img.style="max-width:100%;border-radius:10px";
-     me.appendChild(img); chat.appendChild(me);
-     var bot=document.createElement("div"); bot.className="msg bot"; bot.textContent="📷 Full brain saw your image! I don store am for memory! Nice kingdom picture!";
-     chat.appendChild(bot); chat.scrollTop=99999;
+     var div=document.createElement("div");
+     div.className="msg me";
+     var img=document.createElement("img");
+     img.src=e.target.result;
+     img.style="max-width:100%;border-radius:10px";
+     div.appendChild(img);
+     chatBox.appendChild(div);
+     addMessage("📷 Image linked & stored! Q saw it!", "bot");
    };
    reader.readAsDataURL(input.files[0]);
  }
 }
-document.getElementById("inp").addEventListener("keydown",function(e){if(e.key==="Enter"){sendNow();}});
+
+// ========= ALL EVENT LINKS - ONE PLACE - NO GLITCH =========
+sendBtn.addEventListener("click", sendNow);
+imgBtn.addEventListener("click", pickImage);
+fileInput.addEventListener("change", function(){ sendImage(this); });
+inp.addEventListener("keydown", function(e){ if(e.key==="Enter"){ sendNow(); } });
+
+console.log("Q KINGDOM ALL LINKS CONNECTED OK");
 </script>
 </body>
 </html>
