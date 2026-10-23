@@ -1,52 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="google" content="notranslate">
 <title>Q AI</title>
 <style>
-body{margin:0;background:#0f0f1a;color:white;font-family:Arial;height:100vh;display:flex;flex-direction:column}
-#top{background:#7b1fa2;padding:12px;text-align:center;font-weight:bold}
-#chat{flex:1;overflow:auto;padding:12px}
-.box{margin:8px 0;padding:12px;border-radius:10px;max-width:85%;white-space:pre-wrap}
-.me{background:#7b1fa2;margin-left:auto}
-.bot{background:#23233a}
-#bottom{padding:10px;background:#1a1a2e;display:flex;gap:8px}
-#msg{flex:1;padding:12px;border-radius:20px;border:none;font-size:16px;outline:none}
-#btn{padding:12px 20px;border:none;border-radius:20px;background:#7b1fa2;color:white;font-weight:bold}
+body{margin:0;background:#0f0f1a;color:white;font-family:Arial;display:flex;flex-direction:column;height:100vh}
+#top{background:#7b1fa2;padding:14px;text-align:center;font-weight:bold}
+#chat{flex:1;padding:12px;overflow:auto}
+.msg{padding:12px;margin:8px 0;border-radius:12px;background:#23233a;max-width:90%}
+#bottom{display:flex;padding:10px;background:#1a1a2e;gap:8px}
+#msg{flex:1;padding:12px;border-radius:20px;border:none}
+#btn{padding:12px 18px;background:#7b1fa2;color:white;border:none;border-radius:20px;font-weight:bold}
 </style>
 </head>
 <body>
 <div id="top">👑 Q KINGDOM</div>
-<div id="chat"></div>
+<div id="chat">
+<div class="msg">Assalamu Alaikum. I'm Q AI, build by Abdulmalik, how can I assist u?</div>
+</div>
 <div id="bottom">
-<input id="msg" placeholder="Ask anything...">
-<button id="btn" onclick="go()">Send</button>
+<input id="msg" placeholder="Type here...">
+<button id="btn" onclick="send()">Send</button>
 </div>
 <script>
-var chat=document.getElementById('chat');
-function add(t,c){
+function send(){
+ var i=document.getElementById('msg');
+ var t=i.value.trim();
+ if(!t) return;
+ var c=document.getElementById('chat');
  var d=document.createElement('div');
- d.className='box '+c;
+ d.className='msg';
+ d.style.background='#7b1fa2';
+ d.style.marginLeft='auto';
  d.innerText=t;
- chat.appendChild(d);
- chat.scrollTop=chat.scrollHeight;
+ c.appendChild(d);
+ i.value='';
+ var r=document.createElement('div');
+ r.className='msg';
+ var low=t.toLowerCase();
+ if(low.includes('murja')) r.innerText='Murja - Elder Sister - 1st Born - 70% - Sabon Gari';
+ else if(low.includes('khadija')) r.innerText='Khadija - Last Born Sister - 40% - NWU Quarters';
+ else if(low.includes('naja')) r.innerText='Naja\'atu - Elder Sister - 2nd Born - 70%';
+ else r.innerText='Q: You said "'+t+'" - I can help!';
+ c.appendChild(r);
+ c.scrollTop=9999;
 }
-var FAMILY={
- murja:"Murja - Elder Sister - 1st Born - Tudun Wada Sabon Gari - 70%",
- naja:"Naja'atu - Elder Sister - 2nd Born - Tudun Wada Sabon Gari - 70%",
- samira:"Samira - Sister - 3rd Born - Tudun Wada - 60%",
- sam:"Samira - Sister - 3rd Born",
- zabbau:"Zabbau (Maman Khairat) - Sister - 4th Born - 60%",
- abdulmalik:"Abdulmalik - Brother - 5th Born CENTER - Kano Sharada - 100% - Creator",
- aminu:"Aminu - Brother - 6th Born - 50%",
- amina:"Amina - Sister - 7th Born - 45%",
- khadija:"Khadija - Sister - Last Born 8th - 40%",
- basiru:"Uncle Basiru - Family Elder - 90%",
- jamila:"Jamila Adam - Cousin Sister - 80%",
- fauziyya:"Fauziyya Sani - Cousin Sister - 80%",
- fatima:"Fatima Ado Abba - Cousin Sister - 80%",
- zahraddeen:"Zahraddeen Sa'ad - Uncle - Nurse - 70%",
- musa:"Musa Garba - Brother-in-law - 70%",
- nasiru:"Nasiru Khalid - Cous
+</script>
+</body>
+</html>
