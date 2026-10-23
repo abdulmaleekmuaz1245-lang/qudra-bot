@@ -5,23 +5,23 @@
 <title>QUDRA Llama Technology</title>
 <style>
 body{margin:0;background:#121212;color:#fff;font-family:Arial}
-.header{background:#ff6a00;padding:12px;text-align:center;font-weight:bold}
-.chat{padding:15px;padding-bottom:80px}
-.bubble{padding:10px 14px;border-radius:18px;margin:8px 0;max-width:80%;word-wrap:break-word}
+.header{background:#ff6a00;padding:12px;text-align:center;font-weight:bold;font-size:14px}
+.chat{padding:15px;padding-bottom:90px}
+.bubble{padding:10px 14px;border-radius:18px;margin:8px 0;max-width:80%;word-wrap:break-word;font-size:14px}
 .user{background:#0084ff;margin-left:auto}
 .bot{background:#2a2a2a}
 .inputBar{position:fixed;bottom:0;left:0;right:0;display:flex;background:#1e1e1e;padding:10px}
-input{flex:1;padding:12px;border-radius:20px;border:none;background:#2a2a2a;color:#fff}
+input{flex:1;padding:12px;border-radius:20px;border:none;background:#2a2a2a;color:#fff;outline:none}
 button{margin-left:8px;padding:12px 18px;border-radius:20px;border:none;background:#ff6a00;color:#fff;font-weight:bold}
 </style>
 </head>
 <body>
 <div class="header">QUDRA Llama Technology - 13.1V Power ON</div>
 <div class="chat" id="chat">
-<div class="bubble bot">Wallahi na him! I be Q, built by Abdulmalik. Ask me anything!</div>
+<div class="bubble bot">Wallahi na him! I be Q, built by Abdulmalik. Ask me anything! Qudra Remains!</div>
 </div>
 <div class="inputBar">
-<input id="msgInput" placeholder="Type Hi..." />
+<input id="msgInput" placeholder="Type Hi..." autocomplete="off" />
 <button onclick="sendMessage()">Send</button>
 </div>
 <script>
@@ -49,7 +49,7 @@ async function sendMessage(){
     if(!res.ok) throw new Error(data.reply);
     addMessage(data.reply, 'bot');
   }catch(e){
-    addMessage('Q say: ' + e.message, 'bot');
+    addMessage(e.message, 'bot');
   }
 }
 input.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
