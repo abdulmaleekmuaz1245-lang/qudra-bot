@@ -1,7 +1,7 @@
 {
   "name": "q-kingdom-control-center",
-  "version": "2.0.0",
-  "description": "Q Kingdom - Full Function Brain System - Owner Control Center - Fantasy Golden Black",
+  "version": "3.0.0",
+  "description": "Q Kingdom v3 - Owner stays logged - Golden Black",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
