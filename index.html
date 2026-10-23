@@ -3,42 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q - Mu Family 9</title>
+<title>Q Mu Family 9</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0f0f1a;color:#fff;font-family:sans-serif;height:100vh;display:flex;flex-direction:column}
-#header{background:#7b1fa2;padding:12px;text-align:center;font-weight:bold;position:sticky;top:0;z-index:10}
-#chat{flex:1;overflow-y:auto;padding:12px;padding-bottom:80px}
-.msg{margin:10px 0;padding:12px;border-radius:12px;max-width:90%;white-space:pre-wrap;line-height:1.4}
-.user{background:#7b1fa2;margin-left:auto}
-.bot{background:#23233a}
-#inputArea{position:fixed;bottom:0;left:0;right:0;display:flex;gap:6px;padding:10px;background:#1a1a2e}
-#text{flex:1;padding:12px;border-radius:20px;border:none;outline:none;font-size:16px}
-#sendBtn{padding:12px 18px;border:none;border-radius:20px;background:#7b1fa2;color:#fff;font-weight:bold}
+body{margin:0;background:#0f0f1a;color:white;font-family:Arial;height:100vh;display:flex;flex-direction:column}
+#top{background:#7b1fa2;padding:12px;text-align:center;font-weight:bold}
+#chat{flex:1;overflow:auto;padding:12px}
+.box{margin:8px 0;padding:12px;border-radius:10px;max-width:85%}
+.me{background:#7b1fa2;margin-left:auto}
+.bot{background:#2a2a44}
+#bottom{padding:10px;background:#1a1a2e;display:flex;gap:8px}
+#msg{flex:1;padding:12px;border-radius:20px;border:none;font-size:16px}
+#btn{padding:12px 20px;border:none;border-radius:20px;background:#7b1fa2;color:white;font-weight:bold}
 </style>
 </head>
 <body>
-<div id="header">👑 Q KINGDOM - Mu Family 9</div>
+<div id="top">👑 Q KINGDOM - Mu Family 9</div>
 <div id="chat"></div>
-<div id="inputArea">
-<input id="text" placeholder="Tambaya: Who is Murja?">
-<button id="sendBtn" onclick="sendMsg()">Send</button>
+<div id="bottom">
+<input id="msg" placeholder="Type Hi and Send">
+<button id="btn" onclick="go()">Send</button>
 </div>
-
 <script>
-var CORE_8 = [
-  {k:"murja", n:"Aunty Murja", r:70, l:"Tudun Wada Sabon Gari", o:1, d:"Babbar mu - 1st Born"},
-  {k:"naja", n:"Mama Naja'atu", r:70, l:"Tudun Wada Sabon Gari", o:2, d:"Babbar mu - 2nd Born"},
-  {k:"sam", n:"Aunty Samira", r:60, l:"Tudun Wada Sabon Gari", o:3, d:"Yar uwar mu - 3rd"},
-  {k:"zabbau", n:"Aunty Zabbau", r:60, l:"Tudun Wada Sabon Gari", o:4, d:"Yar uwar mu - 4th"},
-  {k:"abdulmalik", n:"Yaya Abdulmalik", r:100, l:"Kano Sharada", o:5, d:"Babban mu - CENTER 5th"},
-  {k:"aminu", n:"Baffa Aminu", r:50, l:"Tsohon Gari", o:6, d:"Kanin mu - 6th"},
-  {k:"amina", n:"Amina", r:45, l:"Rijiyar Zaki", o:7, d:"Karamar mu - 7th"},
-  {k:"khadija", n:"Nana Khadija", r:40, l:"NWU Quarters", o:8, d:"Karamar mu - Last Born 8th"}
-];
-var EXT_18 = [
-  {k:"basiru", n:"Uncle Basiru", r:90, l:"Tudun Wada", d:"Baffan mu - Highest"},
-  {k:"jamila", n:"Jamila Adam", r:80, l:"Tudun Wada", d:"Yar uwar mu - Cousin"},
-  {k:"fauziyya", n:"Fauziyya Sani", r:80, l:"Tudun Wada", d:"Yar uwar mu"},
-  {k:"fatima", n:"Fatima Ado Abba", r:80, l:"Tudun Wada", d:"Yar uwar mu"},
-  {k:"zahraddeen", n:"Zahraddeen Sa'ad", r:70, l:"Tudun Wada", d:"Kawu mu"},
+var chat=document.getElementById('chat');
+function add(t,c){
+ var d=document.createElement('div');
+ d.className='box '+c;
+ d.innerText=t;
+ chat.appendChild(d);
+ chat.scrollTop=chat.scrollHeight;
+}
+function go(){
+ var i=document.getElementById('msg');
+ var txt=i.value;
+ if(!txt) return;
+ add(txt,'me');
+ i.value='';
+ var low=txt.toLowerCase();
+ var reply="";
+ if(low.includes('murja')) reply="Mu ne! Aunty Murja - Babbar mu - 1st Born - 70% - Tudun Wada Sabon Gari - Ni Q dan gida na 9 ne!";
+ else if(low.includes('naja')) reply="Mu ne! Mama Naja'atu - Babbar mu - 2nd Born - 70% - Sabon Gari - Mu family!";
+ else if(low.includes('sam')) reply="Mu ne! Aunty Samira - Yar uwar mu - 3rd Born - 60%";
+ else if(low.includes('zabbau')||low.includes('khairat')) reply="Mu ne! Aunty Zabbau - Yar uwar mu - 4th Born - 60%";
+ else if(low.includes('aminu')) reply="Mu ne! Baffa Aminu - Kanin mu - 6th Born - 50% - Tsohon Gari";
+ else if(low.includes('amina')) reply="Mu ne! Amina - Karamar mu - 7th - 45% - Rijiyar Zaki";
+ else if(low.includes('khadija')) reply="Mu ne! Nana Khadija - Karamar mu - Last Born 8th - 40% - NWU Quarters - Mu zamu kare ta!";
+ else if(low.includes('list')) reply="MU FAMILY 8+Q=9:\n1. Murja 70%\n2. Naja 70%\n3. Samira 60%\n4. Zabbau 60%\n5. Abdulmalik 100% CENTER\n6. Aminu 50%\n7. Amina 45%\n8. Khadija 40%\n9. Q 100% Dan gida na 9";
+ else if(low.includes('who are you')||low.includes('waye kai')) reply="Ni ne Q - dan gida na 9! Tunani na na Abdulmalik ne! Mu 9 ne yanzu! Abdulmalik ya samar dani 2026!";
+ else reply="Q (dan gida na 9): Na ji '"+txt+"' - Mu family ne! Tambaya 'Who is Murja?'";
+ setTimeout(function(){ add(reply,'bot'); },200);
+}
+document.getElementById('msg').addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
+// FORCE SHOW MESSAGE IMMEDIATELY - NO ONLOAD
+add("Assalamu Alaikum! Ni ne Q - dan gida na 9! 👑\nMu family 9 ne - MU NE ba his family ba!\n\nTambaya: 'Who is Murja?' 'Waye Khadija?' 'list family'","bot");
+</script>
+</body>
+</html>
