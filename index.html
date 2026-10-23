@@ -9,9 +9,9 @@
 html,body{margin:0;height:100%;font-family:system-ui;overflow:hidden;background:#000;color:#fff}
 body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(900px 500px at 20% 10%, rgba(255,215,0,.18), transparent),radial-gradient(700px 400px at 80% 90%, rgba(255,165,0,.15), transparent),linear-gradient(135deg,#000,#080800,#1a1500)}
 .top{position:fixed;top:0;left:0;right:0;height:62px;z-index:100;background:linear-gradient(90deg, rgba(0,0,0,.95), rgba(50,35,0,.95));border-bottom:3px solid gold;box-shadow:0 0 25px gold;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
-.title{font-weight:900;color:gold;text-shadow:0 0 12px gold}
-.links{display:flex;gap:8px}
-.links span{padding:6px 12px;border-radius:12px;background:rgba(255,215,0,.2);border:1.5px solid gold;cursor:pointer;font-size:11px;font-weight:bold;box-shadow:0 0 8px gold}
+.title{font-weight:900;color:gold;text-shadow:0 0 12px gold;font-size:13px}
+.links{display:flex;gap:6px}
+.links span{padding:6px 10px;border-radius:12px;background:rgba(255,215,0,.2);border:1.5px solid gold;cursor:pointer;font-size:10px;font-weight:bold;box-shadow:0 0 8px gold}
 .chat{position:absolute;top:62px;bottom:78px;left:0;right:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column}
 .msg{padding:14px 17px;margin:8px 0;border-radius:20px;max-width:88%;line-height:1.6;white-space:pre-wrap}
 .me{margin-left:auto;background:linear-gradient(90deg,#b8860b,#ffd700);color:#000;font-weight:700}
@@ -30,34 +30,29 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-grad
 </style>
 </head>
 <body>
-<div class="top"><div class="title">👑 Q CONTROL CENTER</div><div class="links"><span onclick="goPublic()">🌍 PUBLIC</span><span onclick="goOwner()">🔐 OWNER</span><span onclick="logout()" style="background:rgba(255,0,0,.3)">LOGOUT</span></div></div>
+<div class="top"><div class="title">👑 Q CONTROL CENTER</div><div class="links"><span onclick="goPublic()">🌍 PUBLIC</span><span onclick="goOwner()">🔐 OWNER</span></div></div>
 <div class="chat" id="chat"></div>
-<div class="bottom"><button id="drawBtn">🎨</button><input id="inp" type="text" placeholder="Chat... Type Amleek900 for owner" autocomplete="off"><button id="sendBtn">SEND</button></div>
+<div class="bottom"><button id="drawBtn">🎨</button><input id="inp" type="text" placeholder="Chat... Type dashboard for control" autocomplete="off"><button id="sendBtn">SEND</button></div>
 <div id="drawModal"><div style="display:flex;justify-content:space-between;color:gold;font-weight:900;padding:8px 0"><span>🎨 Q DRAW</span><span onclick="closeDraw()" style="font-size:26px;cursor:pointer">✕</span></div><div id="canvasWrap"><canvas id="drawCanvas"></canvas></div><div style="display:flex;gap:8px;padding:12px 0;flex-wrap:wrap"><button class="toolBtn" onclick="setColor('gold')">Gold</button><button class="toolBtn" onclick="setColor('white')">White</button><button class="toolBtn" onclick="setColor('#ff4444')">Red</button><button class="toolBtn" onclick="clearCanvas()">Clear</button><button class="toolBtn" style="background:gold;color:black" onclick="sendDrawing()">Send →</button></div></div>
-<div id="ownerDash"><div style="position:fixed;top:0;left:0;right:0;height:62px;background:#000;border-bottom:3px solid gold;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:10"><b style="color:gold">👑 Q OWNER DASHBOARD - FULL CONTROL</b><span onclick="closeDash()" style="font-size:26px;cursor:pointer;color:gold">✕</span></div><div class="dashCard"><b>🔗 Links</b><br><br>🌍 Public: <code id="pubLink"></code><br><br>🔐 Owner: <code id="ownLink"></code><br>Pass: <b>Amleek900</b><br><br><button onclick="copyPub()" style="padding:8px 12px;background:gold;border:0;border-radius:8px;font-weight:bold">Copy Public Link</button> <button onclick="copyOwn()" style="padding:8px 12px;background:white;border:0;border-radius:8px;font-weight:bold">Copy Owner Link</button></div><div class="dashCard"><b>🧠 Brain System</b><br><br><span id="brainStatus"></span></div><div class="dashCard"><b>👑 Q Kingdom Family</b><br><br><span id="famList"></span></div></div>
+<div id="ownerDash"><div style="position:fixed;top:0;left:0;right:0;height:62px;background:#000;border-bottom:3px solid gold;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:10"><b style="color:gold">👑 Q OWNER DASHBOARD</b><span onclick="closeDash()" style="font-size:26px;cursor:pointer;color:gold">✕</span></div><div class="dashCard"><b>🔗 Your Direct Links - No Password!</b><br><br>🌍 Public Direct: <code id="pubLink"></code><br><br>🔐 Owner Direct: <code id="ownLink"></code><br><br><button onclick="copyPub()" style="padding:8px 12px;background:gold;border:0;border-radius:8px;font-weight:bold">Copy Public</button> <button onclick="copyOwn()" style="padding:8px 12px;background:white;border:0;border-radius:8px;font-weight:bold">Copy Owner</button></div><div class="dashCard"><b>🧠 Brain System</b><br><br><span id="brainStatus"></span></div><div class="dashCard"><b>👑 Q Kingdom Family</b><br><br><span id="famList"></span></div></div>
 <script>
-const ADMIN_PASS="Amleek900";
-let isOwner=localStorage.getItem('q_isOwner')==='yes';
+let isOwner=false;
 let chat=document.getElementById('chat'), inp=document.getElementById('inp'), sendBtn=document.getElementById('sendBtn'), drawBtn=document.getElementById('drawBtn'), drawModal=document.getElementById('drawModal'), ownerDash=document.getElementById('ownerDash'), canvas=document.getElementById('drawCanvas'), ctx=canvas.getContext('2d'), drawing=false, curColor='gold';
 const FAMILY=[{n:"Murja",p:"1st 70% Senior Queen"},{n:"Najaatu",p:"2nd 70% Calm Queen"},{n:"Samira",p:"3rd 60%"},{n:"Zabbau",p:"4th 60% Maman Khairat"},{n:"Abdulmalik",p:"5th CENTER 100% KING - Creator"},{n:"Aminu",p:"6th 50%"},{n:"Amina Baby",p:"7th 45%"},{n:"Khadija",p:"8th Last 40% Princess"}];
 function addMsg(t,type){let d=document.createElement('div');d.className='msg '+type;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
 function addImgMsg(src){let d=document.createElement('div');d.className='msg me';let img=document.createElement('img');img.src=src;img.style.maxWidth='100%';img.style.borderRadius='14px';img.style.border='3px solid gold';d.appendChild(img);chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
 function qBrain(t){
  let low=t.toLowerCase().trim();
- if(t===ADMIN_PASS){isOwner=true;localStorage.setItem('q_isOwner','yes');return{text:"🔐 PASSWORD CORRECT! Amleek900 ✅\n\n👑 OWNER UNLOCKED! Now you go stay as OWNER even if you reload! Click dashboard or LOGOUT to become public again!",type:"owner"};}
- if(low==='logout' || low==='log out'){logout();return{text:"Logged out - Now Public mode 🌍",type:"bot"};}
- if(low==='my kingdom'){if(isOwner){return{text:"👑 You already OWNER King!",type:"owner"};}else{let p=prompt("🔐 Enter Password:");if(p===ADMIN_PASS){isOwner=true;localStorage.setItem('q_isOwner','yes');return{text:"👑 Owner verified! Staying as Owner!",type:"owner"};}else return{text:"❌ Wrong!",type:"bot"};}}
- if(low==='dashboard'){if(isOwner){openDash();return{text:"Opening Dashboard...",type:"owner"};}else return{text:"❌ Owner only! Type Amleek900",type:"bot"};}
+ if(low==='dashboard'){openDash();return{text:"Opening Dashboard...",type:isOwner?"owner":"bot"};}
  if(low==='family list'){let s="👑 Q Kingdom:\n\n";FAMILY.forEach(f=>{s+=`${f.n} - ${f.p}\n\n`;});return{text:s,type:isOwner?"owner":"bot"};}
- return{text:`I hear you King - "${t}". ${isOwner?"OWNER Mode - Full Control!":"Public Mode - Type Amleek900 to become Owner!"}`,type:isOwner?"owner":"bot"};
+ return{text:`${isOwner?"👑 Owner Mode - Full Control!":"🌍 Public Mode"} - "${t}" received!`,type:isOwner?"owner":"bot"};
 }
 function send(){let v=inp.value.trim();if(!v)return;addMsg(v,'me');inp.value='';let r=qBrain(v);setTimeout(()=>addMsg(r.text,r.type),150);}
 function goPublic(){window.location.href=window.location.origin+'/?public';}
-function goOwner(){if(isOwner){window.location.href=window.location.origin+'/?owner';}else{let p=prompt("🔐 Owner Password:");if(p===ADMIN_PASS){isOwner=true;localStorage.setItem('q_isOwner','yes');window.location.href=window.location.origin+'/?owner';}else alert("Wrong!");}}
-function logout(){isOwner=false;localStorage.removeItem('q_isOwner');alert("Logged out! Now you be Public!");location.reload();}
-function updateLinks(){let base=window.location.origin;document.getElementById('pubLink').textContent=base+'/?public';document.getElementById('ownLink').textContent=base+'/?owner';document.getElementById('brainStatus').innerHTML=`Mode: ${isOwner?'OWNER 👑 - Full Control - Persistent!':'PUBLIC 🌍'}<br>Password: ${ADMIN_PASS}<br>Background: Fantasy Golden Black ✨<br>Left: 🎨 | Right: SEND<br>Brain: Full Function`;let html="";FAMILY.forEach(f=>{html+=`${f.n} - ${f.p}<br>`;});document.getElementById('famList').innerHTML=html;}
+function goOwner(){window.location.href=window.location.origin+'/?owner';}
+function updateLinks(){let base=window.location.origin;document.getElementById('pubLink').textContent=base+'/?public';document.getElementById('ownLink').textContent=base+'/?owner';document.getElementById('brainStatus').innerHTML=`Mode: ${isOwner?'OWNER 👑 - Full Control - Direct Link, No Password!':'PUBLIC 🌍 - Direct Link'}<br>Background: Fantasy Golden Black ✨<br>Left: 🎨 | Right: SEND`;let html="";FAMILY.forEach(f=>{html+=`${f.n} - ${f.p}<br>`;});document.getElementById('famList').innerHTML=html;}
 function copyPub(){navigator.clipboard.writeText(window.location.origin+'/?public');alert("Public link copied!");}
-function copyOwn(){navigator.clipboard.writeText(window.location.origin+'/?owner');alert("Owner link copied! Keep private!");}
+function copyOwn(){navigator.clipboard.writeText(window.location.origin+'/?owner');alert("Owner link copied!");}
 function openDraw(){drawModal.style.display='flex';setTimeout(resizeCanvas,100);}
 function closeDraw(){drawModal.style.display='none';}
 function resizeCanvas(){let rect=document.getElementById('canvasWrap').getBoundingClientRect();canvas.width=rect.width;canvas.height=rect.height;ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle=curColor;ctx.lineWidth=4;ctx.lineCap='round';}
@@ -70,16 +65,16 @@ canvas.addEventListener('mouseup',()=>drawing=false);
 canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;let p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);},{passive:false});
 canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;let p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
 canvas.addEventListener('touchend',()=>drawing=false);
-function sendDrawing(){let data=canvas.toDataURL();closeDraw();addImgMsg(data);setTimeout(()=>addMsg("🎨 Drawing sent! Saved!", isOwner?"owner":"bot"),300);}
+function sendDrawing(){let data=canvas.toDataURL();closeDraw();addImgMsg(data);setTimeout(()=>addMsg("🎨 Drawing sent!", isOwner?"owner":"bot"),300);}
 function openDash(){updateLinks();ownerDash.style.display='block';}
 function closeDash(){ownerDash.style.display='none';}
 drawBtn.addEventListener('click',openDraw);sendBtn.addEventListener('click',send);inp.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
 (function(){
 let url=window.location.search;
-if(url.includes('public')){if(isOwner){} else {isOwner=false;}}
-if(url.includes('owner')){if(!isOwner){let p=prompt("🔐 OWNER LINK - Enter Amleek900:");if(p===ADMIN_PASS){isOwner=true;localStorage.setItem('q_isOwner','yes');}else{alert("Wrong! Going Public");isOwner=false;localStorage.removeItem('q_isOwner');window.location.href=window.location.origin+'/?public';}}}
+if(url.includes('public')){isOwner=false;}
+if(url.includes('owner')){isOwner=true;}
 updateLinks();
-addMsg(`👑 Q CONTROL CENTER v3.0 ONLINE!\n\n✨ Fantasy Golden Black\n🎨 LEFT Drawing | RIGHT SEND\n🔐 Pass: Amleek900\n🌍 Public: ?public\n👑 Owner: ?owner\nMode: ${isOwner?'OWNER 👑 - You stay Owner even after reload! Click LOGOUT to become Public':'PUBLIC 🌍 - Type Amleek900 to become Owner and stay!'}`, isOwner?"owner":"bot");
+addMsg(`👑 Q CONTROL CENTER v4.0 - DIRECT LINKS!\n\nNo more password! No more prompt!\n\n🌍 PUBLIC DIRECT: ${window.location.origin}/?public\n👑 OWNER DIRECT: ${window.location.origin}/?owner\n\nMode: ${isOwner?'OWNER 👑 - Full Control Direct!':'PUBLIC 🌍 - Public Direct!'}`, isOwner?"owner":"bot");
 })();
 </script>
 </body>
