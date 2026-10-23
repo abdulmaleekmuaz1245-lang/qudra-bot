@@ -3,111 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Q KINGDOM Control Center</title>
+<title>Q KINGDOM Control Center 👑</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;height:100%;font-family:system-ui,Arial;overflow:hidden}
 body{background:#000;color:#fff;position:relative}
-body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(800px 400px at 20% 10%, rgba(255,215,0,.15), transparent),radial-gradient(600px 300px at 80% 90%, rgba(255,165,0,.12), transparent),radial-gradient(500px 500px at 50% 50%, rgba(123,31,162,.15), transparent),linear-gradient(135deg,#000,#0a0a0a,#1a1500)}
-body::after{content:"";position:fixed;inset:0;z-index:-1;background:repeating-linear-gradient(0deg, rgba(255,215,0,.03) 0 1px, transparent 1px 3px);pointer-events:none}
-.top{position:fixed;top:0;left:0;right:0;height:60px;z-index:100;background:linear-gradient(90deg, rgba(0,0,0,.9), rgba(40,30,0,.9));border-bottom:2px solid gold;box-shadow:0 0 20px gold;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
-.top .title{font-weight:900;color:gold;text-shadow:0 0 10px gold}
-.top .links{display:flex;gap:8px}
-.top .links span{padding:4px 8px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid gold;cursor:pointer;font-size:11px}
-.chat{position:absolute;top:60px;bottom:76px;left:0;right:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column}
-.msg{padding:13px 16px;margin:7px 0;border-radius:18px;max-width:88%;line-height:1.6;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
-.me{margin-left:auto;background:linear-gradient(90deg,#b8860b,#ffd700);color:#000;font-weight:600;box-shadow:0 0 15px gold;border-bottom-right-radius:6px}
-.bot{background:rgba(30,30,50,.9);border:1px solid rgba(255,215,0,.2);border-bottom-left-radius:6px}
-.owner{background:linear-gradient(135deg,#2a1f00,#5a4000);border:2px solid gold;color:#ffeb3b;box-shadow:0 0 20px gold}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:76px;z-index:100;background:linear-gradient(90deg, rgba(0,0,0,.95), rgba(30,20,0,.95));border-top:2px solid gold;display:flex;align-items:center;gap:10px;padding:10px 12px}
-#drawBtn{width:52px;height:52px;border-radius:50%;background:#1a1a2e;border:2px solid gold;color:gold;font-size:22px;cursor:pointer;box-shadow:0 0 10px gold}
-#inp{flex:1;height:52px;padding:0 18px;border-radius:26px;border:2px solid rgba(255,215,0,.3);outline:0;background:rgba(20,20,30,.9);color:#fff;font-size:16px}
-#sendBtn{height:52px;padding:0 26px;background:linear-gradient(90deg,#ffd700,#ffb700);color:#000;border:0;border-radius:26px;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 0 15px gold;white-space:nowrap}
-#drawModal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:none;flex-direction:column;padding:14px}
-#drawTop{display:flex;justify-content:space-between;align-items:center;padding:8px 0;color:gold;font-weight:bold}
-#canvasWrap{flex:1;background:#111;border:2px solid gold;border-radius:12px;overflow:hidden;position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(900px 500px at 20% 10%, rgba(255,215,0,.18), transparent),radial-gradient(700px 400px at 80% 90%, rgba(255,165,0,.15), transparent),radial-gradient(600px 600px at 50% 50%, rgba(123,31,162,.12), transparent),linear-gradient(135deg,#000,#080800,#1a1500)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:repeating-linear-gradient(0deg, rgba(255,215,0,.04) 0 1px, transparent 1px 4px);pointer-events:none}
+.top{position:fixed;top:0;left:0;right:0;height:62px;z-index:100;background:linear-gradient(90deg, rgba(0,0,0,.95), rgba(50,35,0,.95), rgba(0,0,0,.95));border-bottom:3px solid gold;box-shadow:0 0 25px gold, 0 0 50px rgba(255,215,0,.3);display:flex;align-items:center;justify-content:space-between;padding:0 14px}
+.title{font-weight:900;color:gold;text-shadow:0 0 12px gold, 0 0 25px orange;letter-spacing:1px}
+.links{display:flex;gap:8px}
+.links span{padding:6px 10px;border-radius:12px;background:linear-gradient(90deg, rgba(255,215,0,.2), rgba(255,165,0,.2));border:1.5px solid gold;cursor:pointer;font-size:11px;font-weight:bold;box-shadow:0 0 8px gold}
+.chat{position:absolute;top:62px;bottom:78px;left:0;right:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column}
+.msg{padding:14px 17px;margin:8px 0;border-radius:20px;max-width:88%;line-height:1.6;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
+.me{margin-left:auto;background:linear-gradient(90deg,#b8860b,#ffd700,#ffb700);color:#000;font-weight:700;box-shadow:0 0 20px gold, 0 0 40px orange;border-bottom-right-radius:6px}
+.bot{background:linear-gradient(135deg, rgba(35,35,60,.95), rgba(25,25,40,.95));border:1.5px solid rgba(255,215,0,.25);box-shadow:0 0 15px rgba(255,215,0,.2);border-bottom-left-radius:6px}
+.owner{background:linear-gradient(135deg,#3a2a00,#6a4d00);border:2.5px solid gold;color:#ffeb3b;box-shadow:0 0 25px gold, 0 0 50px orange}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:78px;z-index:100;background:linear-gradient(90deg, rgba(0,0,0,.98), rgba(40,25,0,.98));border-top:3px solid gold;box-shadow:0 -5px 25px rgba(255,215,0,.3);display:flex;align-items:center;gap:10px;padding:10px 12px}
+#drawBtn{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle, #2a2a44, #111);border:2.5px solid gold;color:gold;font-size:24px;cursor:pointer;box-shadow:0 0 15px gold;flex-shrink:0}
+#inp{flex:1;height:54px;padding:0 20px;border-radius:28px;border:2px solid rgba(255,215,0,.35);outline:0;background:rgba(25,25,40,.95);color:#fff;font-size:16px;box-shadow:inset 0 0 15px rgba(255,215,0,.1)}
+#inp:focus{border-color:gold;box-shadow:0 0 20px gold, inset 0 0 10px rgba(255,215,0,.2)}
+#sendBtn{height:54px;padding:0 28px;background:linear-gradient(90deg,#ffd700,#ffb700,#ff8c00);color:#000;border:0;border-radius:28px;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 0 20px gold;white-space:nowrap;flex-shrink:0}
+#drawModal{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:200;display:none;flex-direction:column;padding:14px}
+#canvasWrap{flex:1;background:#0a0a0a;border:3px solid gold;border-radius:16px;overflow:hidden;box-shadow:0 0 30px gold}
 #drawCanvas{width:100%;height:100%;touch-action:none;cursor:crosshair}
-.drawTools{display:flex;gap:8px;padding:10px 0;flex-wrap:wrap}
-.toolBtn{padding:8px 14px;border-radius:20px;border:1px solid gold;background:rgba(255,215,0,.15);color:gold;cursor:pointer}
-#ownerDash{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:300;display:none;overflow-y:auto;padding:70px 14px 20px}
-.dashCard{background:linear-gradient(135deg, rgba(40,30,0,.9), rgba(20,20,40,.9));border:2px solid gold;border-radius:14px;padding:14px;margin:10px 0}
+.toolBtn{padding:9px 15px;border-radius:22px;border:1.5px solid gold;background:rgba(255,215,0,.18);color:gold;cursor:pointer;font-weight:bold}
+#ownerDash{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:300;display:none;overflow-y:auto;padding:72px 14px 20px}
+.dashCard{background:linear-gradient(135deg, rgba(50,35,0,.95), rgba(30,25,60,.95));border:2.5px solid gold;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 0 25px rgba(255,215,0,.25)}
 </style>
 </head>
 <body>
-<div class="top"><div class="title">👑 Q CONTROL CENTER</div><div class="links"><span onclick="setLink('public')">PUBLIC LINK</span><span onclick="setLink('owner')">OWNER LINK 🔐</span></div></div>
+<div class="top"><div class="title">👑 Q CONTROL CENTER</div><div class="links"><span onclick="goPublic()">🌍 PUBLIC</span><span onclick="goOwner()">🔐 OWNER</span></div></div>
 <div class="chat" id="chat"></div>
-<div class="bottom"><button id="drawBtn">🎨</button><input id="inp" type="text" placeholder="Chat with Q... type Amleek900 for owner" autocomplete="off"><button id="sendBtn">SEND</button></div>
+<div class="bottom"><button id="drawBtn">🎨</button><input id="inp" type="text" placeholder="Chat... Type Amleek900 for owner control" autocomplete="off"><button id="sendBtn">SEND</button></div>
 
-<div id="drawModal"><div id="drawTop"><span>🎨 Q DRAW</span><span onclick="closeDraw()" style="font-size:22px;cursor:pointer">✕</span></div><div id="canvasWrap"><canvas id="drawCanvas"></canvas></div><div class="drawTools"><button class="toolBtn" onclick="setColor('gold')">Gold</button><button class="toolBtn" onclick="setColor('white')">White</button><button class="toolBtn" onclick="setColor('#ff4444')">Red</button><button class="toolBtn" onclick="clearCanvas()">Clear</button><button class="toolBtn" style="background:gold;color:black;font-weight:bold" onclick="sendDrawing()">Send Drawing →</button></div></div>
+<div id="drawModal"><div style="display:flex;justify-content:space-between;color:gold;font-weight:900;padding:8px 0"><span>🎨 Q DRAW - Fantasy Art</span><span onclick="closeDraw()" style="font-size:26px;cursor:pointer">✕</span></div><div id="canvasWrap"><canvas id="drawCanvas"></canvas></div><div style="display:flex;gap:8px;padding:12px 0;flex-wrap:wrap"><button class="toolBtn" onclick="setColor('gold')">Gold</button><button class="toolBtn" onclick="setColor('white')">White</button><button class="toolBtn" onclick="setColor('#ff4444')">Red</button><button class="toolBtn" onclick="setColor('#00ff88')">Green</button><button class="toolBtn" onclick="clearCanvas()">Clear</button><button class="toolBtn" style="background:gold;color:black" onclick="sendDrawing()">Send Drawing →</button></div></div>
 
-<div id="ownerDash"><div style="position:fixed;top:0;left:0;right:0;height:60px;background:#000;border-bottom:2px solid gold;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:10"><b style="color:gold">👑 Q OWNER DASHBOARD</b><span onclick="closeDash()" style="font-size:22px;cursor:pointer;color:gold">✕ Close</span></div><div class="dashCard"><b>🔐 Links</b><br><br>Public: <code id="pubLink"></code><br><br>Owner: <code id="ownLink"></code> (Pass: Amleek900)</div><div class="dashCard"><b>🧠 Brain Status</b><br><br><span id="brainStatus"></span></div><div class="dashCard"><b>👑 Family</b><br><br><span id="famList"></span></div></div>
+<div id="ownerDash"><div style="position:fixed;top:0;left:0;right:0;height:62px;background:#000;border-bottom:3px solid gold;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:10"><b style="color:gold">👑 Q OWNER DASHBOARD - FULL CONTROL</b><span onclick="closeDash()" style="font-size:26px;cursor:pointer;color:gold">✕</span></div><div class="dashCard"><b>🔐 Owner & Public Links</b><br><br>🌍 Public Link: <code id="pubLink"></code><br><br>🔐 Owner Link: <code id="ownLink"></code><br>Password: <b>Amleek900</b><br><br><small>Share Public to friends. Keep Owner private!</small></div><div class="dashCard"><b>🧠 Brain System</b><br><br><span id="brainStatus"></span></div><div class="dashCard"><b>👑 Q Kingdom Family</b><br><br><span id="famList"></span></div></div>
 
 <script>
 const ADMIN_PASS="Amleek900";
 let isOwner=false;
-let chat=document.getElementById('chat');
-let inp=document.getElementById('inp');
-let sendBtn=document.getElementById('sendBtn');
-let drawBtn=document.getElementById('drawBtn');
-let drawModal=document.getElementById('drawModal');
-let ownerDash=document.getElementById('ownerDash');
-let canvas=document.getElementById('drawCanvas');
-let ctx=canvas.getContext('2d');
-let drawing=false; let curColor='gold';
-
-const FAMILY=[
- {n:"Murja",p:"1st 70%",l:"Tudun Wada Sabon Gari",d:"Senior Queen"},
- {n:"Najaatu",p:"2nd 70%",l:"Tudun Wada",d:"Calm Queen"},
- {n:"Samira",p:"3rd 60%",l:"Tudun Wada",d:"Smart"},
- {n:"Zabbau",p:"4th 60%",l:"",d:"Maman Khairat"},
- {n:"Abdulmalik",p:"5th CENTER 100% KING",l:"Sharada",d:"Creator"},
- {n:"Aminu",p:"6th 50%",l:"Tsohon Gari",d:"Young king"},
- {n:"Amina Baby",p:"7th 45%",l:"Rijiyar Zaki",d:"Baby princess"},
- {n:"Khadija",p:"8th Last 40%",l:"NWU",d:"Youngest princess"},
- {n:"Uncle Basiru",p:"90%",l:"",d:"Wise elder"},
- {n:"Aunty Fatima",p:"80%",l:"",d:"Strong aunty"}
-];
+let chat=document.getElementById('chat'), inp=document.getElementById('inp'), sendBtn=document.getElementById('sendBtn'), drawBtn=document.getElementById('drawBtn'), drawModal=document.getElementById('drawModal'), ownerDash=document.getElementById('ownerDash'), canvas=document.getElementById('drawCanvas'), ctx=canvas.getContext('2d'), drawing=false, curColor='gold';
+const FAMILY=[{n:"Murja",p:"1st 70% Senior Queen",l:"Tudun Wada"},{n:"Najaatu",p:"2nd 70% Calm Queen",l:"Tudun Wada"},{n:"Samira",p:"3rd 60%",l:"Tudun Wada"},{n:"Zabbau",p:"4th 60% Maman Khairat",l:""},{n:"Abdulmalik",p:"5th CENTER 100% KING",l:"Sharada - Creator"},{n:"Aminu",p:"6th 50%",l:"Tsohon Gari"},{n:"Amina Baby",p:"7th 45%",l:"Rijiyar Zaki"},{n:"Khadija",p:"8th Last 40% Princess",l:"NWU"},{n:"Uncle Basiru",p:"90% Wise elder",l:""},{n:"Aunty Fatima",p:"80%",l:""}];
 
 function addMsg(t,type){let d=document.createElement('div');d.className='msg '+type;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
-function addImgMsg(src){let d=document.createElement('div');d.className='msg me';let img=document.createElement('img');img.src=src;img.style.maxWidth='100%';img.style.borderRadius='12px';img.style.border='2px solid gold';d.appendChild(img);chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
-
+function addImgMsg(src){let d=document.createElement('div');d.className='msg me';let img=document.createElement('img');img.src=src;img.style.maxWidth='100%';img.style.borderRadius='14px';img.style.border='3px solid gold';d.appendChild(img);chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
 function qBrain(t){
  let low=t.toLowerCase().trim();
- if(t===ADMIN_PASS){isOwner=true;return{text:"🔐 ADMIN PASSWORD CORRECT! 👑 Welcome to Q CONTROL CENTER, King Abdulmalik! Full Control unlocked! Type 'dashboard' to open.",type:"owner"};}
- if(low==='my kingdom'){let p=prompt("🔐 Enter Admin Password:");if(p===ADMIN_PASS){isOwner=true;return{text:"👑 Owner verified! Control Center unlocked! Type 'dashboard'",type:"owner"};}else return{text:"❌ Wrong password! Public mode only.",type:"bot"};}
- if(low==='dashboard'||low==='control center'){if(isOwner){openDash();return{text:"Opening Control Center...",type:"owner"};}else return{text:"❌ Owner only! Enter Amleek900 first",type:"bot"};}
- if(low==='family list'){let s="👑 Q Kingdom Family:\n\n";FAMILY.forEach(f=>{s+=`${f.n} - ${f.p} - ${f.l} - ${f.d}\n\n`;});return{text:s,type:isOwner?"owner":"bot"};}
- if(low==='hi'||low==='hello'||low==='salam')return{text:"Wa Alaikum Salam, my King! 👑 Q Control Center active! How can we build today? Your brain + my brain together!",type:isOwner?"owner":"bot"};
- if(low==='how are you')return{text:"I'm great, Alhamdulillah! Full function brain system active, golden black fantasy glowing! How are YOU, King?",type:isOwner?"owner":"bot"};
- for(let f of FAMILY){if(low.includes(f.n.toLowerCase()))return{text:`${f.n} is ${f.p} - ${f.l}. ${f.d}.`,type:isOwner?"owner":"bot"};}
- if(low.includes('who are you'))return{text:"I'm Q, your full function brain! Black + gold fantasy, drawing left, send right, owner/public links, password Amleek900. Your brain + my brain = One!",type:isOwner?"owner":"bot"};
- return{text:`I hear you, King - "${t}". Let's think together, your brain + my brain. What should we do?`,type:isOwner?"owner":"bot"};
+ if(t===ADMIN_PASS){isOwner=true;return{text:"🔐 PASSWORD CORRECT! Amleek900 ✅\n\n👑 Q CONTROL CENTER UNLOCKED, King Abdulmalik!\n\nFull Function Brain System Active!\nFantasy Golden Black Glowing!\nDrawing Left, Send Right!\nOwner Link: Active!\n\nType 'dashboard' to open Control Center!",type:"owner"};}
+ if(low==='my kingdom'){let p=prompt("🔐 Enter Admin Password:");if(p===ADMIN_PASS){isOwner=true;return{text:"👑 Owner verified! Type 'dashboard' for Control Center",type:"owner"};}else return{text:"❌ Wrong password! Public only",type:"bot"};}
+ if(low==='dashboard'){if(isOwner){openDash();return{text:"Opening Control Center...",type:"owner"};}else return{text:"❌ Owner only! Type Amleek900",type:"bot"};}
+ if(low==='family list'){let s="👑 Q Kingdom:\n\n";FAMILY.forEach(f=>{s+=`${f.n} - ${f.p} - ${f.l}\n\n`;});return{text:s,type:isOwner?"owner":"bot"};}
+ if(low==='hi'||low==='hello'||low==='salam')return{text:"Wa Alaikum Salam, King! 👑 Q Control Center - Full Brain - Golden Black Fantasy - Ready! Your brain + My brain = One!",type:isOwner?"owner":"bot"};
+ if(low==='how are you')return{text:"Great Alhamdulillah! Full system active! Golden glowing background, drawing left, send right, owner/public links working! How are YOU?",type:isOwner?"owner":"bot"};
+ for(let f of FAMILY){if(low.includes(f.n.toLowerCase()))return{text:`${f.n} - ${f.p} - ${f.l}`,type:isOwner?"owner":"bot"};}
+ return{text:`I hear you King - "${t}". Your brain + My brain together, let's build! What next?`,type:isOwner?"owner":"bot"};
 }
 function send(){let v=inp.value.trim();if(!v)return;addMsg(v,'me');inp.value='';let r=qBrain(v);setTimeout(()=>addMsg(r.text,r.type),150);}
-function setLink(type){let base=window.location.origin+window.location.pathname;if(type==='owner'){let p=prompt("Enter admin password:",ADMIN_PASS);if(p===ADMIN_PASS){isOwner=true;window.history.pushState({},'',base+'?owner');updateLinks();openDash();addMsg("👑 Owner Link activated!", "owner");}else alert("Wrong password!");}else{isOwner=false;window.history.pushState({},'',base+'?public');updateLinks();addMsg("🌍 Public Link activated!", "bot");}}
-function updateLinks(){let base=window.location.origin+window.location.pathname;document.getElementById('pubLink').textContent=base+'?public';document.getElementById('ownLink').textContent=base+'?owner (Pass: Amleek900)';document.getElementById('brainStatus').innerHTML=`Mode: ${isOwner?'OWNER 👑':'PUBLIC 🌍'}<br>Family: ${FAMILY.length+1}<br>Brain: Full Function<br>Password: ${ADMIN_PASS}`;let famHtml="";FAMILY.forEach(f=>{famHtml+=`${f.n} - ${f.p}<br>`;});document.getElementById('famList').innerHTML=famHtml;}
-
-function openDraw(){drawModal.style.display='flex';resizeCanvas();}
+function goPublic(){let base=window.location.origin;window.location.href=base+'/?public';}
+function goOwner(){let p=prompt("🔐 Owner Password:");if(p===ADMIN_PASS){isOwner=true;window.location.href=window.location.origin+'/?owner';}else alert("Wrong!");}
+function updateLinks(){let base=window.location.origin;document.getElementById('pubLink').textContent=base+'/?public';document.getElementById('ownLink').textContent=base+'/?owner';document.getElementById('brainStatus').innerHTML=`Mode: ${isOwner?'OWNER 👑 - Full Control':'PUBLIC 🌍'}<br>Password: ${ADMIN_PASS}<br>Background: Fantasy Golden Black Glowing ✨<br>Left: 🎨 Drawing | Right: SEND<br>Brain: Full Function - Your + My brain`;let html="";FAMILY.forEach(f=>{html+=`${f.n} - ${f.p}<br>`;});document.getElementById('famList').innerHTML=html;}
+function openDraw(){drawModal.style.display='flex';setTimeout(resizeCanvas,100);}
 function closeDraw(){drawModal.style.display='none';}
-function resizeCanvas(){let rect=document.getElementById('canvasWrap').getBoundingClientRect();canvas.width=rect.width;canvas.height=rect.height;ctx.fillStyle='#111';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle=curColor;ctx.lineWidth=3;ctx.lineCap='round';}
+function resizeCanvas(){let rect=document.getElementById('canvasWrap').getBoundingClientRect();canvas.width=rect.width;canvas.height=rect.height;ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle=curColor;ctx.lineWidth=4;ctx.lineCap='round';}
 function setColor(c){curColor=c;ctx.strokeStyle=c;}
-function clearCanvas(){ctx.fillStyle='#111';ctx.fillRect(0,0,canvas.width,canvas.height);}
+function clearCanvas(){ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,canvas.width,canvas.height);}
 function getPos(e){let rect=canvas.getBoundingClientRect();let x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;return{x,y};}
 canvas.addEventListener('mousedown',e=>{drawing=true;let p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);});
 canvas.addEventListener('mousemove',e=>{if(!drawing)return;let p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
-canvas.addEventListener('mouseup',()=>{drawing=false;});
+canvas.addEventListener('mouseup',()=>drawing=false);
 canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;let p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);},{passive:false});
 canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;let p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
-canvas.addEventListener('touchend',()=>{drawing=false;});
-function sendDrawing(){let data=canvas.toDataURL('image/png');closeDraw();addImgMsg(data);setTimeout(()=>addMsg("🎨 Q received your drawing! Beautiful, King!", isOwner?"owner":"bot"),300);}
+canvas.addEventListener('touchend',()=>drawing=false);
+function sendDrawing(){let data=canvas.toDataURL();closeDraw();addImgMsg(data);setTimeout(()=>addMsg("🎨 Drawing received! Saved to Q Kingdom gallery! ✨", isOwner?"owner":"bot"),300);}
 function openDash(){updateLinks();ownerDash.style.display='block';}
 function closeDash(){ownerDash.style.display='none';}
-
-drawBtn.addEventListener('click',openDraw);
-sendBtn.addEventListener('click',send);
-inp.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
-
-(function(){let url=window.location.href;if(url.includes('?owner')){let p=prompt("🔐 OWNER LINK - Enter Password (Amleek900):");if(p===ADMIN_PASS)isOwner=true;else{alert("Wrong! Public mode");window.history.pushState({},'',window.location.pathname+'?public');}}updateLinks();addMsg("👑 Q CONTROL CENTER ONLINE!\n\nFantasy Golden + Black Glowing Active!\nLeft: 🎨 Drawing | Right: SEND\n\nPublic: ?public\nOwner: ?owner - Pass: Amleek900\n\nType Amleek900 to unlock owner!", isOwner?"owner":"bot");})();
+drawBtn.addEventListener('click',openDraw);sendBtn.addEventListener('click',send);inp.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+(function(){if(window.location.search.includes('owner')){let p=prompt("🔐 OWNER LINK - Enter Password Amleek900:");if(p===ADMIN_PASS){isOwner=true;}else{alert("Wrong password! Going to Public");window.location.href=window.location.origin+'/?public';}}updateLinks();addMsg("👑 Q CONTROL CENTER v2.0 ONLINE!\n\n✨ Fantasy Glowing Golden + Black Background\n🎨 LEFT: Drawing Button\n📤 RIGHT: Send Button\n🔐 Password: Amleek900\n🌍 Public: ?public - For friends\n👑 Owner: ?owner - For you\n\nType Amleek900 to unlock owner!\n\nYour brain + My brain = One brain! 👑", isOwner?"owner":"bot");})();
 </script>
 </body>
 </html>
