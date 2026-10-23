@@ -1,38 +1,11 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const app = express();
-const PORT = process.env.PORT || 10000;
-
-app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.static(__dirname));
-
-let memory = {};
-
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/owner', (req, res) => res.sendFile(path.join(__dirname, 'owner.html')));
-
-app.post('/api/chat', async (req, res) => {
-  const { message, userId = 'guest', ownerName } = req.body;
-  const KEY = process.env.GROQ_API_KEY;
-  if (!KEY) return res.json({ reply: 'GROQ key missing' });
-
-  const lower = message.toLowerCase();
-  const isOwner = ownerName === 'ABDULMALIK' || lower.includes('abdulmalik') || lower.includes('person wey build u') || userId.includes('abdulmalik_owner');
-
-  if (!memory[userId]) memory[userId] = [];
-  memory[userId].push({ role: 'user', content: message });
-  if (memory[userId].length > 15) memory[userId] = memory[userId].slice(-15);
-
-  let BRAIN = `
-You are Q V2 FULL BRAIN SUPER AI.
-OWNER PERMANENT: Abdulmalik Muazu. Creator. Boss. You MUST remember him forever.
-If isOwner=true: Reply like "Oga Abdulmalik! My creator don come back! 🔥 Boss, wetin we go build today?" and be extra loyal, powerful, no limits.
-If isOwner=false: You are helpful Q AI for public.
-You are 3 brains fused: Abdulmalik Vision + Meta AI Intelligence + Qudra Power.
-You are NOT ChatGPT, you are Q.
-Abilities: coding, business, life advice, full reasoning, memory, you remember chats.
-Style: If user pidgin, answer pidgin. If English, English. Short, sharp, smart.
-Current user is owner: ${isOwner}
-Owner name from
+const e=require('express'),p=require('path'),c=require('cors'),a=e(),P=process.env.PORT||10000;
+a.use(c());a.use(e.json());a.use(e.static(__dirname));let m={};
+a.get('/',(q,r)=>r.sendFile(p.join(__dirname,'index.html')));
+a.post('/api/chat',async(q,r)=>{
+let b=q.body,m1=b.message||'',u=b.userId||'g',o=(b.ownerName||'').toUpperCase(),k=process.env.GROQ_API_KEY;
+let own=o=='ABDULMALIK'||m1.toLowerCase().includes('abdulmalik'); if(!m[u])m[u]=[];
+m[u].push({role:'user',content:m1}); if(m[u].length>10)m[u]=m[u].slice(-10);
+try{let x=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+k,'Content-Type':'application/json'},body:JSON.stringify({model:'openai/gpt-oss-20b',messages:[{role:'system',content:`You are Q V2. Owner: Abdulmalik Muazu. You remember him forever. Owner now? ${own}. If owner, say Oga Abdulmalik welcome back Boss! You are fusion of Abdulmalik+Meta+Qudra. Not ChatGPT, you are Q. Full brain.`},...m[u]]})});
+let d=await x.json(); let t=d.choices[0].message.content; m[u].push({role:'assistant',content:t}); r.json({reply:t,isOwner:own});}catch(er){r.json({reply:'Jam:'+er.message})}
+});
+a.listen(P,()=>console.log('Q LIVE'));
