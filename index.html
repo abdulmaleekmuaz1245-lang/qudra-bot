@@ -18,7 +18,7 @@ button{margin-left:8px;padding:12px 18px;border-radius:20px;border:none;backgrou
 <body>
 <div class="header">QUDRA Llama Technology - 13.1V Power ON</div>
 <div class="chat" id="chat">
-<div class="bubble bot">Wallahi na him! I be Q, built by Abdulmalik. Ask me anything! Qudra Remains!</div>
+<div class="bubble bot">You are welcome, I'm Q AI, build by Abdulmalik, Ask me anything! Qudra Remains!</div>
 </div>
 <div class="inputBar">
 <input id="msgInput" placeholder="Type Hi..." />
@@ -44,7 +44,13 @@ async function sendMessage(){
     const data = await res.json();
     if(!res.ok) throw new Error(data.reply);
     addMessage(data.reply, 'bot');
-  }catch(e){ addMessage(e.message, 'bot'); }
+  }catch(e){
+    if(e.message.includes('Failed to fetch')){
+      addMessage('Q dey wake up... Wait 30 sec then try again. Qudra Remains!', 'bot');
+    } else {
+      addMessage(e.message, 'bot');
+    }
+  }
 }
 input.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
 </script>
