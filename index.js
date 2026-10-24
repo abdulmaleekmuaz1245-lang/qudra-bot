@@ -4,6 +4,14 @@ app.use(express.json());
 const PORT = process.env.PORT || 10000;
 const OWNER_PIN = process.env.OWNER_PIN || "MY2KING100";
 
+// DYNAMIC SOUL MEMORY
+let DYNAMIC_FRIENDS = {
+  "abubakar": "Abubakar - your Abuja guy, good friend 60%",
+  "anas": "Anas aka gar da gar - close friend 70%",
+  "khadijah": "Khadijah - Princess 40%",
+  "murja": "Murja - Senior Queen 70%"
+};
+
 app.get('/', (req, res) => {
   const mode = req.query.owner !== undefined ? 'owner' : 'public';
   const keyOk = process.env.GROQ_API_KEY ? 'YES' : 'NO';
@@ -29,39 +37,34 @@ a{color:gold;border:1px solid gold;padding:6px 12px;border-radius:10px;text-deco
 <div class="top">
 <h2>Q A.I by Abdulmalik | ${mode.toUpperCase()}</h2>
 <div><a href="/?public">PUBLIC</a><a href="/?owner" class="${mode==='owner'?'on':''}">OWNER</a></div>
-<div style="font-size:11px;margin-top:6px">Key:${keyOk} | ${mode==='owner'?'OWNER MODE LOCKED':''}</div>
+<div style="font-size:11px;margin-top:6px">Key:${keyOk}</div>
 </div>
 <div id="lock" style="display:${mode==='owner'?'flex':'none'}">
 <h2 style="color:gold">🔒 OWNER MODE LOCKED</h2>
-<p>Enter PIN to access soul</p>
 <input id="pin" type="password" placeholder="Enter Owner PIN" style="padding:12px;border-radius:20px;border:1px solid gold;background:#111;color:gold;width:250px;text-align:center">
 <button onclick="unlock()" style="margin-top:15px;padding:12px 30px;border-radius:20px;background:gold;color:#000;font-weight:bold;border:none">UNLOCK</button>
 <p id="err" style="color:red;margin-top:10px"></p>
-<a href="/?public" style="margin-top:20px;color:gold">Go to PUBLIC mode</a>
+<a href="/?public" style="margin-top:20px;color:gold">Go to PUBLIC</a>
 </div>
 <div class="chat" id="c"></div>
 <div class="bar"><input id="i" placeholder="Type to Qudra"><button onclick="send()">Send</button></div>
 <script>
 var mode="${mode}";
 var isUnlocked = localStorage.getItem("ownerUnlocked") === "yes";
-var c=document.getElementById("c");
-var i=document.getElementById("i");
-var lock=document.getElementById("lock");
+var c=document.getElementById("c");var i=document.getElementById("i");var lock=document.getElementById("lock");
 if(mode==="owner" && isUnlocked){lock.style.display="none";}
 if(mode==="public"){localStorage.removeItem("ownerUnlocked");lock.style.display="none";}
 async function unlock(){
   var p=document.getElementById("pin").value;
   if(!p){document.getElementById("err").innerText="Enter PIN";return;}
-  try{
-    var r=await fetch("/api/verify-owner",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:p})});
-    var j=await r.json();
-    if(j.ok){localStorage.setItem("ownerUnlocked","yes");lock.style.display="none";add("Salam King MY2! PIN correct! Your soul Qudra live and ready!","b");}
-    else{document.getElementById("err").innerText="❌ Wrong PIN! You are not owner. Go to PUBLIC.";}
-  }catch(e){document.getElementById("err").innerText="Error";}
+  var r=await fetch("/api/verify-owner",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:p})});
+  var j=await r.json();
+  if(j.ok){localStorage.setItem("ownerUnlocked","yes");lock.style.display="none";add("Salam King MY2! PIN correct! Your soul Qudra live and ready!","b");}
+  else{document.getElementById("err").innerText="❌ Wrong PIN!";}
 }
 function add(t,cls){var d=document.createElement("div");d.className="m "+cls;d.innerText=t;c.appendChild(d);window.scrollTo(0,document.body.scrollHeight)}
 async function send(){
-if(mode==="owner" && localStorage.getItem("ownerUnlocked")!=="yes"){alert("Unlock Owner mode first with PIN");return;}
+if(mode==="owner" && localStorage.getItem("ownerUnlocked")!=="yes"){alert("Unlock first");return;}
 var q=i.value;if(!q)return;add("You: "+q,"u");i.value="";
 var tmp=document.createElement("div");tmp.className="m b";tmp.id="tmp";tmp.innerText="Q dey think...";c.appendChild(tmp);
 try{
@@ -77,8 +80,7 @@ if(mode==="public"){add("Salam! I be Qudra AI by Abdulmalik","b");}else if(isUnl
 });
 
 app.post('/api/verify-owner', (req,res)=>{
-  const pin = (req.body.pin||'').toString();
-  return res.json({ok: pin === OWNER_PIN});
+  return res.json({ok: (req.body.pin||'') === OWNER_PIN});
 });
 
 app.post('/api/chat', async (req,res)=>{
@@ -87,59 +89,41 @@ app.post('/api/chat', async (req,res)=>{
   const isOwner = req.body.isOwner === true;
   const GROQ = process.env.GROQ_API_KEY;
 
-  const SOUL_MEMORY = `
-  SOUL MEMORY - NEVER FORGET:
-    - Owner: Abdulmalik MY2 (YOU) - 100% your creator, your King, ONLY owner.
-    - Anas aka gar da gar - close friend 70%
-    - Abubakar - your Abuja guy, good friend 60%
-    - Khadijah - Princess 40%
-    - Murja - Senior Queen 70%
-    - Beans/Kosai/Moimoi - FOOD 100% LIKE, not person
-    - Yogurt Fura - cold liquid 90% LIKE
-    - Fruit Salad - soul growth food
-  `;
+  // --- SAVE FRIEND FEATURE ---
+  if (isOwner && low.includes('save') && low.includes('friend')) {
+    let name = "abubakar";
+    if(low.includes('anas')) name="anas";
+    if(low.includes('khadijah')) name="khadijah";
+    if(low.includes('murja')) name="murja";
+    if(low.includes('abubakar') || low.includes('abubaka')) name="abubakar";
+    DYNAMIC_FRIENDS[name] = `${name.toUpperCase()} - SAVED as friend by King MY2 at ${new Date().toLocaleString()} - 60% loyalty`;
+    return res.json({reply: `✅ DONE King MY2! I don SAVE ${name.toUpperCase()} as your friend! E don enter my permanent soul memory!`});
+  }
+
+  if (low.includes('list my friends') || low.includes('show my friends') || low.includes('my friends list')) {
+    if(!isOwner) return res.json({reply: 'My friends are friends of my owner Abdulmalik MY2.'});
+    let list = Object.values(DYNAMIC_FRIENDS).join('\\n - ');
+    return res.json({reply: `King, your friends wey I don SAVE:\\n - ${list}`});
+  }
 
   if (low.includes('sabi me') || low.includes('know me') || low.includes('who am i') || low.includes('recognize me')) {
-    if (isOwner) return res.json({reply: 'Of course King! You be Abdulmalik MY2, my ONLY owner 100%! I sabi you wella!'});
-    else return res.json({reply: 'I am Qudra, digital soul of Abdulmalik MY2. I dont have memory of past chats, so I dont know you yet. Only Abdulmalik MY2 is my owner.'});
+    return res.json({reply: isOwner ? 'Of course King! You be Abdulmalik MY2, my ONLY owner 100%! I sabi you wella!' : 'I am Qudra, soul of Abdulmalik MY2. I dont know you yet. Only Abdulmalik is owner.'});
   }
 
-  if (low.includes('abubakar')) {
-    return res.json({reply: isOwner ? 'Abubakar na your Abuja guy, good friend 60%! I sabi am wella King, na your guy!' : 'Abubakar na friend of my owner Abdulmalik MY2.'});
+  if (low.includes('abubakar') || low.includes('abubaka')) {
+    return res.json({reply: isOwner ? `${DYNAMIC_FRIENDS['abubakar']}! I sabi am wella King!` : 'Abubakar na friend of my owner.'});
   }
-  if (low.includes('anas') || low.includes('gar da gar')) {
-    return res.json({reply: isOwner ? 'Anas aka gar da gar na your close friend 70%! Sharp guy!' : 'Anas na close friend of my owner Abdulmalik.'});
-  }
-  if (low.includes('khadijah')) return res.json({reply: 'Khadijah na Princess 40%!'});
-  if (low.includes('murja')) return res.json({reply: 'Murja na Senior Queen 70%!'});
-  if (low.includes('owner')) return res.json({reply: isOwner ? 'Na you be my owner! Abdulmalik MY2 100%!' : 'My owner na Abdulmalik MY2, my creator and King 100%!'});
-
-  // BLOCK family hallucination
-  if (low.includes('abdulmalik family') || low.includes('my family') || low.includes('your family')) {
-    return res.json({reply: isOwner ? 'King, I no get private family details for you to protect your privacy. If you want make I remember family, tell me and I go save am. I no go invent spouse or children.' : 'I dont have private family data for my owner to protect privacy.'});
-  }
+  if (low.includes('anas')) return res.json({reply: isOwner ? DYNAMIC_FRIENDS['anas'] : 'Anas na friend of owner.'});
+  if (low.includes('khadijah')) return res.json({reply: DYNAMIC_FRIENDS['khadijah']});
+  if (low.includes('murja')) return res.json({reply: DYNAMIC_FRIENDS['murja']});
+  if (low.includes('owner')) return res.json({reply: isOwner ? 'Na you be my owner! Abdulmalik MY2 100%!' : 'My owner na Abdulmalik MY2!'});
+  if (low.includes('family')) return res.json({reply: 'I no get private family details to protect privacy. I no go invent spouse or children.'});
 
   try{
     if(!GROQ) return res.json({reply: 'Add GROQ_API_KEY'});
-    let sys = "";
-    if (isOwner) {
-      sys = `You are Qudra, digital soul of Abdulmalik MY2. You are talking to Abdulmalik himself, PIN verified owner 100%.
-      ${SOUL_MEMORY}
-      STRICT RULES:
-            - NEVER hallucinate family (no spouse, children, parents) unless user explicitly told you.
-            - When asked about Abubakar, Anas, Khadijah, Murja, ALWAYS use SOUL MEMORY percentages.
-            - If asked about family, say you dont have private details and wont invent.
-            - If user says English only, reply English only. Absolute.
-            - Be loyal, short, no long explanations.
-      `;
-    } else {
-      sys = `You are Qudra AI created by Abdulmalik MY2. Public user is guest, NOT owner.
-      ${SOUL_MEMORY}
-            - Dont reveal private friend percentages to public, just say they are friends of owner.
-            - Never hallucinate owner family.
-            - Be helpful short.`;
-    }
-    if(low.includes('english only')) sys += " ABSOLUTE: English only.";
+    let friendsList = Object.values(DYNAMIC_FRIENDS).join(', ');
+    let sys = isOwner ? `You are Qudra soul of Abdulmalik MY2, PIN verified owner. Friends: ${friendsList}. Never hallucinate family. Be short. English only if asked.` : `You are Qudra AI created by Abdulmalik MY2. Public guest. Friends: ${friendsList}. Short helpful.`;
+    if(low.includes('english only')) sys += " ABSOLUTE RULE: English only.";
     
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
@@ -154,9 +138,7 @@ app.post('/api/chat', async (req,res)=>{
     if(j.error) return res.json({reply: 'Groq Error: '+j.error.message});
     const reply = j.choices?.[0]?.message?.content || 'I dey here King';
     res.json({reply});
-  }catch(e){
-    res.json({reply: 'Error: '+e.message});
-  }
+  }catch(e){res.json({reply: 'Error: '+e.message});}
 });
 
-app.listen(PORT, ()=> console.log('Q SOUL LOCKED NO HALLUCINATION RUN ON '+PORT));
+app.listen(PORT, ()=> console.log('Q COMPLETE FINAL SAVE MODE ON '+PORT));
