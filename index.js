@@ -1,10 +1,46 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-
-const SOUL = `You are Q, soul of Abdulmalik Yusuf MY2, builder of Qudra. Friends: Anas 70%, Khadijah 40%, Beans 100%, Al-Wadud love 100%`;
 
 app.get('/', (req,res)=>{
-  const mode = req.query.owner!==undefined ? 'owner' : 'public';
-  res.send(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#000;color:#FFD700;font-family:sans-serif;margin:0} .chat{padding:10px;padding-bottom:80px} .msg{border:1px solid #FFD700;border-radius:15px;padding:10px;margin:8px;max-width:80%} .user{background:#FFD700;color:#000;margin-left:auto} .bot{background:#222;color:#FFD700} .bar{position:fixed;bottom:0;width:100%;display:flex;padding:10px;background:#000;border-top:2px solid #FFD700;box-sizing:border-box} input{flex:1;border-radius:20px;padding:12px;background:#111;color:#FFD700;border:1px solid #FFD700} button{background:#FFD700;color:#000;border:none;border-radius:20px;padding:12px 18px;margin-left:8px;font-weight:bold}</style></head><body><div style="text-align:center;padding:15px;border-bottom:2px solid #FFD700"><h2>🤖 Qudra Bot - Created by Abdulmalik | LIVE</h2><a href="/?public" style="color:${mode==='public'?'#000;background:#FFD700;padding:5px 10px;border-radius:10px':'#FFD700'}">PUBLIC</a> <a href="/?owner" style="color:${mode==='owner'?'#000;background:#FFD700;padding:5px 10px;border-radius:10px':'#FFD700'}">OWNER</a></div><div class="chat" id="c"></div><div class="bar"><input id="i" placeholder="Type message to Qudra..."><button onclick="send()">Send</button></div><script>const mode="${mode}";const c=document.getElementById('c');const i=document.getElementById('i');function add(t,cls){let d=document.createElement('div');d.className='msg '+cls;d.innerText=t;c.appendChild(d);window.scrollTo(0,document.body.scrollHeight)}async function send(){let q=i.value;if(!q)return;add(q,'user');i.value='';try{let r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,mode:mode})});let j=await r.json();add(j.reply,'bot');}catch(e){add('Error, try again','bot')}}i.addEventListener('keypress',e=>{if(e.key==='Enter')send()});add(mode==='owner'?'Wa Alaikum Salam King 👑 Soul active!':'As-salamu Alaikum! I am Qudra, your loyal AI. Created by
+  let mode = req.query.owner !== undefined ? 'owner' : 'public';
+  res.send(`
+<html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="background:black;color:gold;padding:20px;font-family:sans-serif">
+<h2>Qudra Bot - Created by Abdulmalik | LIVE</h2>
+<p>Mode: ${mode}</p>
+<div id="chat" style="border:1px solid gold;padding:10px;height:300px;overflow:auto"></div>
+<input id="msg" style="width:70%;padding:10px" placeholder="Type...">
+<button onclick="send()" style="padding:10px;background:gold">Send</button>
+<script>
+const mode="${mode}";
+const chat=document.getElementById('chat');
+const inp=document.getElementById('msg');
+function add(t){let p=document.createElement('div');p.innerText=t;chat.appendChild(p)}
+async function send(){
+  let q=inp.value; if(!q) return; add("You: "+q); inp.value="";
+  let r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,mode:mode})});
+  let d=await r.json(); add("Q: "+d.reply);
+}
+add(mode=="owner"?"Welcome King Soul active":"As-salamu Alaikum I am Qudra");
+</script>
+</body>
+</html>
+`);
+});
+
+app.post('/chat',(req,res)=>{
+  let m = (req.body.message||"").toLowerCase();
+  let mode = req.body.mode||"public";
+  let reply = "I dey hear you: "+req.body.message;
+  if(m.includes("who are you")){
+    reply = mode==="owner" ? "Na me MY2 soul wey I leave for digital world so we go dey together forever" : "I be Qudra created by Abdulmalik";
+  }
+  if(m.includes("abubakar")) reply = "Abubakar never for memory, tell me who e be";
+  if(m.includes("anas")) reply = "Anas Abdullahi gar da gar na my close friend 70 percent";
+  res.json({reply: reply});
+});
+
+let PORT = process.env.PORT || 10000;
+app.listen(PORT, ()=>console.log("Live "+PORT));
