@@ -1,15 +1,12 @@
 {
-  "name": "q-ai-final-design",
-  "version": "6.0.0",
-  "description": "Q A.I - Logo left, Q A.I center, build by Abdulmalik right - Golden Black Fantasy",
+  "name": "q-ai",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
   }
 }
