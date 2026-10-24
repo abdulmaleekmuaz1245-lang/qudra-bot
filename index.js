@@ -18,12 +18,12 @@ body{background:linear-gradient(180deg,#e6f0ff 0%,#ffffff 100%);font-family:Aria
 .header{height:120px;background:linear-gradient(135deg,#0a3d8f 0%,#0a66c2 40%,#3a9bff 100%);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
 .q-logo{width:56px;height:56px;background:white;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#0a66c2}
 .q-title{color:white;font-size:30px;font-weight:800;margin-left:12px}
-.owner-btn{background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.4);color:white;padding:7px 14px;border-radius:20px;font-size:11px;text-decoration:none;backdrop-filter:blur(8px)}
+.owner-btn{background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.4);color:white;padding:7px 14px;border-radius:20px;font-size:11px;text-decoration:none}
 .wrap{max-width:700px;margin:0 auto;padding:14px 12px}
 .status-card{background:white;border-radius:18px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 6px 20px rgba(10,102,194,0.1);border:1px solid #e6f0ff;margin-bottom:12px}
 .dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 8px currentColor}
 .online{background:#00e676;color:#00e676;animation:pulse 2s infinite}
-.offline{background:#9aa8c2;color:#9aa8c2}
+.offline{background:#9aa8c2}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
 .q-msg{background:white;border-radius:18px 18px 18px 4px;padding:12px 14px;max-width:82%;margin:10px 0;display:flex;gap:9px;box-shadow:0 4px 18px rgba(10,102,194,0.08);border:1px solid #f0f6ff}
 .q-icon{width:34px;height:34px;background:linear-gradient(135deg,#0a66c2,#3a9bff);color:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold}
@@ -40,45 +40,21 @@ body{background:linear-gradient(180deg,#e6f0ff 0%,#ffffff 100%);font-family:Aria
   <a href="/owner" class="owner-btn">built by Abdulmalik ✨</a>
 </div>
 <div class="wrap">
-  <div class="status-card" id="statusCard">
-    <div class="dot offline" id="dot"></div>
-    <div><b style="color:#0a3d8f;font-size:14px" id="statusText">Checking Q status...</b> <small style="color:#8aa0c2" id="statusTime"></small></div>
-    <div style="margin-left:auto;font-size:14px">✨</div>
-  </div>
+  <div class="status-card" id="statusCard"><div class="dot offline" id="dot"></div><div><b style="color:#0a3d8f;font-size:14px" id="statusText">Checking...</b> <small style="color:#8aa0c2" id="statusTime"></small></div><div style="margin-left:auto">✨</div></div>
   <div id="chat"><div class="q-msg"><div class="q-icon">Q</div><div>Hi King! Q is live ✨</div></div></div>
 </div>
 <div class="footer">
   <input id="input" placeholder="Ask Q anything..." onkeypress="if(event.key==='Enter')send()">
-  <button class="btn btn-draw" onclick="document.getElementById('input').value='/draw ';document.getElementById('input').focus()">🎨</button>
+  <button class="btn btn-draw" onclick="document.getElementById('input').value='/draw ';this.nextElementSibling.focus()">🎨</button>
   <button class="btn btn-send" onclick="send()">➤</button>
 </div>
 <script>
 async function checkStatus(){
   let dot=document.getElementById('dot'), txt=document.getElementById('statusText'), time=document.getElementById('statusTime');
-  try{
-    let res=await fetch('/ping?t='+Date.now());
-    if(res.ok){
-      dot.className='dot online';
-      txt.textContent='Q A.I is online';
-      let now=new Date();
-      time.textContent='• active now • '+now.toLocaleTimeString();
-    }else throw new Error();
-  }catch(e){
-    dot.className='dot offline';
-    txt.textContent='Q A.I is offline';
-    time.textContent='• reconnecting...';
-  }
+  try{let res=await fetch('/ping?t='+Date.now());if(res.ok){dot.className='dot online';txt.textContent='Q A.I is online';time.textContent='• active now • '+new Date().toLocaleTimeString();}else throw 0;}catch(e){dot.className='dot offline';txt.textContent='Q A.I is offline';time.textContent='• reconnecting...';}
 }
-checkStatus();
-setInterval(checkStatus, 10000); // check every 10 seconds - REAL active status!
-
-function send(){
-  let i=document.getElementById('input');let t=i.value.trim();if(!t)return;
-  let c=document.getElementById('chat');
-  c.innerHTML+='<div style="background:linear-gradient(135deg,#0a66c2,#1a7bff);color:white;border-radius:18px 18px 4px 18px;padding:11px 14px;max-width:76%;margin:10px 0 10px auto">'+t+'</div>';
-  c.innerHTML+='<div class="q-msg"><div class="q-icon">Q</div><div>Q go reply here ✨</div></div>';
-  i.value='';window.scrollTo(0,document.body.scrollHeight);
-}
+checkStatus();setInterval(checkStatus,10000);
+function send(){let i=document.getElementById('input');let t=i.value.trim();if(!t)return;let c=document.getElementById('chat');c.innerHTML+='<div style="background:linear-gradient(135deg,#0a66c2,#1a7bff);color:white;border-radius:18px 18px 4px 18px;padding:11px 14px;max-width:76%;margin:10px 0 10px auto">'+t+'</div><div class="q-msg"><div class="q-icon">Q</div><div>Q go reply ✨</div></div>';i.value='';window.scrollTo(0,document.body.scrollHeight);}
 </script>
 </body>
 </html>
@@ -86,7 +62,52 @@ function send(){
 });
 
 app.get('/owner', (req, res) => {
-  res.send('<h1 style="font-family:Arial;text-align:center;margin-top:50px;color:#0a66c2">Q A.I Owner Panel<br><br><a href="/" style="color:#0a66c2">Back to Q</a><br><br>Built by Abdulmalik - 100% Meta</h1>');
+  res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Q A.I Owner</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:linear-gradient(180deg,#e6f0ff,#fff);font-family:Arial;min-height:100vh}
+.header{height:120px;background:linear-gradient(135deg,#0a3d8f,#0a66c2 50%,#3a9bff);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.q-logo{width:56px;height:56px;background:white;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#0a66c2}
+.q-title{color:white;font-size:28px;font-weight:800;margin-left:12px}
+.back{background:white;color:#0a66c2;padding:8px 16px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:13px;box-shadow:0 3px 12px rgba(0,0,0,0.2)}
+.card{max-width:650px;margin:-30px auto 0;background:white;border-radius:24px;padding:22px;box-shadow:0 15px 40px rgba(10,102,194,0.15);border:1px solid #e6f0ff}
+.owner-pic{width:90px;height:90px;background:linear-gradient(135deg,#0a66c2,#3a9bff);border-radius:22px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:40px;color:white;font-weight:900}
+.stat{flex:1;background:#f5f9ff;border:1px solid #e6f0ff;border-radius:14px;padding:12px;text-align:center}
+.stat b{color:#0a66c2;font-size:18px}
+.stat small{color:#8aa0c2;font-size:11px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div style="display:flex;align-items:center"><div class="q-logo">Q</div><div class="q-title" style="margin-left:12px">Q A.I Owner</div></div>
+  <a href="/" class="back">← Back to Q</a>
+</div>
+<div style="padding:0 14px">
+  <div class="card">
+    <div class="owner-pic">A</div>
+    <h2 style="text-align:center;color:#0a3d8f;margin:14px 0 4px">Abdulmalik</h2>
+    <p style="text-align:center;color:#8aa0c2;font-size:13px;margin-bottom:18px">Creator & Owner • 100% Meta • Fantasy Blue Edition</p>
+    <div style="display:flex;gap:10px;margin-bottom:18px">
+      <div class="stat"><b>Q A.I</b><br><small>Project</small></div>
+      <div class="stat"><b>Online</b><br><small>Status</small></div>
+      <div class="stat"><b>Fantasy</b><br><small>Theme</small></div>
+    </div>
+    <div style="background:#f5f9ff;border:1px solid #e6f0ff;border-radius:14px;padding:14px">
+      <b style="color:#0a3d8f;font-size:13px">About Q A.I</b><br>
+      <small style="color:#5a789e;line-height:18px">Q A.I is a next-gen AI assistant built by Abdulmalik with Fantasy Blue design. Features: Real-time status detection, Chat, Draw (🎨), and clean minimal UI. Built 100% for Meta.</small>
+    </div>
+    <a href="/" style="display:block;text-align:center;margin-top:16px;background:linear-gradient(135deg,#0a66c2,#3a9bff);color:white;padding:12px;border-radius:14px;text-decoration:none;font-weight:bold">Go to Q A.I Chat ✨</a>
+    <p style="text-align:center;color:#8aa0c2;font-size:10px;margin-top:12px">© 2026 Built by Abdulmalik - Q A.I Fantasy Blue</p>
+  </div>
+</div>
+</body>
+</html>
+  `);
 });
 
-app.listen(PORT, () => console.log('Q A.I REAL STATUS LIVE on', PORT));
+app.listen(PORT, () => console.log('Q A.I CLEAN + OWNER FIX LIVE'));
