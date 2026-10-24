@@ -6,109 +6,83 @@
 <title>Q A.I - built by Abdulmalik</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4ff;padding-bottom:90px;color:#1a1a1a}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4ff;padding-bottom:90px}
 
-/* === HEADER SLIDESHOW 3 BANNERS === */
-.header-slideshow{
-  width:100%;height:170px;position:relative;overflow:hidden;
-  border-bottom:3px solid #0a66c2;box-shadow:0 4px 15px rgba(10,102,194,0.2)
-}
-.slide{
-  position:absolute;top:0;left:0;width:100%;height:100%;
-  background-size:cover;background-position:center left;
-  opacity:0;animation:slideShow 12s infinite
-}
-.slide:nth-child(1){background-image:url('banner1.png');animation-delay:0s}
-.slide:nth-child(2){background-image:url('banner2.png');animation-delay:4s}
-.slide:nth-child(3){background-image:url('banner3.png');animation-delay:8s}
+/* HEADER SLIDESHOW - NO IMAGE FILES, PURE CSS BLUE TECH */
+.header-slideshow{width:100%;height:170px;position:relative;overflow:hidden;border-bottom:3px solid #0a66c2;box-shadow:0 4px 15px rgba(10,102,194,0.2)}
+.slide{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 25px;opacity:0;animation:slideShow 12s infinite}
+.slide1{background:linear-gradient(90deg,#0a3d8f 0%,#0a66c2 60%,#e6f0ff 100%)}
+.slide2{background:linear-gradient(90deg,#061e47 0%,#0a3d8f 50%,#1a7bff 100%)}
+.slide3{background:linear-gradient(90deg,#e6f0ff 0%,#cce0ff 40%,#ffffff 100%)}
+.slide:nth-child(1){animation-delay:0s}.slide:nth-child(2){animation-delay:4s}.slide:nth-child(3){animation-delay:8s}
 @keyframes slideShow{0%,30%{opacity:1}33%,100%{opacity:0}}
+.q-left{display:flex;align-items:center;gap:15px}
+.q-circle{width:58px;height:58px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;color:#0a66c2}
+.slide2 .q-circle{background:#e6f0ff;color:#061e47}
+.slide3 .q-circle{background:#0a66c2;color:white}
+.q-text{color:white;font-size:42px;font-weight:800;letter-spacing:2px}
+.slide3 .q-text{color:#0a3d8f}
+.q-sub{color:#cce0ff;font-size:12px;letter-spacing:2px;margin-top:2px}
+.slide3 .q-sub{color:#0a66c2}
+.built{color:#cce0ff;font-size:13px}
+.slide3 .built{color:#0a66c2}
 
-/* === CHAT PAGE EXACTLY LIKE SAMPLE === */
+/* CHAT LIKE SAMPLE */
 .chat-wrap{max-width:720px;margin:18px auto;padding:0 14px}
-.top-bar{
-  background:white;border-radius:18px;padding:12px 18px;
-  display:flex;justify-content:space-between;align-items:center;
-  box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-bottom:18px
-}
+.top-bar{background:white;border-radius:18px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-bottom:18px}
 #chatArea{display:flex;flex-direction:column;gap:10px;min-height:60vh}
-.q-bubble{
-  background:white;border-radius:20px 20px 20px 0;padding:12px 16px;
-  max-width:78%;box-shadow:0 2px 10px rgba(0,0,0,0.08);
-  border:1px solid #e6f0ff;display:flex;gap:10px;align-items:flex-start
-}
-.q-icon{
-  width:38px;height:38px;background:#0a66c2;border-radius:50%;
-  color:white;display:flex;align-items:center;justify-content:center;
-  font-weight:bold;flex-shrink:0
-}
-.user-bubble{
-  background:#0a66c2;color:white;border-radius:20px 20px 0 20px;
-  padding:12px 16px;max-width:75%;margin-left:auto;
-  box-shadow:0 2px 10px rgba(10,102,194,0.3)
-}
+.q-bubble{background:white;border-radius:20px 20px 20px 0;padding:12px 16px;max-width:78%;box-shadow:0 2px 10px rgba(0,0,0,0.08);border:1px solid #e6f0ff;display:flex;gap:10px}
+.q-icon{width:38px;height:38px;background:#0a66c2;border-radius:50%;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+.user-bubble{background:#0a66c2;color:white;border-radius:20px 20px 0 20px;padding:12px 16px;max-width:75%;margin-left:auto}
 .time{font-size:11px;color:#8aa0c2;margin-top:6px}
 .user-time{font-size:11px;color:#0a66c2;text-align:right;margin-top:4px}
 
-/* === FOOTER - CHAT SEND DRAW === */
-.footer{
-  position:fixed;bottom:0;left:0;right:0;background:white;
-  border-top:2px solid #0a66c2;padding:10px 12px;
-  display:flex;gap:8px;align-items:center;
-  box-shadow:0 -4px 15px rgba(10,102,194,0.15);z-index:999;
-  max-width:720px;margin:0 auto;width:100%;left:50%;transform:translateX(-50%);
-  border-radius:18px 18px 0 0
-}
-.footer input{
-  flex:1;border:1.5px solid #cce0ff;border-radius:25px;
-  padding:12px 18px;outline:none;font-size:15px;background:#f8fbff
-}
-.footer input:focus{border-color:#0a66c2;background:white}
-.btn-draw{
-  background:#e6f0ff;border:1.5px solid #0a66c2;color:#0a66c2;
-  border-radius:50%;width:46px;height:46px;font-size:20px;cursor:pointer
-}
-.btn-send{
-  background:#0a66c2;border:none;color:white;border-radius:50%;
-  width:46px;height:46px;font-size:18px;cursor:pointer
-}
-.btn-draw:active,.btn-send:active{transform:scale(0.95)}
+/* FOOTER CHAT SEND DRAW */
+.footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);background:white;border-top:2px solid #0a66c2;padding:10px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 -4px 15px rgba(10,102,194,0.15);z-index:999;max-width:720px;width:100%;border-radius:18px 18px 0 0}
+.footer input{flex:1;border:1.5px solid #cce0ff;border-radius:25px;padding:12px 18px;outline:none;font-size:15px;background:#f8fbff}
+.btn-draw{background:#e6f0ff;border:1.5px solid #0a66c2;color:#0a66c2;border-radius:50%;width:46px;height:46px;font-size:20px;cursor:pointer}
+.btn-send{background:#0a66c2;border:none;color:white;border-radius:50%;width:46px;height:46px;font-size:18px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<!-- HEADER SLIDESHOW -->
+<!-- HEADER 3 BANNERS SLIDESHOW -->
 <div class="header-slideshow">
-  <div class="slide"></div>
-  <div class="slide"></div>
-  <div class="slide"></div>
+  <div class="slide slide1">
+    <div class="q-left"><div class="q-circle">Q</div><div><div class="q-text">Q A.I</div><div class="q-sub">QUANTUM • AI • TECHNOLOGY</div></div></div>
+    <div class="built">built by Abdulmalik</div>
+  </div>
+  <div class="slide slide2">
+    <div class="q-left"><div class="q-circle">Q</div><div><div class="q-text">Q A.I</div><div class="q-sub">BUILT BY ABDULMALIK</div></div></div>
+    <div class="built">built by Abdulmalik</div>
+  </div>
+  <div class="slide slide3">
+    <div class="q-left"><div class="q-circle">Q</div><div><div class="q-text">Q A.I</div><div class="q-sub">CLASSIC • TECH • BLUE</div></div></div>
+    <div class="built">built by Abdulmalik</div>
+  </div>
 </div>
 
-<!-- CHAT BODY -->
+<!-- CHAT -->
 <div class="chat-wrap">
   <div class="top-bar">
-    <div style="display:flex;gap:12px;align-items:center">
-      <span style="font-size:28px;color:#0a66c2">‹</span>
-      <div>
-        <b style="font-size:22px;color:#0a3d8f">Q A.I.</b><br>
-        <small style="color:#6b8ab8">Online • Ready to help • built by Abdulmalik</small>
-      </div>
-    </div>
-    <div style="color:#0a66c2;font-size:20px">📞 •••</div>
+    <div style="display:flex;gap:12px;align-items:center"><span style="font-size:28px;color:#0a66c2">‹</span><div><b style="font-size:22px;color:#0a3d8f">Q A.I.</b><br><small style="color:#6b8ab8">Online • Ready to help • built by Abdulmalik</small></div></div>
+    <div style="color:#0a66c2">📞 •••</div>
   </div>
-
-  <div id="chatArea">
-    <div class="q-bubble">
-      <div class="q-icon">Q</div>
-      <div>Hi! I'm Q A.I., your virtual assistant. How can I help you today?
-        <div class="time">09:32 AM</div>
-      </div>
-    </div>
-  </div>
+  <div id="chatArea"><div class="q-bubble"><div class="q-icon">Q</div><div>Hi! I'm Q A.I., your virtual assistant. How can I help you today?<div class="time">09:32 AM</div></div></div></div>
 </div>
 
-<!-- FOOTER WITH CHAT SEND DRAW -->
+<!-- FOOTER -->
 <div class="footer">
   <input id="userInput" placeholder="Ask Q A.I. anything... or type /draw cat" onkeypress="if(event.key==='Enter')sendMsg()">
-  <button class="btn-draw" onclick="drawMode()" title="Draw Image">🎨</button>
-  <button class="btn-send" onclick="sendMsg()" title="Send">➤</button>
+  <button class="btn-draw" onclick="drawMode()">🎨</button>
+  <button class="btn-send" onclick="sendMsg()">➤</button>
 </div>
+
+<script>
+function addUserBubble(t){let a=document.getElementById('chatArea');a.innerHTML+=`<div class="user-bubble">${t}</div><div class="user-time">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} • Delivered</div>`;window.scrollTo(0,document.body.scrollHeight)}
+function addQBubble(t){let a=document.getElementById('chatArea');a.innerHTML+=`<div class="q-bubble"><div class="q-icon">Q</div><div>${t}<div class="time">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div></div>`;window.scrollTo(0,document.body.scrollHeight)}
+function drawMode(){let i=document.getElementById('userInput');i.value="/draw ";i.focus();i.placeholder="Describe wetin Q go draw..."}
+function sendMsg(){let i=document.getElementById('userInput');let t=i.value.trim();if(!t)return;addUserBubble(t);i.value="";if(t.toLowerCase().startsWith('/draw')||t.toLowerCase().startsWith('draw ')){let p=t.replace(/^\/draw\s*/i,'').replace(/^draw\s*/i,'');addQBubble("🎨 Q dey draw: <i>"+p+"</i>...");setTimeout(()=>addQBubble("Draw done! Connect your /draw API"),800)}else{addQBubble("Q dey think...");setTimeout(()=>{document.querySelectorAll('.q-bubble:last-child')[0]?.remove();addQBubble("I'm Q A.I built by Abdulmalik - your chat API answer go show here")},600)}}
+</script>
+</body>
+</html>
