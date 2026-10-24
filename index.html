@@ -2,80 +2,54 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Q A.I - built by Abdulmalik</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q A.I - Fantasy Blue</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#eef4ff;font-family:Arial,sans-serif;padding-bottom:80px}
-
-/* NEW BLUE HEADER SLIDESHOW - REPLACE YELLOW */
-.header{
-  width:100%;height:150px;position:relative;overflow:hidden;
-  background:linear-gradient(90deg,#0a3d8f,#0a66c2);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;border-bottom:3px solid #0a66c2;
-  animation:colorChange 12s infinite;
+* { margin:0; padding:0; box-sizing:border-box; }
+body { 
+  background: linear-gradient(180deg, #e6f0ff 0%, #ffffff 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height:100vh; padding-bottom:85px;
 }
-@keyframes colorChange{
-  0%{background:linear-gradient(90deg,#0a3d8f,#0a66c2)}
-  33%{background:linear-gradient(90deg,#061e47,#1a7bff)}
-  66%{background:linear-gradient(90deg,#e6f0ff,#ffffff)}
-  100%{background:linear-gradient(90deg,#0a3d8f,#0a66c2)}
+
+/* FANTASY BLUE HEADER - ANIMATED */
+.header {
+  height:160px; 
+  background: linear-gradient(135deg, #0a3d8f 0%, #0a66c2 30%, #3a9bff 60%, #cce0ff 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px; position:relative; overflow:hidden;
 }
-.q-logo{width:55px;height:55px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#0a66c2}
-.q-title{color:white;font-size:36px;font-weight:800;margin-left:12px}
-.q-sub{color:#cce0ff;font-size:11px;letter-spacing:2px}
-.built{color:#cce0ff;font-size:12px}
-
-/* CHAT LIKE SAMPLE YOU LIKE */
-.chat-wrap{max-width:700px;margin:15px auto;padding:0 12px}
-.top-bar{background:white;border-radius:16px;padding:10px 15px;display:flex;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.08);margin-bottom:15px}
-.bubble-q{background:white;border-radius:18px 18px 18px 0;padding:10px 14px;max-width:80%;margin:8px 0;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;gap:8px;border:1px solid #e6f0ff}
-.bubble-user{background:#0a66c2;color:white;border-radius:18px 18px 0 18px;padding:10px 14px;max-width:75%;margin:8px 0 8px auto}
-.icon-q{width:34px;height:34px;background:#0a66c2;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
-
-/* FOOTER - CHAT SEND DRAW - BLUE NOT YELLOW */
-.footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;background:white;border-top:2px solid #0a66c2;padding:8px 10px;display:flex;gap:6px;border-radius:16px 16px 0 0;box-shadow:0 -3px 10px rgba(10,102,194,0.15)}
-.footer input{flex:1;border:1.5px solid #cce0ff;border-radius:22px;padding:10px 15px;outline:none;background:#f8fbff}
-.btn{border-radius:50%;width:42px;height:42px;border:none;cursor:pointer;font-size:18px}
-.btn-draw{background:#e6f0ff;border:1.5px solid #0a66c2;color:#0a66c2}
-.btn-send{background:#0a66c2;color:white}
-</style>
-</head>
-<body>
-
-<!-- NEW BLUE HEADER - NO YELLOW -->
-<div class="header">
-  <div style="display:flex;align-items:center"><div class="q-logo">Q</div><div><div class="q-title">Q A.I</div><div class="q-sub">QUANTUM • AI • TECHNOLOGY</div></div></div>
-  <div class="built">built by Abdulmalik</div>
-</div>
-
-<div class="chat-wrap">
-  <div class="top-bar"><div><b style="color:#0a3d8f">Q A.I.</b> <small style="color:#6b8ab8">Online • Ready to help</small></div><div>📞 •••</div></div>
-  <div id="chat">
-    <div class="bubble-q"><div class="icon-q">Q</div><div>Hi! I'm Q A.I., your virtual assistant. How can I help you today?<br><small style="color:gray">09:32 AM</small></div></div>
-  </div>
-</div>
-
-<div class="footer">
-  <input id="msg" placeholder="Ask Q A.I. anything... or /draw cat" onkeypress="if(event.key==='Enter')send()">
-  <button class="btn btn-draw" onclick="document.getElementById('msg').value='/draw ';document.getElementById('msg').focus()">🎨</button>
-  <button class="btn btn-send" onclick="send()">➤</button>
-</div>
-
-<script>
-function send(){
-  let i=document.getElementById('msg');let t=i.value.trim();if(!t)return;
-  let c=document.getElementById('chat');
-  if(t.toLowerCase().startsWith('/draw')||t.toLowerCase().startsWith('draw')){
-    c.innerHTML+=`<div class="bubble-user">${t}</div>`;
-    c.innerHTML+=`<div class="bubble-q"><div class="icon-q">Q</div><div>🎨 Drawing: ${t.replace('/draw','')} ...</div></div>`;
-  }else{
-    c.innerHTML+=`<div class="bubble-user">${t}</div>`;
-    c.innerHTML+=`<div class="bubble-q"><div class="icon-q">Q</div><div>Q A.I reply go here - connect your API! Connect Groq/Meta brain here.</div></div>`;
-  }
-  i.value='';window.scrollTo(0,document.body.scrollHeight);
+.header::before{
+  content:''; position:absolute; top:0; left:0; right:0; bottom:0;
+  background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 30%, rgba(255,255,255,0.2) 0%, transparent 40%);
+  animation: shine 4s ease-in-out infinite;
 }
-</script>
-</body>
-</html>
+@keyframes shine { 0%,100%{opacity:0.5} 50%{opacity:1} }
+.q-logo {
+  width:62px; height:62px; background:white; border-radius:18px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px; font-weight:900; color:#0a66c2;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.6), 0 0 30px rgba(10,102,194,0.3);
+  position:relative; z-index:2; transform: rotate(-5deg);
+}
+.q-info { margin-left:14px; position:relative; z-index:2; }
+.q-title { color:white; font-size:32px; font-weight:800; text-shadow:0 2px 10px rgba(0,0,0,0.2); letter-spacing:1px; }
+.q-subtitle { color:#e6f0ff; font-size:11px; letter-spacing:3px; margin-top:3px; opacity:0.9; }
+.built-badge {
+  background: rgba(255,255,255,0.25); backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.4); color:white;
+  padding:6px 14px; border-radius:20px; font-size:11px;
+  position:relative; z-index:2;
+}
+
+/* CHAT FANTASY */
+.wrap { max-width:700px; margin:0 auto; padding:16px 14px; }
+.top-card {
+  background:white; border-radius:20px; padding:14px 18px;
+  display:flex; justify-content:space-between; align-items:center;
+  box-shadow:0 8px 30px rgba(10,102,194,0.12); border:1px solid #e6f0ff;
+  margin-bottom:16px;
+}
+.q-msg {
+  background:white; border-radius:20px 20
