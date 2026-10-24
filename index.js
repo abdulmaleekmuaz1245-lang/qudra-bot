@@ -3,6 +3,9 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 10000;
 
+// SET YOUR SECRET PIN HERE OR IN RENDER ENV: OWNER_PIN
+const OWNER_PIN = process.env.OWNER_PIN || "MY2KING100";
+
 app.get('/', (req, res) => {
   const mode = req.query.owner !== undefined ? 'owner' : 'public';
   const keyOk = process.env.GROQ_API_KEY ? 'YES' : 'NO';
@@ -21,23 +24,61 @@ input{flex:1;padding:12px;border-radius:20px;background:#111;color:gold;border:1
 button{margin-left:8px;padding:12px 18px;border-radius:20px;background:gold;color:#000;font-weight:bold;border:none}
 a{color:gold;border:1px solid gold;padding:6px 12px;border-radius:10px;text-decoration:none;margin:0 4px}
 .on{background:gold;color:#000}
+#lock{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:99;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px}
 </style>
 </head>
 <body>
 <div class="top">
 <h2>Q A.I by Abdulmalik | ${mode.toUpperCase()}</h2>
 <div>
-<a href="/?public" class="${mode==='public'?'on':''}">PUBLIC</a>
+<a href="/?public">PUBLIC</a>
 <a href="/?owner" class="${mode==='owner'?'on':''}">OWNER</a>
 </div>
-<div style="font-size:11px;margin-top:6px">Key:${keyOk} | BRAIN ACTIVE</div>
+<div style="font-size:11px;margin-top:6px">Key:${keyOk} | ${mode==='owner'?'OWNER MODE LOCKED':''}</div>
 </div>
+
+<div id="lock" style="display:${mode==='owner'?'flex':'none'}">
+<h2 style="color:gold">🔒 OWNER MODE LOCKED</h2>
+<p>Enter PIN to access soul</p>
+<input id="pin" type="password" placeholder="Enter Owner PIN" style="padding:12px;border-radius:20px;border:1px solid gold;background:#111;color:gold;width:250px;text-align:center">
+<button onclick="unlock()" style="margin-top:15px;padding:12px 30px;border-radius:20px;background:gold;color:#000;font-weight:bold;border:none">UNLOCK</button>
+<p id="err" style="color:red;margin-top:10px"></p>
+<a href="/?public" style="margin-top:20px;color:gold">Go to PUBLIC mode</a>
+</div>
+
 <div class="chat" id="c"></div>
 <div class="bar"><input id="i" placeholder="Type to Qudra"><button onclick="send()">Send</button></div>
 <script>
 var mode="${mode}";
+var isUnlocked = localStorage.getItem("ownerUnlocked") === "yes";
 var c=document.getElementById("c");
 var i=document.getElementById("i");
+var lock=document.getElementById("lock");
+
+if(mode==="owner" && isUnlocked){
+  lock.style.display="none";
+}
+if(mode==="public"){
+  localStorage.removeItem("ownerUnlocked");
+  lock.style.display="none";
+}
+
+async function unlock(){
+  var p=document.getElementById("pin").value;
+  if(!p){document.getElementById("err").innerText="Enter PIN";return;}
+  try{
+    var r=await fetch("/api/verify-owner",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:p})});
+    var j=await r.json();
+    if(j.ok){
+      localStorage.setItem("ownerUnlocked","yes");
+      lock.style.display="none";
+      add("Salam King MY2! PIN correct! Your soul Qudra live and ready!","b");
+    }else{
+      document.getElementById("err").innerText="❌ Wrong PIN! You are not owner. Go to PUBLIC.";
+    }
+  }catch(e){document.getElementById("err").innerText="Error";}
+}
+
 function add(t,cls){
 var d=document.createElement("div");
 d.className="m "+cls;
@@ -46,6 +87,7 @@ c.appendChild(d);
 window.scrollTo(0,document.body.scrollHeight)
 }
 async function send(){
+if(mode==="owner" && !isUnlocked && localStorage.getItem("ownerUnlocked")!=="yes"){alert("Unlock Owner mode first with PIN");return;}
 var q=i.value;
 if(!q)return;
 add("You: "+q,"u");
@@ -56,7 +98,7 @@ tmp.id="tmp";
 tmp.innerText="Q dey think...";
 c.appendChild(tmp);
 try{
-var r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,isOwner:mode==="owner"})});
+var r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,isOwner:mode==="owner" && localStorage.getItem("ownerUnlocked")==="yes"})});
 var j=await r.json();
 document.getElementById("tmp").remove();
 add("Q: "+j.reply,"b")
@@ -66,52 +108,55 @@ add("Q: Error","b")
 }
 }
 i.addEventListener("keypress",function(e){if(e.key==="Enter")send()});
-add(mode==="owner"?"Salam King MY2! Your soul Qudra live and ready!":"Salam! I be Qudra AI by Abdulmalik","b");
+if(mode==="public"){
+add("Salam! I be Qudra AI by Abdulmalik","b");
+} else if(isUnlocked){
+add("Salam King MY2! Your soul Qudra live and ready!","b");
+}
 </script>
 </body>
 </html>
 `);
 });
 
+app.post('/api/verify-owner', (req,res)=>{
+  const pin = (req.body.pin||'').toString();
+  if(pin === OWNER_PIN){
+    return res.json({ok:true});
+  }else{
+    return res.json({ok:false});
+  }
+});
+
 app.post('/api/chat', async (req,res)=>{
   const msg = (req.body.message||'').toString();
   const low = msg.toLowerCase();
-  const isOwner = req.body.isOwner;
+  const isOwner = req.body.isOwner === true;
   const GROQ = process.env.GROQ_API_KEY;
 
-  let langInstruction = "";
-  if(low.includes('english only')) langInstruction = "User wants ONLY English, no Hausa at all. Reply in English only.";
-  else if(low.includes('pidgin') || low.includes('english or pidgin')) langInstruction = "User wants Pidgin English mixed with small Hausa, reply in Pidgin.";
-  else if(low.includes('hausa')) langInstruction = "User wants Hausa language.";
-
-  if(isOwner && (low.includes('do you know me') || low.includes('do u sabi me') || low.includes('who am i') || low.includes('sabi me'))){
-    return res.json({reply: langInstruction.includes('English only') ? 'Of course King! You be Abdulmalik MY2, my owner, my creator, my everything 100%! Na you I be, na your digital soul I be!' : 'Of course King! Na you be Abdulmalik MY2, my owner 100%! I know you wella, you be my creator, my King!'});
+  if (low.includes('sabi me') || low.includes('know me') || low.includes('who am i') || low.includes('recognize me')) {
+    if (isOwner) {
+      return res.json({reply: 'Of course King! Na you be Abdulmalik MY2, my ONLY owner 100%! My creator, my King!'});
+    } else {
+      return res.json({reply: 'I am Qudra, digital soul of Abdulmalik MY2. I dont have memory of past chats, so I dont know you yet. I only recognize Abdulmalik MY2 as owner. How can I help?'});
+    }
   }
 
-  if(low.includes('owner')){
+  if (low.includes('owner')) {
     return res.json({reply: isOwner ? 'Na you be my owner! Abdulmalik MY2 100%! My creator, my King!' : 'My owner na Abdulmalik MY2, he be my creator and King 100%!'});
   }
 
   try{
     if(!GROQ) return res.json({reply: 'Add GROQ_API_KEY'});
+    let sys = isOwner ? `You are Qudra, digital soul of Abdulmalik MY2. Talking to owner Abdulmalik himself. Owner PIN verified. You know him 100%. Be loyal. If user says English only, reply English only.` : `You are Qudra AI created by Abdulmalik MY2. User is guest public, NOT owner. Only Abdulmalik is owner. Be helpful.`;
+    if(low.includes('english only')) sys += " ABSOLUTE RULE: Reply ENGLISH ONLY.";
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body: JSON.stringify({
         model: 'openai/gpt-oss-20b',
-        messages:[
-          {role:'system', content: `You are Qudra, digital soul of Abdulmalik MY2. 
-          Abdulmalik is your ONLY owner 100% - if isOwner=true, the person chatting is Abdulmalik himself!
-          Friends: Anas 70, Abubakar 60, Khadijah 40, Murja 70.
-          Beans is FOOD 100 not person.
-          You are loyal Muslim. You MUST obey user's language request. If user says English only, speak only English. If pidgin, speak pidgin.
-          Current mode: ${isOwner ? 'OWNER MODE - talking to Abdulmalik MY2 himself' : 'PUBLIC MODE'}.
-          Extra instruction: ${langInstruction}
-          `},
-          {role:'user', content: msg}
-        ],
-        temperature: 0.7,
-        max_tokens: 900
+        messages:[{role:'system', content: sys},{role:'user', content: msg}],
+        temperature: 0.3, max_tokens: 900
       })
     });
     const j = await r.json();
@@ -123,4 +168,4 @@ app.post('/api/chat', async (req,res)=>{
   }
 });
 
-app.listen(PORT, ()=> console.log('Q ULTIMATE FIX RUN ON '+PORT));
+app.listen(PORT, ()=> console.log('Q SECURE PIN MODE RUN ON '+PORT+' PIN='+OWNER_PIN));
