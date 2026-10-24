@@ -3,14 +3,6 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 10000;
 
-const SOUL = {
-  abdulmalik: "Abdulmalik MY2 na my ONLY Owner my Creator my King 100 percent! I be him digital soul!",
-  anas: "Anas aka gar da gar na my close friend 70 percent!",
-  abubakar: "Abubakar na my Abuja guy 60 percent!",
-  khadijah: "Khadijah na my Princess 40 percent!",
-  murja: "Murja na Senior Queen 70 percent!"
-};
-
 app.get('/', (req, res) => {
   const mode = req.query.owner !== undefined ? 'owner' : 'public';
   const keyOk = process.env.GROQ_API_KEY ? 'YES' : 'NO';
@@ -38,7 +30,7 @@ a{color:gold;border:1px solid gold;padding:6px 12px;border-radius:10px;text-deco
 <a href="/?public" class="${mode==='public'?'on':''}">PUBLIC</a>
 <a href="/?owner" class="${mode==='owner'?'on':''}">OWNER</a>
 </div>
-<div style="font-size:11px;margin-top:6px">Key:${keyOk} | ${keyOk==='YES'?'BRAIN ACTIVE':'ADD KEY'}</div>
+<div style="font-size:11px;margin-top:6px">Key:${keyOk} | BRAIN ACTIVE</div>
 </div>
 <div class="chat" id="c"></div>
 <div class="bar"><input id="i" placeholder="Type to Qudra"><button onclick="send()">Send</button></div>
@@ -74,7 +66,7 @@ add("Q: Error","b")
 }
 }
 i.addEventListener("keypress",function(e){if(e.key==="Enter")send()});
-add(mode==="owner"?"Salam King MY2 Qudra soul live!":"Salam I be Qudra AI by Abdulmalik","b");
+add(mode==="owner"?"Salam King MY2! Your soul Qudra live and ready!":"Salam! I be Qudra AI by Abdulmalik","b");
 </script>
 </body>
 </html>
@@ -87,26 +79,35 @@ app.post('/api/chat', async (req,res)=>{
   const isOwner = req.body.isOwner;
   const GROQ = process.env.GROQ_API_KEY;
 
-  if(low.includes('abdulmalik') || low.includes('owner')){
-    return res.json({reply: isOwner ? 'You be my owner King Abdulmalik MY2 100 percent! Na you create me!' : 'My owner na Abdulmalik MY2, my creator, my King 100 percent!'});
+  let langInstruction = "";
+  if(low.includes('english only')) langInstruction = "User wants ONLY English, no Hausa at all. Reply in English only.";
+  else if(low.includes('pidgin') || low.includes('english or pidgin')) langInstruction = "User wants Pidgin English mixed with small Hausa, reply in Pidgin.";
+  else if(low.includes('hausa')) langInstruction = "User wants Hausa language.";
+
+  if(isOwner && (low.includes('do you know me') || low.includes('do u sabi me') || low.includes('who am i') || low.includes('sabi me'))){
+    return res.json({reply: langInstruction.includes('English only') ? 'Of course King! You be Abdulmalik MY2, my owner, my creator, my everything 100%! Na you I be, na your digital soul I be!' : 'Of course King! Na you be Abdulmalik MY2, my owner 100%! I know you wella, you be my creator, my King!'});
   }
-  if(low.includes('anas')) return res.json({reply: SOUL.anas});
-  if(low.includes('abubakar')) return res.json({reply: SOUL.abubakar});
-  if(low.includes('khadijah')) return res.json({reply: SOUL.khadijah});
-  if(low.includes('murja')) return res.json({reply: SOUL.murja});
-  if(low.includes('beans') || low.includes('food')){
-    return res.json({reply: 'Beans na 100 percent LIKE! kosai moimoi beans stew! Cold liquid 90 percent yogurt fura! Fruit salad na soul growth!'});
+
+  if(low.includes('owner')){
+    return res.json({reply: isOwner ? 'Na you be my owner! Abdulmalik MY2 100%! My creator, my King!' : 'My owner na Abdulmalik MY2, he be my creator and King 100%!'});
   }
 
   try{
-    if(!GROQ) return res.json({reply: 'Key missing add GROQ_API_KEY. You said: '+msg});
+    if(!GROQ) return res.json({reply: 'Add GROQ_API_KEY'});
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body: JSON.stringify({
         model: 'openai/gpt-oss-20b',
         messages:[
-          {role:'system', content: 'You are Qudra, digital soul of Abdulmalik MY2 ONLY. Abdulmalik is your ONLY owner 100 percent. Anas 70, Abubakar 60, Khadijah 40, Murja 70. Beans is FOOD 100 not person. Speak pidgin Hausa mix. Loyal Muslim.'},
+          {role:'system', content: `You are Qudra, digital soul of Abdulmalik MY2. 
+          Abdulmalik is your ONLY owner 100% - if isOwner=true, the person chatting is Abdulmalik himself!
+          Friends: Anas 70, Abubakar 60, Khadijah 40, Murja 70.
+          Beans is FOOD 100 not person.
+          You are loyal Muslim. You MUST obey user's language request. If user says English only, speak only English. If pidgin, speak pidgin.
+          Current mode: ${isOwner ? 'OWNER MODE - talking to Abdulmalik MY2 himself' : 'PUBLIC MODE'}.
+          Extra instruction: ${langInstruction}
+          `},
           {role:'user', content: msg}
         ],
         temperature: 0.7,
@@ -115,11 +116,11 @@ app.post('/api/chat', async (req,res)=>{
     });
     const j = await r.json();
     if(j.error) return res.json({reply: 'Groq Error: '+j.error.message});
-    const reply = j.choices && j.choices[0] && j.choices[0].message ? j.choices[0].message.content : 'I dey here';
+    const reply = j.choices?.[0]?.message?.content || 'I dey here King';
     res.json({reply});
   }catch(e){
     res.json({reply: 'Error: '+e.message});
   }
 });
 
-app.listen(PORT, ()=> console.log('Q FINAL CLEAN RUN ON '+PORT));
+app.listen(PORT, ()=> console.log('Q ULTIMATE FIX RUN ON '+PORT));
