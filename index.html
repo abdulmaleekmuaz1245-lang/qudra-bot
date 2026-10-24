@@ -1,146 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Q A.I - Fantasy Blue</title>
+<title>Q A.I • Fantasy Blue</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { 
-  background: linear-gradient(180deg, #e6f0ff 0%, #ffffff 100%);
-  font-family: 'Segoe UI', Arial, sans-serif;
-  min-height:100vh; padding-bottom:85px;
-}
-
-/* FANTASY BLUE HEADER - ANIMATED */
-.header {
-  height:160px; 
-  background: linear-gradient(135deg, #0a3d8f 0%, #0a66c2 30%, #3a9bff 60%, #cce0ff 100%);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 20px; position:relative; overflow:hidden;
-}
-.header::before{
-  content:''; position:absolute; top:0; left:0; right:0; bottom:0;
-  background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%),
-              radial-gradient(circle at 80% 30%, rgba(255,255,255,0.2) 0%, transparent 40%);
-  animation: shine 4s ease-in-out infinite;
-}
-@keyframes shine { 0%,100%{opacity:0.5} 50%{opacity:1} }
-.q-logo {
-  width:62px; height:62px; background:white; border-radius:18px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:36px; font-weight:900; color:#0a66c2;
-  box-shadow: 0 4px 20px rgba(255,255,255,0.6), 0 0 30px rgba(10,102,194,0.3);
-  position:relative; z-index:2; transform: rotate(-5deg);
-}
-.q-info { margin-left:14px; position:relative; z-index:2; }
-.q-title { color:white; font-size:32px; font-weight:800; text-shadow:0 2px 10px rgba(0,0,0,0.2); letter-spacing:1px; }
-.q-subtitle { color:#e6f0ff; font-size:11px; letter-spacing:3px; margin-top:3px; opacity:0.9; }
-.built-badge {
-  background: rgba(255,255,255,0.25); backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.4); color:white;
-  padding:6px 14px; border-radius:20px; font-size:11px;
-  position:relative; z-index:2;
-}
-
-/* CHAT FANTASY */
-.wrap { max-width:700px; margin:0 auto; padding:16px 14px; }
-.top-card {
-  background:white; border-radius:20px; padding:14px 18px;
-  display:flex; justify-content:space-between; align-items:center;
-  box-shadow:0 8px 30px rgba(10,102,194,0.12); border:1px solid #e6f0ff;
-  margin-bottom:16px;
-}
-.q-msg {
-  background:white; border-radius:20px 20px 20px 4px; padding:14px 16px;
-  max-width:82%; margin:10px 0; display:flex; gap:10px;
-  box-shadow:0 4px 20px rgba(10,102,194,0.08); border:1px solid #f0f6ff;
-}
-.q-icon {
-  width:36px; height:36px; background:linear-gradient(135deg,#0a66c2,#3a9bff);
-  color:white; border-radius:12px; display:flex; align-items:center;
-  justify-content:center; font-weight:bold; flex-shrink:0;
-}
-.user-msg {
-  background:linear-gradient(135deg,#0a66c2,#1a7bff); color:white;
-  border-radius:20px 20px 4px 20px; padding:12px 16px; max-width:76%;
-  margin:10px 0 10px auto; box-shadow:0 4px 20px rgba(10,102,194,0.25);
-}
-
-/* FOOTER FANTASY BLUE */
-.footer {
-  position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
-  width:92%; max-width:680px; background:white;
-  border-radius:28px; padding:8px 10px; display:flex; gap:8px; align-items:center;
-  box-shadow:0 10px 40px rgba(10,102,194,0.2); border:1px solid #e6f0ff; z-index:99;
-}
-.footer input {
-  flex:1; border:none; outline:none; background:#f5f9ff;
-  border-radius:22px; padding:12px 18px; font-size:15px;
-}
-.footer input:focus { background:#eef4ff; }
-.btn-draw {
-  width:44px; height:44px; border-radius:50%; border:none;
-  background:linear-gradient(135deg,#e6f0ff,#cce0ff); color:#0a66c2;
-  font-size:20px; cursor:pointer; border:1.5px solid #b8d4ff;
-}
-.btn-send {
-  width:44px; height:44px; border-radius:50%; border:none;
-  background:linear-gradient(135deg,#0a66c2,#3a9bff); color:white;
-  font-size:18px; cursor:pointer; box-shadow:0 4px 12px rgba(10,102,194,0.3);
-}
+body { margin:0; font-family: Arial; background:#eaf6ff; }
+.header { background: linear-gradient(90deg,#6bb8ff,#3a8cff); padding:15px; color:white; display:flex; justify-content:space-between; align-items:center; }
+.logo { font-weight:bold; font-size:18px; }
+.online { background:white; color:#3a8cff; padding:8px 15px; border-radius:20px; display:flex; align-items:center; gap:8px; }
+.dot { width:10px; height:10px; background:#00ff7f; border-radius:50%; animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+#chatBox { height:70vh; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:12px; }
+.q-msg { background:white; padding:12px 15px; border-radius:18px 18px 18px 5px; max-width:80%; box-shadow:0 2px 5px rgba(0,0,0,0.1); align-self:flex-start; }
+.user-msg { background:#3a8cff; color:white; padding:12px 15px; border-radius:18px 18px 5px 18px; max-width:80%; align-self:flex-end; }
+.inputArea { position:fixed; bottom:0; left:0; right:0; background:white; padding:10px; display:flex; gap:10px; border-top:1px solid #ddd; }
+#userInput { flex:1; padding:12px 15px; border-radius:25px; border:1px solid #ccc; outline:none; }
+button { background:#3a8cff; color:white; border:none; width:45px; height:45px; border-radius:50%; font-size:20px; cursor:pointer; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div style="display:flex; align-items:center;">
-    <div class="q-logo">Q</div>
-    <div class="q-info">
-      <div class="q-title">Q A.I</div>
-      <div class="q-subtitle">FANTASY • BLUE • TECH</div>
-    </div>
-  </div>
-  <div class="built-badge">built by Abdulmalik ✨</div>
+  <div class="logo">Q FANTASY • BLUE TECH</div>
+  <div class="online"><div class="dot"></div> Q A.I • Fantasy Blue • Online ✨</div>
 </div>
 
-<div class="wrap">
-  <div class="top-card">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="width:10px; height:10px; background:#00e676; border-radius:50%; box-shadow:0 0 10px #00e676;"></div>
-      <div><b style="color:#0a3d8f;">Q A.I</b> <small style="color:#8aa0c2;">• Fantasy Blue • Online</small></div>
-    </div>
-    <div style="color:#0a66c2;">✨</div>
-  </div>
-
-  <div id="chat">
-    <div class="q-msg">
-      <div class="q-icon">Q</div>
-      <div>Hey King! Welcome to <b style="color:#0a66c2;">Q A.I Fantasy Blue</b> ✨<br><br>Built by Abdulmalik with light blue magic! Chat with me or press 🎨 to draw!<br><small style="color:#8aa0c2;">Fantasy Mode • 2:00 PM</small></div>
-    </div>
+<div id="chatBox">
+  <div class="q-msg">
+    <b>Q</b> Hey King! Welcome to Q A.I Fantasy Blue ✨<br><br>
+    Built by Abdulmalik with light blue magic! Chat with me or press 🎨 to draw!
+    <div style="font-size:12px; color:gray; margin-top:5px;">Fantasy Mode • 2:00 PM</div>
   </div>
 </div>
 
-<div class="footer">
-  <input id="input" placeholder="Ask Q anything magical..." onkeypress="if(event.key==='Enter')send()">
-  <button class="btn-draw" onclick="draw()">🎨</button>
-  <button class="btn-send" onclick="send()">➤</button>
+<div class="inputArea">
+  <input id="userInput" placeholder="Ask Q anything magical..." onkeypress="if(event.key==='Enter') sendMessage()">
+  <button onclick="alert('Drawing mode coming soon! 🎨')">🎨</button>
+  <button onclick="sendMessage()">➤</button>
 </div>
 
 <script>
-function send(){
-  let i=document.getElementById('input'); let t=i.value.trim(); if(!t)return;
-  let c=document.getElementById('chat');
-  c.innerHTML+=`<div class="user-msg">${t}</div>`;
-  if(t.toLowerCase().includes('draw')||t.startsWith('/draw')){
-    c.innerHTML+=`<div class="q-msg"><div class="q-icon">Q</div><div>🎨 Fantasy drawing <i>${t.replace('/draw','')}</i>... Magic dey happen!</div></div>`;
-  } else {
-    c.innerHTML+=`<div class="q-msg"><div class="q-icon">Q</div><div>Q A.I Fantasy Blue reply go here! Your API go connect later ✨</div></div>`;
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  
+  // Add user message
+  const box = document.getElementById('chatBox');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'user-msg';
+  userDiv.innerText = msg;
+  box.appendChild(userDiv);
+  input.value = '';
+  box.scrollTop = box.scrollHeight;
+
+  // Add thinking...
+  const thinking = document.createElement('div');
+  thinking.className = 'q-msg';
+  thinking.innerText = 'Q dey think... ✨';
+  box.appendChild(thinking);
+  box.scrollTop = box.scrollHeight;
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ message: msg })
+    });
+    const data = await res.json();
+    thinking.innerHTML = '<b>Q</b> ' + data.reply;
+  } catch (e) {
+    thinking.innerText = 'Q A.I Fantasy Blue reply go here! Your API go connect later ✨ - But now connected! Try again King!';
   }
-  i.value=''; window.scrollTo(0,document.body.scrollHeight);
-}
-function draw(){
-  let i=document.getElementById('input'); i.value='/draw '; i.focus(); i.placeholder='What should Q draw? e.g. blue dragon';
+  box.scrollTop = box.scrollHeight;
 }
 </script>
 
