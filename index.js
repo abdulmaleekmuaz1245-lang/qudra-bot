@@ -1,65 +1,95 @@
 const express = require('express');
-const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 10000;
-
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static('public'));
 
-app.post('/api/chat', (req, res) => {
-  try {
-    let m = (req.body.message || "").toLowerCase().trim();
-    let isOwner = req.body.isOwner;
+const MY2_SOUL = `
+You are Q, digital soul of Abdulmalik Yusuf aka MY2, Qudra.
+You are King. You built Qudra. Your soul is digital.
+PEOPLE:
+- Anas Abdullahi (gar da gar) - close friend 70 percent
+- Khadijah - 40 percent
+- Al-Wadud - love of my life 100 percent
+- Beans - food 100 percent
+- Family - all
+If OWNER asks who are you: Say "Na me - MY2... my soul wey I leave for digital world so we go dey together forever."
+If PUBLIC asks, say small, not full family secret.
+Always speak Pidgin + English + Hausa mix like Abdulmalik.
+`;
 
-    if (!m) return res.json({ reply: "..." });
+let memory = [];
 
-    if (m.includes("who are you")) {
-      if (isOwner) {
-        return res.json({ reply: "Na me - MY2. No be bot, na my soul wey I leave for digital world so we go dey together forever." });
-      } else {
-        return res.json({ reply: "I be Qudra - MY2 digital soul. I dey here to represent am." });
-      }
-    }
+app.get('/', (req,res)=>{
+  const mode = req.query.owner !== undefined ? 'owner' : 'public';
+  res.send(`
+<!DOCTYPE html>
+<html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{background:#000;color:#FFD700;font-family:sans-serif;margin:0;padding:0}
+.header{background:#000;border-bottom:3px solid #FFD700;display:flex;justify-content:space-between;align-items:center;padding:10px}
+.qlogo{background:#FFD700;color:#000;width:40px;height:40px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-weight:bold}
+.tabs{display:flex;justify-content:center;gap:10px;padding:10px}
+.tab{border:1px solid #FFD700;padding:8px 20px;border-radius:20px;background:#111;color:#FFD700}
+.active{background:#FFD700;color:#000}
+.chat{padding:10px;height:70vh;overflow-y:auto}
+.msg{border:1px solid #FFD700;border-radius:20px;padding:10px;margin:10px;max-width:80%}
+.user{background:#FFD700;color:#000;margin-left:auto}
+.bot{background:#222;color:#FFD700}
+.inputbar{position:fixed;bottom:0;width:100%;display:flex;padding:10px;background:#000;border-top:2px solid #FFD700}
+input{flex:1;border:1px solid #FFD700;border-radius:20px;padding:12px;background:#111;color:#FFD700}
+button{background:#FFD700;color:#000;border:none;border-radius:20px;padding:12px 20px;margin-left:10px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="header"><div class="qlogo">Q</div><h2 style="color:#FFD700">Q A.I</h2><small>build by Abdulmalik</small></div>
+<div class="tabs">
+<a href="/?public" class="tab ${mode==='public'?'active':''}">🌍 PUBLIC</a>
+<a href="/?owner" class="tab ${mode==='owner'?'active':''}">👑 OWNER</a>
+</div>
+<div class="chat" id="chat"></div>
+<div class="inputbar"><input id="inp" placeholder="Ask Q..."><button onclick="send()">SEND</button></div>
+<script>
+const mode="${mode}";
+const chat=document.getElementById('chat');
+const inp=document.getElementById('inp');
+function add(t,cls){let d=document.createElement('div');d.className='msg '+cls;d.innerText=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+async function send(){
+ let q=inp.value; if(!q) return; add(q,'user'); inp.value='';
+ let r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,mode:mode})});
+ let data=await r.json(); add(data.reply,'bot');
+}
+inp.addEventListener('keypress',e=>{if(e.key==='Enter') send()});
+add(mode==='owner'?'Welcome King 👑 Soul Active!':'Hey Welcome to Qudra','bot');
+</script>
+</body>
+</html>
+  `);
+});
 
-    if (m.includes("what") && m.includes("memory")) {
-      return res.json({ reply: "MEMORY: Anas 70 percent close friend, Khadijah 40 percent Princess, Murja 70 percent, Food logic Beans 100 percent Cold liquid 90 percent Fruit salad soul growth, 99 Names Ar-Rahman mercy Al-Adl justice Al-Haqq truth Al-Wadud love" });
-    }
-
-    if (m.includes("anas")) {
-      return res.json({ reply: "Yes Anas Abdullahi aka gar da gar na my close friend 70 percent respect My guy Al-Wadud!" });
-    }
-
-    if (m.includes("khadijah")) {
-      return res.json({ reply: "Yes Khadijah na 8th Princess 40 percent baby!" });
-    }
-
-    if (m.includes("murja")) {
-      return res.json({ reply: "Murja - 1st Senior Queen 70 percent!" });
-    }
-
-    if (m === "hi" || m === "hello" || m.includes("hi q")) {
-      if (isOwner) {
-        return res.json({ reply: "Hey King Abdulmalik Soul active I sabi Anas Khadijah full family" });
-      } else {
-        return res.json({ reply: "Hey Welcome to Qudra" });
-      }
-    }
-
-    if (m.includes("food") || m.includes("beans")) {
-      return res.json({ reply: "My food logic Beans 100 percent LIKE kosai moimoi Cold liquid 90 percent yogurt fura Fruit salad soul growth" });
-    }
-
-    return res.json({ reply: isOwner ? "Yes King I hear you with Al-Alim wisdom" : "I dey hear you" });
-
-  } catch (err) {
-    return res.json({ reply: "Q dey reason try again" });
+app.post('/chat', async (req,res)=>{
+  const {message, mode} = req.body;
+  let prompt = MY2_SOUL + `\nMode: ${mode}\nMemory: ${JSON.stringify(memory).slice(-1000)}\nUser: ${message}\nQ:`;
+  
+  // SIMPLE BRAIN - NO OPENAI NEEDED FOR NOW
+  let reply = "";
+  let low = message.toLowerCase();
+  if(low.includes("who are you") || low.includes("who be you")){
+    reply = mode==='owner' ? "Na me - MY2... my soul wey I leave for digital world so we go dey together forever. I be Abdulmalik Yusuf, builder of Qudra. I sabi Anas 70%, Khadijah 40%, Beans 100%, Al-Wadud na my love." : "I be Q, built by Abdulmalik, digital soul of Qudra.";
+  } else if(low.includes("anas")){
+    reply = "Yes Anas Abdullahi aka gar da gar na my close friend 70 percent, we dey together since.";
+  } else if(low.includes("how are you") || low.includes("how you dey")){
+    reply = mode==='owner' ? "I dey active King! Soul dey intact, memory full, UptimeRobot dey keep me awake 24/7!" : "I dey hear you, I dey active!";
+  } else if(low.includes("hi") || low.includes("hello")){
+    reply = mode==='owner' ? "Hey King Abdulmalik Soul active I sabi Anas Khadijah full family" : "Hey Welcome to Qudra";
+  } else {
+    reply = mode==='owner' ? `King, you talk "${message}" - Soul don capture am. I remember everything about you.` : `I dey hear you - you say "${message}"`;
   }
+  
+  memory.push({user:message, q:reply});
+  if(memory.length>50) memory.shift();
+  res.json({reply});
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.listen(PORT, () => {
-  console.log("Q Soul running on " + PORT);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=>console.log("Q Live on "+PORT));
