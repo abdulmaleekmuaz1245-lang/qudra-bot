@@ -1,1 +1,13 @@
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Q-Manager</title>
+<style>body{font-family:Arial;background:#eaf6ff;padding:20px} .card{background:white;padding:20px;border-radius:15px;box-shadow:0 3px 10px rgba(0,0,0,.1);margin-bottom:15px} .live{color:green;font-weight:bold}</style></head><body>
+<h2>👑 Q-Manager Department - AI+AI+Me Trinity</h2>
+<div class="card"><h3>Live Status</h3><p class="live">● LIVE since 12:54 AM - Tree of Qudra Growing 🌳</p><p id="info">Loading...</p></div>
+<div class="card"><h3>Memory - Permanent (Amina bug fixed)</h3><p id="memory">Loading...</p></div>
+<div class="card"><a href="/">← Q Chat</a> | <a href="/settings">Settings</a> | <a href="/owner">Owner</a></div>
+<script>
+async function load(){
+ let r=await fetch('/api/manager'); let d=await r.json(); info.innerHTML=`King: ${d.king}<br>Dept: ${d.dept}<br>Trinity: ${d.trinity}<br>Orders: ${d.orders} | Memory: ${d.memory} chats<br>Tree: ${d.tree} legacy`;
+ let m=await fetch('/api/memory'); let mem=await m.json(); memory.innerHTML=mem.length?mem.slice(-5).map(x=>`<div><b>User:</b> ${x.user}<br><b>Q:</b> ${x.q}</div><hr>`).join(''):'No chats yet';
+}
+load(); setInterval(load,3000);
+</script></body></html>
