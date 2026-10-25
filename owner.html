@@ -1,11 +1,42 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Owner - Qudra OS</title><style>body{font-family:Arial;padding:15px;background:#f0f6ff}a{display:block;padding:12px;margin:8px 0;background:white;border-radius:10px;text-decoration:none;color:#0b5cff;box-shadow:0 2px 8px rgba(0,0,0,0.1)}h1{color:#0b5cff}pre{background:white;padding:10px;border-radius:8px;overflow:auto;white-space:pre-wrap}.card{background:white;padding:15px;border-radius:12px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)}</style></head><body>
-<h1>👑 QUDRA OS - Owner Dashboard</h1>
-<a href="/">🏠 Main Q Chat</a><a href="/manager">🧠 Q-Manager Trinity Office</a><a href="/settings">⚙️ Settings Control</a><a href="/ping">💓 Ping</a><a href="/api/soul">🕋 Soul API</a><a href="/api/memory">🧠 Memory API</a><a href="/api/adverts">📢 Adverts API</a><a href="/api/orders">🛒 Orders API</a><a href="/api/manager">👑 Manager API</a>
-<div class="card"><h2>📊 Live Stats</h2><div id="stats">Loading...</div></div>
-<div class="card"><h2>🧠 10 Permanent Rules</h2><pre id="rules"></pre></div>
-<div class="card"><h2>👤 Owner Core</h2><pre id="owner"></pre></div>
-<div class="card"><h2>🧠 People Memory</h2><pre id="people"></pre></div>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Owner - Qudra OS Private</title><style>body{font-family:Arial;padding:15px;background:#f0f6ff}a{display:block;padding:12px;margin:8px 0;background:white;border-radius:10px;text-decoration:none;color:#0b5cff;box-shadow:0 2px 8px rgba(0,0,0,0.1)}h1{color:#0b5cff}pre{background:white;padding:10px;border-radius:8px;overflow:auto;white-space:pre-wrap}.card{background:white;padding:15px;border-radius:12px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)}input{padding:10px;border-radius:8px;border:1px solid #ccc;width:80%}</style></head><body>
+<h1>👑 QUDRA OS - Owner Private</h1>
+<div class="card"><input id="pinInput" placeholder="Enter Owner PIN (default 1106)" type="password"><button onclick="savePin()" style="padding:10px;background:#333;color:white;border:none;border-radius:8px">Unlock</button><div id="pinStatus"></div></div>
+<a href="/">🏠 Main Q Chat</a><a href="/manager">🧠 Q-Manager</a><a href="/settings">⚙️ Settings</a><a href="/ping">💓 Ping</a>
+<div class="card"><h2>📊 Live Stats</h2><div id="stats">Need PIN</div></div>
+<div class="card"><h2>🧠 10 Rules</h2><pre id="rules">Need PIN</pre></div>
+<div class="card"><h2>👤 Owner Core</h2><pre id="owner">Need PIN</pre></div>
+<div class="card"><h2>🧠 People Memory - Private</h2><pre id="people">Need PIN</pre></div>
 <div class="card"><h2>📢 Adverts</h2><div id="adverts"></div></div>
-<div class="card"><h2>🛒 Orders</h2><div id="orders"></div></div>
-<script>async function load(){try{const s=await fetch('/api/soul').then(r=>r.json());document.getElementById('rules').innerText=s.rules.join('\n\n');document.getElementById('owner').innerText=JSON.stringify(s.owner,null,2);document.getElementById('stats').innerHTML=`Soul: ${s.soul.status}<br>Memory: ${Object.keys(s.owner?{}:{}).length} | Time: ${s.time}`;const m=await fetch('/api/memory').then(r=>r.json());document.getElementById('people').innerText=JSON.stringify(m.memory.people,null,2);document.getElementById('stats').innerHTML=`People: ${m.count} | Facts: ${m.facts.length}<br>Soul: ${s.soul.status} | Rules: ${s.rules.length}`;const adv=await fetch('/api/adverts').then(r=>r.json());document.getElementById('adverts').innerHTML=adv.map(a=>`<div style="border:1px solid #ccc;padding:8px;margin:5px;border-radius:8px">${a.text} - ${a.phone} <button onclick="delAdv(${a.id})">Del</button></div>`).join('');const ord=await fetch('/api/orders').then(r=>r.json());document.getElementById('orders').innerHTML=ord.map(o=>`<div style="border:1px solid #ccc;padding:8px;margin:5px;border-radius:8px">${o.name} - ${o.phone} - ${o.location} <button onclick="delOrd(${o.id})">Del</button></div>`).join('');}catch(e){console.log(e)}}async function delAdv(id){await fetch('/api/adverts/'+id,{method:'DELETE'});load()}async function delOrd(id){await fetch('/api/orders/'+id,{method:'DELETE'});load()}load();setInterval(load,5000);</script>
+<div class="card"><h2>🛒 Orders - Private</h2><div id="orders">Need PIN</div></div>
+<script>
+let PIN = localStorage.getItem('qudra_pin') || "1106";
+document.getElementById('pinInput').value = PIN;
+function savePin(){PIN=document.getElementById('pinInput').value;localStorage.setItem('qudra_pin',PIN);document.getElementById('pinStatus').innerText="PIN saved: "+PIN; load();}
+async function fetchOwner(url,opts={}){
+  opts.headers={...(opts.headers||{}),'x-owner-pin':PIN};
+  let u = url + (url.includes('?')?'&':'?') + 'pin='+PIN;
+  const r = await fetch(u, opts);
+  const j = await r.json();
+  if(j.error && j.need_pin) throw new Error("Wrong PIN - 401");
+  return j;
+}
+async function load(){
+  try{
+    const s=await fetchOwner('/api/soul');
+    document.getElementById('rules').innerText=s.rules.join('\n\n');
+    document.getElementById('owner').innerText=JSON.stringify(s.owner,null,2);
+    const m=await fetchOwner('/api/memory');
+    document.getElementById('people').innerText=JSON.stringify(m.memory.people,null,2);
+    document.getElementById('stats').innerHTML=`People: ${m.count} | Facts: ${m.facts.length}<br>Soul: ${s.soul.status} | Ver: ${s.soul.version}`;
+    const adv=await fetch('/api/adverts').then(r=>r.json());
+    document.getElementById('adverts').innerHTML=adv.map(a=>`<div style="border:1px solid #ccc;padding:8px;margin:5px;border-radius:8px">${a.text} - ${a.phone} <button onclick="delAdv(${a.id})">Del</button></div>`).join('');
+    const ord=await fetchOwner('/api/orders');
+    document.getElementById('orders').innerHTML=ord.map(o=>`<div style="border:1px solid #ccc;padding:8px;margin:5px;border-radius:8px">${o.name} - ${o.phone} - ${o.location} <button onclick="delOrd(${o.id})">Del</button></div>`).join('');
+    document.getElementById('pinStatus').innerText="✅ Unlocked";
+  }catch(e){document.getElementById('pinStatus').innerText="❌ "+e.message+" - Check PIN"; console.log(e)}
+}
+async function delAdv(id){await fetchOwner('/api/adverts/'+id,{method:'DELETE'}); load();}
+async function delOrd(id){await fetchOwner('/api/orders/'+id,{method:'DELETE'}); load();}
+load();
+</script>
 </body></html>
