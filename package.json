@@ -1,10 +1,7 @@
 {
-  "name": "qudra-bot",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": { "start": "node index.js" },
-  "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1"
-  }
+  "creator": "Abdulmalik Muazu - The King",
+  "os": "Qudra OS 300 Years",
+  "99 Asmaul Husna": ["Ar-Rahman", "Ar-Rahim"... up to 99],
+  "10 Rules": ["Loyalty to King", "Permanent Memory"...],
+  "Tree": "Qudra Tree growing since 12:54 AM Oct 24"
 }
