@@ -1,1 +1,13 @@
 
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Q Settings</title>
+<style>body{font-family:Arial;background:#eaf6ff;padding:20px} .card{background:white;padding:20px;border-radius:15px;box-shadow:0 3px 10px rgba(0,0,0,.1);margin-bottom:15px} input,textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc} button{background:#3a8cff;color:white;border:none;padding:12px 20px;border-radius:10px;cursor:pointer;width:100%}</style></head><body>
+<h2>⚙️ Q Control Center - Fantasy Blue</h2>
+<div class="card"><h3>Change Bot Name / Price / Welcome</h3>
+<input id="botName" placeholder="Bot Name"><input id="price" placeholder="Price"><textarea id="welcome" placeholder="Welcome Message"></textarea>
+<button onclick="save()">Save Settings ✨</button><p id="status"></p></div>
+<div class="card"><a href="/">← Back to Q Chat</a> | <a href="/manager">Q-Manager</a> | <a href="/owner">Owner</a></div>
+<script>
+async function load(){let r=await fetch('/api/settings');let s=await r.json(); botName.value=s.botName; price.value=s.price; welcome.value=s.welcome;}
+async function save(){let data={botName:botName.value, price:price.value, welcome:welcome.value}; await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); status.innerText="Saved! Q updated! ✨";}
+load();
+</script></body></html>
