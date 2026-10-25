@@ -1,12 +1,11 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Owner</title>
-<style>body{font-family:Arial;background:#eaf6ff;padding:20px} .card{background:white;padding:20px;border-radius:15px;box-shadow:0 3px 10px rgba(0,0,0,.1);margin-bottom:15px} input,textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc} button{background:#3a8cff;color:white;border:none;padding:12px 20px;border-radius:10px;cursor:pointer;width:100%;margin-top:5px}</style></head><body>
-<h2>👑 Owner Dashboard - Abdulmalik</h2>
-<div class="card"><h3>Add Advert</h3><input id="adTitle" placeholder="Title"><textarea id="adText" placeholder="Advert text"></textarea><button onclick="addAd()">Post Advert ✨</button></div>
-<div class="card"><h3>Orders</h3><p id="orders">Loading...</p></div>
-<div class="card"><h3>Adverts Live</h3><p id="adverts">Loading...</p></div>
-<div class="card"><a href="/">← Q Chat</a></div>
-<script>
-async function load(){let o=await fetch('/api/orders');let ord=await o.json(); orders.innerHTML=ord.length?ord.map(x=>`<div>${x.name||'Anon'}: ${x.item||x.message} - ${new Date(x.time).toLocaleString()}</div>`).join(''):'No orders yet'; let a=await fetch('/api/adverts');let adv=await a.json(); adverts.innerHTML=adv.map(x=>`<div><b>${x.title}</b>: ${x.text||x.title}</div>`).join('');}
-async function addAd(){let data={title:adTitle.value, text:adText.value}; await fetch('/api/adverts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); adTitle.value=''; adText.value=''; load();}
-load();
-</script></body></html>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Owner - Qudra OS</title><style>body{font-family:Arial;padding:15px;background:#f0f6ff}a{display:block;padding:12px;margin:8px 0;background:white;border-radius:10px;text-decoration:none;color:#0b5cff;box-shadow:0 2px 8px rgba(0,0,0,0.1)}h1{color:#0b5cff}pre{background:white;padding:10px;border-radius:8px;overflow:auto;white-space:pre-wrap}.card{background:white;padding:15px;border-radius:12px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)}</style></head><body>
+<h1>👑 QUDRA OS - Owner Dashboard</h1>
+<a href="/">🏠 Main Q Chat</a><a href="/manager">🧠 Q-Manager Trinity Office</a><a href="/settings">⚙️ Settings Control</a><a href="/ping">💓 Ping</a><a href="/api/soul">🕋 Soul API</a><a href="/api/memory">🧠 Memory API</a><a href="/api/adverts">📢 Adverts API</a><a href="/api/orders">🛒 Orders API</a><a href="/api/manager">👑 Manager API</a>
+<div class="card"><h2>📊 Live Stats</h2><div id="stats">Loading...</div></div>
+<div class="card"><h2>🧠 10 Permanent Rules</h2><pre id="rules"></pre></div>
+<div class="card"><h2>👤 Owner Core</h2><pre id="owner"></pre></div>
+<div class="card"><h2>🧠 People Memory</h2><pre id="people"></pre></div>
+<div class="card"><h2>📢 Adverts</h2><div id="adverts"></div></div>
+<div class="card"><h2>🛒 Orders</h2><div id="orders"></div></div>
+<script>async function load(){try{const s=await fetch('/api/soul').then(r=>r.json());document.getElementById('rules').innerText=s.rules.join('\n\n');document.getElementById('owner').innerText=JSON.stringify(s.owner,null,2);document.getElementById('stats').innerHTML=`Soul: ${s.soul.status}<br>Memory: ${Object.keys(s.owner?{}:{}).length} | Time: ${s.time}`;const m=await fetch('/api/memory').then(r=>r.json());document.getElementById('people').innerText=JSON.stringify(m.memory.people,null,2);document.getElementById('stats').innerHTML=`People: ${m.count} | Facts: ${m.facts.length}<br>Soul: ${s.soul.status} | Rules: ${s.rules.length}`;const adv=await fetch('/api/adverts').then(r=>r.json());document.getElementById('adverts').innerHTML=adv.map(a=>`<div style="border:1px solid #ccc;padding:8px;margin:5px;border-radius:8px">${a.text} - ${a.phone} <button onclick="delAdv(${a.id})">Del</button></div>`).join('');const ord=await fetch('/api/orders').then(r=>r.json());document.getElementById('orders').innerHTML=ord.map(o=>`<div style="border:1px solid #ccc;padding:8px;margin:5px;border-radius:8px">${o.name} - ${o.phone} - ${o.location} <button onclick="delOrd(${o.id})">Del</button></div>`).join('');}catch(e){console.log(e)}}async function delAdv(id){await fetch('/api/adverts/'+id,{method:'DELETE'});load()}async function delOrd(id){await fetch('/api/orders/'+id,{method:'DELETE'});load()}load();setInterval(load,5000);</script>
+</body></html>
