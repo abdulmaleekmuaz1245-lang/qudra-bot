@@ -1,17 +1,1 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manager - Q OS v6.0</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#000;color:#fff}
-.header{background:#107c10;padding:15px}.row{background:#1f1f1f;padding:12px;margin:8px 12px;border-radius:4px;display:flex;justify-content:space-between}
-.btn{background:#0078d7;color:#fff;border:none;padding:8px 12px;margin:2px}.btn-danger{background:#e81123}
-</style></head><body>
-<div class="header"><h2>📊 Manager Dashboard - Product Delete & Expiry</h2><div style="margin-top:8px"><a href="index.html" style="color:#fff;background:#fff;color:#107c10;padding:5px 10px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:bold">Lumia Home</a> <a href="owner.html" style="color:#fff;background:#222;padding:5px 10px;border-radius:20px;font-size:11px;text-decoration:none">Owner Studio</a></div></div>
-<div style="padding:12px">
-<h3 style="color:#e81123">🔴 Expired / Invalid - Need Action</h3>
-<div class="row"><div><b>Coca Cola 50cl</b><br><small>Drinks - Sub expired 2 days - Danladi Drinks</small></div><div><button class="btn btn-danger">Delete Forever</button><button class="btn">Archive</button></div></div>
-<div class="row"><div><b>iPhone 12</b><br><small>Phones - Company marked Out of Stock</small></div><div><button class="btn btn-danger">Delete</button></div></div>
-<h3 style="color:#107c10;margin-top:16px">🟢 Active - Visible</h3>
-<div class="row"><div><b>LG TV 55" - ₦150k</b><br><small>Electronics - Alhaji Electronics</small></div><div><button class="btn btn-danger">Delete</button><button class="btn">Pause</button></div></div>
-<div class="row"><div><b>iPhone 15 - ₦850k</b><br><small>Phones - Ahmed Phones</small></div><div><button class="btn btn-danger">Delete</button></div></div>
-</div>
-</body></html>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vault Manager</title><style>body{background:#000;color:gold;font-family:sans-serif;padding:15px}.tile{border:1px solid gold;border-radius:10px;padding:10px;margin:10px 0;background:#111}button{padding:10px 15px;border-radius:10px;background:gold;color:#000;font-weight:bold;border:none;margin:5px}</style></head><body><h2>📦 Q Vault Manager - Trinity Memory</h2><a href="/" style="color:gold">← Back</a><div id="list"></div><button onclick="load()">Reload Vault</button><script>async function load(){var r=await fetch('/api/memory');var j=await r.json();var html='<div class=tile><b>Vault ('+j.vault.length+'):</b><br>'+j.vault.join('<br>')+'</div><div class=tile><b>Friends ('+Object.keys(j.friends).length+'):</b><br>'+Object.values(j.friends).join('<br>')+'</div><div class=tile><b>Stats:</b> Chats '+j.stats.totalChats+'</div>';document.getElementById('list').innerHTML=html;}load();</script></body></html>
