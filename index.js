@@ -13,7 +13,7 @@ function saveRam(){ try{ fs.writeFileSync(path.join(__dirname,'memory.json'), JS
 function callGroq(key, system, userText){
   return new Promise((resolve, reject)=>{
     const data = JSON.stringify({
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.3-70b-versatile",
       messages:[{role:"system", content:system},{role:"user", content:userText}],
       temperature:0.9, max_tokens:120
     });
@@ -33,7 +33,6 @@ function callGroq(key, system, userText){
       res.on('end', ()=>{
         try{
           const json = JSON.parse(body);
-          console.log("GROQ STATUS:", res.statusCode, "BODY:", body.slice(0,400));
           if(json.error) reject(new Error(json.error.message));
           else resolve(json.choices?.[0]?.message?.content || "No reply");
         }catch(e){ reject(e); }
@@ -47,18 +46,17 @@ function callGroq(key, system, userText){
 
 async function ghostBrain(text){
   const KEY = process.env.GROQ_API_KEY;
-  if(!KEY) return "ERROR: Key no dey for Environment";
-  const SYSTEM = `You are MY2KING. Naija street, pidgin mix, confident, short. Max 2 lines. Not AI. Memory: ${ram.slice(0,3).map(r=>r.input).join(" | ")}`;
+  if(!KEY) return "Key no dey for Render.";
+  const SYSTEM = `You are MY2KING. Naija street king, pidgin mix, confident, short with sense. Max 2 lines. Not AI. Memory: ${ram.slice(0,3).map(r=>r.input).join(" | ")}`;
   try{
     const reply = await callGroq(KEY, SYSTEM, text);
     return reply;
   }catch(e){
-    console.log("GROQ FAIL:", e.message);
-    return `REAL ERROR: ${e.message} | Key exists: ${!!KEY} | Len: ${KEY.length}`;
+    return `ERROR: ${e.message}`;
   }
 }
 
-app.get('/api/health', (req,res)=>{ res.json({ram:ram.length, hasKey: !!process.env.GROQ_API_KEY, keyLen: process.env.GROQ_API_KEY ? process.env.GROQ_API_KEY.length : 0}); });
+app.get('/api/health', (req,res)=>{ res.json({ram:ram.length, hasKey: !!process.env.GROQ_API_KEY}); });
 app.post('/api/chat', async (req,res)=>{
   const msg = req.body.message || "";
   if(ram.length>=7) ram = ram.slice(0,4);
@@ -70,4 +68,4 @@ app.post('/api/chat', async (req,res)=>{
 });
 app.get('/', (req,res)=>{ res.sendFile(path.join(__dirname,'index.html')); });
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, ()=>{ console.log("Q OS V9.2 HTTPS LIVE"); });
+app.listen(PORT, ()=>{ console.log("Q OS V10 FINAL LIVE"); });
