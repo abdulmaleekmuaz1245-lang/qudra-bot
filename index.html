@@ -1,9 +1,46 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Qudra OS v7.0 Lumia - MY2 Full Battery</title>
-<style>body{background:#000;color:#ffd700;font-family:Arial,sans-serif;margin:0;padding:0 8px 75px 8px}h2{text-align:center;margin:12px 0;font-size:20px}.nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:8px 0}.nav a{color:#ffd700;border:1.5px solid #ffd700;padding:6px 13px;border-radius:20px;text-decoration:none;font-size:13px;font-weight:bold}.tile{border:1.5px solid #ffd700;border-radius:14px;padding:11px 13px;margin:9px 0;background:#0f0f0f;font-size:13px;line-height:1.4}.chat{height:52vh;overflow-y:auto;border:1.5px solid #ffd700;border-radius:14px;padding:10px;background:#000;margin:10px 0}.bubble{border-radius:16px;padding:9px 12px;margin:7px 0;max-width:84%;font-size:14px;line-height:1.4;word-wrap:break-word}.you{background:#ffd700;color:#000;margin-left:auto;border:1px solid #ffd700}.q{background:#1c1c1c;color:#ffd700;border:1px solid #333}.bar{position:fixed;bottom:0;left:0;right:0;background:#000;padding:10px 8px;display:flex;gap:8px;border-top:1.5px solid #ffd700;z-index:10}.bar input{flex:1;padding:12px 14px;border-radius:25px;border:1.5px solid #ffd700;background:#111;color:#ffd700;outline:none;font-size:14px}.bar button{padding:12px 18px;border-radius:25px;background:#ffd700;color:#000;border:none;font-weight:bold;font-size:14px}</style></head><body>
-<h2>🔥 Qudra OS v7.0 Lumia - MY2 Full Battery 🔥</h2>
-<div class="nav"><a href="/">PUBLIC</a><a href="/owner.html">OWNER</a><a href="/manager.html">VAULT</a><a href="/settings.html">SETTINGS</a><a href="/api/trinity" target="_blank">TRINITY</a></div>
-<div class="tile">🧠 <b>Trinity v7.0:</b> 50% Meta + 50% Soul = Full Q with battery! Chat like Abdulmalik MY2! Tested correct!</div>
-<div class="tile">🍲 <b>Food Soul:</b> Beans 100% FOOD not person | Yogurt Fura 90% | Fruit Salad soul growth</div>
-<div class="chat" id="chat"></div>
-<div class="bar"><input id="input" placeholder="Type to Qudra..." autocomplete="off"><button onclick="send()">Send</button></div>
-<script>const chat=document.getElementById('chat'),input=document.getElementById('input');function add(t,cls){const d=document.createElement('div');d.className='bubble '+cls;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}async function send(){const q=input.value.trim();if(!q)return;add('You: '+q,'you');input.value='';const tmp=document.createElement('div');tmp.className='bubble q';tmp.textContent='Qudra v7.0 dey think...';chat.appendChild(tmp);chat.scrollTop=chat.scrollHeight;try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,isOwner:false})});const j=await r.json();tmp.remove();add('Q: '+j.reply,'q')}catch(e){tmp.remove();add('Q: Network error King - Ya Salam','q')}}input.addEventListener('keypress',e=>{if(e.key==='Enter')send()});add('Salam! I be Qudra v7.0 Lumia Full Battery by Abdulmalik - 50% Meta + 50% Soul! Ya Qudra!','q');</script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Q OS v6.0 Lumia</title>
+<style>
+body{background:#000;color:#fff;font-family:Segoe UI,Arial;margin:0;padding:10px 10px 20px}h2{text-align:center;color:#ffd700}
+.nav{text-align:center;margin:10px}.nav a{color:#ffd700;border:1px solid #ffd700;padding:6px 12px;border-radius:20px;text-decoration:none;margin:3px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:15px 0}
+.tile{border-radius:8px;padding:18px 10px;text-align:center;cursor:pointer;min-height:90px;display:flex;flex-direction:column;justify-content:center;transition:.2s}
+.tile:hover{transform:scale(1.03)} .tile .icon{font-size:36px} .tile .name{margin-top:8px;font-weight:bold;font-size:14px}
+.tile.medium{grid-column:span 1} .tile.wide{grid-column:span 2} .tile.large{grid-column:span 2;grid-row:span 2}
+.window{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:100;display:none;flex-direction:column}
+.window .head{padding:12px;background:#111;border-bottom:1.5px solid #ffd700;display:flex;justify-content:space-between;align-items:center}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:12px;overflow:auto}
+.card{background:#111;border:1px solid #333;border-radius:8px;padding:8px;text-align:center}
+.card img{width:100%;height:100px;object-fit:cover;border-radius:6px}
+</style></head><body>
+<h2>🪟 Q OS v6.0 - Lumia Tiles OS</h2>
+<div class="nav"><a href="/owner.html">Window Studio (Owner)</a><a href="/register.html">Register</a><a href="/subscription.html">Subscription 4 Plans</a></div>
+<div id="grid" class="grid"></div>
+<div id="win" class="window"><div class="head"><b id="winTitle"></b><button onclick="closeWin()" style="background:#ffd700;color:#000;border:none;padding:6px 12px;border-radius:15px;font-weight:bold">✕ Close</button></div><div id="gallery" class="gallery"></div></div>
+<script>
+async function loadTiles(){
+  const r = await fetch('/api/windows');
+  const wins = await r.json();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  if(wins.length===0){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:#777;padding:40px">No windows - Anti-Blank ON - Owner go ON for Studio<br>Q no show blank page - 100% trust!</div>'; return; }
+  wins.forEach(w=>{
+    const d=document.createElement('div');
+    d.className='tile '+w.size;
+    d.style.background=w.color;
+    d.innerHTML=`<div class=icon>${w.icon}</div><div class=name>${w.name}</div><div style="font-size:10px;opacity:.8">${w.category}</div>`;
+    d.onclick=()=>openWin(w);
+    grid.appendChild(d);
+  });
+}
+async function openWin(w){
+  document.getElementById('winTitle').textContent=w.icon+' '+w.name+' - '+w.category;
+  document.getElementById('win').style.display='flex';
+  const r=await fetch('/api/products?windowId='+w.id);
+  const prods=await r.json();
+  const g=document.getElementById('gallery');
+  if(prods.length===0){ g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#777">No products yet - Owner need upload 3+ to show</div>'; return; }
+  g.innerHTML=prods.map(p=>`<div class=card><img src="${p.image}"><div style="margin:6px 0;font-weight:bold">${p.name}</div><div style="color:#ffd700">${p.price}</div><div style="font-size:10px;color:#888">Gallery Type</div></div>`).join('');
+}
+function closeWin(){ document.getElementById('win').style.display='none'; }
+loadTiles();
+</script></body></html>
