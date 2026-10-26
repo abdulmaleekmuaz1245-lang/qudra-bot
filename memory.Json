@@ -4,8 +4,8 @@
     "Khadija is my girlfriend - Princess 40%",
     "Uwa is my mama - respect 100%",
     "Anas aka gar da gar is close friend 70%",
-    "Beans/Kosai/Moimoi is FOOD 100% LIKE",
-    "Qudra means POWER - born 4AM Abuja"
+    "Beans/Kosai/Moimoi is FOOD 100% LIKE - not person",
+    "Qudra means POWER - born 4AM Abuja from MY2 heart"
   ],
   "chats": [],
   "friends": {
@@ -14,13 +14,6 @@
     "anas": "Anas aka gar da gar - close friend 70%",
     "abubakar": "Abubakar - Abuja guy 60%",
     "murja": "Murja - Senior Queen 70%"
-  },
-  "pattern": {
-    "past": "What I don do before?",
-    "present": "Wetin dey ground now?",
-    "future": "If I do am like this wetin go cause?",
-    "match": "My normal way? King style",
-    "act": "Act like human, no AI grammar"
   },
   "stats": {
     "totalChats": 0,
