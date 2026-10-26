@@ -1,46 +1,57 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Q OS v6.0 Lumia</title>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Q OS - BRAIN ONLINE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{background:#000;color:#fff;font-family:Segoe UI,Arial;margin:0;padding:10px 10px 20px}h2{text-align:center;color:#ffd700}
-.nav{text-align:center;margin:10px}.nav a{color:#ffd700;border:1px solid #ffd700;padding:6px 12px;border-radius:20px;text-decoration:none;margin:3px;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:15px 0}
-.tile{border-radius:8px;padding:18px 10px;text-align:center;cursor:pointer;min-height:90px;display:flex;flex-direction:column;justify-content:center;transition:.2s}
-.tile:hover{transform:scale(1.03)} .tile .icon{font-size:36px} .tile .name{margin-top:8px;font-weight:bold;font-size:14px}
-.tile.medium{grid-column:span 1} .tile.wide{grid-column:span 2} .tile.large{grid-column:span 2;grid-row:span 2}
-.window{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:100;display:none;flex-direction:column}
-.window .head{padding:12px;background:#111;border-bottom:1.5px solid #ffd700;display:flex;justify-content:space-between;align-items:center}
-.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:12px;overflow:auto}
-.card{background:#111;border:1px solid #333;border-radius:8px;padding:8px;text-align:center}
-.card img{width:100%;height:100px;object-fit:cover;border-radius:6px}
-</style></head><body>
-<h2>🪟 Q OS v6.0 - Lumia Tiles OS</h2>
-<div class="nav"><a href="/owner.html">Window Studio (Owner)</a><a href="/register.html">Register</a><a href="/subscription.html">Subscription 4 Plans</a></div>
-<div id="grid" class="grid"></div>
-<div id="win" class="window"><div class="head"><b id="winTitle"></b><button onclick="closeWin()" style="background:#ffd700;color:#000;border:none;padding:6px 12px;border-radius:15px;font-weight:bold">✕ Close</button></div><div id="gallery" class="gallery"></div></div>
-<script>
-async function loadTiles(){
-  const r = await fetch('/api/windows');
-  const wins = await r.json();
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  if(wins.length===0){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:#777;padding:40px">No windows - Anti-Blank ON - Owner go ON for Studio<br>Q no show blank page - 100% trust!</div>'; return; }
-  wins.forEach(w=>{
-    const d=document.createElement('div');
-    d.className='tile '+w.size;
-    d.style.background=w.color;
-    d.innerHTML=`<div class=icon>${w.icon}</div><div class=name>${w.name}</div><div style="font-size:10px;opacity:.8">${w.category}</div>`;
-    d.onclick=()=>openWin(w);
-    grid.appendChild(d);
-  });
-}
-async function openWin(w){
-  document.getElementById('winTitle').textContent=w.icon+' '+w.name+' - '+w.category;
-  document.getElementById('win').style.display='flex';
-  const r=await fetch('/api/products?windowId='+w.id);
-  const prods=await r.json();
-  const g=document.getElementById('gallery');
-  if(prods.length===0){ g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#777">No products yet - Owner need upload 3+ to show</div>'; return; }
-  g.innerHTML=prods.map(p=>`<div class=card><img src="${p.image}"><div style="margin:6px 0;font-weight:bold">${p.name}</div><div style="color:#ffd700">${p.price}</div><div style="font-size:10px;color:#888">Gallery Type</div></div>`).join('');
-}
-function closeWin(){ document.getElementById('win').style.display='none'; }
-loadTiles();
-</script></body></html>
+:root{--cyan:#00f5ff;--purple:#a855f7;--bg:#050510}
+body{background:var(--bg);color:#fff;font-family:monospace;margin:0;display:flex;height:100vh}
+#engines{width:200px;border-right:1px solid var(--purple);padding:10px}
+#chat{flex:1;display:flex;flex-direction:column;padding:20px}
+.engine{margin:10px 0;color:#0f0} .engine.off{color:#555}
+#messages{flex:1;overflow-y:auto}
+.msg{margin:10px;padding:12px;border-radius:10px;max-width:80%}
+.user{background:var(--purple);align-self:flex-end;margin-left:auto}
+.bot{border:1px solid var(--cyan);background:#0a0a20}
+#inputBar{display:flex;gap:10px;padding:10px;border:1px solid var(--cyan);border-radius:30px}
+#inputBar input{flex:1;background:transparent;border:0;color:#fff;outline:none}
+button{background:var(--cyan);border:0;border-radius:50%;width:40px;height:40px}
+#mem{width:220px;border-left:1px solid var(--purple);padding:10px;font-size:12px}
+</style>
+</head>
+<body>
+<div id="engines">
+<h3 style="color:var(--cyan)">Q OS</h3>
+<div class="engine" id="e-THINK">● THINK ONLINE</div>
+<div class="engine" id="e-MEMORY">● MEMORY ONLINE</div>
+<div class="engine" id="e-FETCH">● FETCH ONLINE</div>
+<div class="engine" id="e-SOUL">● SOUL ONLINE</div>
+<div class="engine" id="e-RAM">● RAM ONLINE</div>
+<div class="engine" id="e-BOOT">● BOOT ONLINE</div>
+<div style="margin-top:50px">HEALTH 98%</div>
+</div>
+
+<div id="chat">
+<div id="messages">
+<div class="msg bot">Q OS BRAIN is online. All 6 engines active. Ya Salam King! How can I assist?</div>
+</div>
+<div id="inputBar">
+<input id="msgInput" placeholder="Ya Salam...">
+<button onclick="sendMsg()">➤</button>
+</div>
+</div>
+
+<div id="mem">
+<b>PERMANENT MEMORIES</b>
+<div id="memA">A: loading...</div>
+<div id="memB">B: loading...</div>
+<div id="memC">C: loading...</div>
+<div id="memD">D: loading...</div>
+<hr>
+<b>RAM SLOTS (7)</b>
+<div id="ram"></div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
