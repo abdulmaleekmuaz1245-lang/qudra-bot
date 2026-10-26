@@ -1,13 +1,17 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Q-Manager - Trinity Private</title><style>body{font-family:Arial;background:#f3e8ff;margin:0;padding:15px}.header{background:linear-gradient(to right,#8e44ad,#6c3486);color:white;padding:15px;border-radius:12px}.card{background:white;padding:15px;border-radius:12px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}a{color:#8e44ad;text-decoration:none;font-weight:bold}pre{background:#f8f8ff;padding:10px;border-radius:8px;overflow:auto}input{padding:10px;border-radius:8px;border:1px solid #ccc;width:60%}</style></head><body><div class="header"><h1>🧠 Q-Manager Dept</h1><p>AI + AI + Me Trinity - Private</p><a href="/" style="color:white">🏠 Q Chat</a> | <a href="/owner" style="color:white">👑 Owner</a> | <a href="/settings" style="color:white">⚙️ Settings</a></div>
-<div class="card"><input id="pinInput" placeholder="PIN default 1106" type="password"><button onclick="savePin()" style="padding:8px;background:#8e44ad;color:white;border:none;border-radius:8px">Unlock</button><span id="pinStatus"></span></div>
-<div class="card"><h2>👑 Trinity Status</h2><div id="trinity">Need PIN</div></div>
-<div class="card"><h2>🧠 Soul + Memory</h2><pre id="soul">Need PIN</pre></div>
-<div class="card"><h2>📊 Stats</h2><div id="stats">Need PIN</div></div>
-<div class="card"><h2>👥 People Memory</h2><pre id="people">Need PIN</pre></div>
-<script>
-let PIN = localStorage.getItem('qudra_pin') || "1106";
-document.getElementById('pinInput').value=PIN;
-function savePin(){PIN=document.getElementById('pinInput').value;localStorage.setItem('qudra_pin',PIN);load();}
-async function fetchOwner(url){const r=await fetch(url+'?pin='+PIN,{headers:{'x-owner-pin':PIN}});const j=await r.json();if(j.error) throw new Error("Wrong PIN"); return j;}
-async function load(){try{const d=await fetchOwner('/api/manager');document.getElementById('trinity').innerHTML=`<b>${d.trinity}</b><br>Soul: ${d.soul.status}<br>Ver: ${d.soul.version}<br>${d.soul.mission}<br>Time: ${d.time}`;document.getElementById('soul').innerText=JSON.stringify(d.soul,null,2)+'\n\nSettings:'+JSON.stringify(d.settings,null,2);document.getElementById('stats').innerHTML=`Memory: ${d.stats.memory} people<br>Adverts: ${d.stats.adverts}<br>Orders: ${d.stats.orders}<br>Facts: ${d.stats.facts}`;document.getElementById('people').innerText=JSON.stringify(d.people,null,2);document.getElementById('pinStatus').innerText="✅ Unlocked";}catch(e){document.getElementById('pinStatus').innerText="❌ "+e.message;}}load();
-</script></body></html>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manager - Q OS v6.0</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#000;color:#fff}
+.header{background:#107c10;padding:15px}.row{background:#1f1f1f;padding:12px;margin:8px 12px;border-radius:4px;display:flex;justify-content:space-between}
+.btn{background:#0078d7;color:#fff;border:none;padding:8px 12px;margin:2px}.btn-danger{background:#e81123}
+</style></head><body>
+<div class="header"><h2>📊 Manager Dashboard - Product Delete & Expiry</h2><div style="margin-top:8px"><a href="index.html" style="color:#fff;background:#fff;color:#107c10;padding:5px 10px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:bold">Lumia Home</a> <a href="owner.html" style="color:#fff;background:#222;padding:5px 10px;border-radius:20px;font-size:11px;text-decoration:none">Owner Studio</a></div></div>
+<div style="padding:12px">
+<h3 style="color:#e81123">🔴 Expired / Invalid - Need Action</h3>
+<div class="row"><div><b>Coca Cola 50cl</b><br><small>Drinks - Sub expired 2 days - Danladi Drinks</small></div><div><button class="btn btn-danger">Delete Forever</button><button class="btn">Archive</button></div></div>
+<div class="row"><div><b>iPhone 12</b><br><small>Phones - Company marked Out of Stock</small></div><div><button class="btn btn-danger">Delete</button></div></div>
+<h3 style="color:#107c10;margin-top:16px">🟢 Active - Visible</h3>
+<div class="row"><div><b>LG TV 55" - ₦150k</b><br><small>Electronics - Alhaji Electronics</small></div><div><button class="btn btn-danger">Delete</button><button class="btn">Pause</button></div></div>
+<div class="row"><div><b>iPhone 15 - ₦850k</b><br><small>Phones - Ahmed Phones</small></div><div><button class="btn btn-danger">Delete</button></div></div>
+</div>
+</body></html>
