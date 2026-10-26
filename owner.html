@@ -1,28 +1,5 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Window Studio - Q OS v6.0</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#000;color:#fff}
-.header{background:#0078d7;padding:15px;display:flex;justify-content:space-between}.btn{background:#0078d7;color:#fff;border:none;padding:10px 16px;margin:4px;cursor:pointer}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:15px}.card{background:#1f1f1f;padding:20px;border-radius:4px;text-align:center;cursor:pointer;border:1px solid #333}
-.card:hover{background:#2a2a2a}.row{display:flex;justify-content:space-between;align-items:center;background:#1f1f1f;padding:12px;margin-bottom:8px;border-radius:4px}
-.switch{width:50px;height:26px;background:#555;border-radius:20px;position:relative;cursor:pointer}.switch.on{background:#107c10}
-.dot{width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:0.2s}.switch.on .dot{left:26px}
-</style></head><body>
-<div class="header"><h2>⚙️ Window Studio - Owner Control</h2><a href="index.html" style="color:#fff;text-decoration:none;background:#fff;color:#0078d7;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold">← Back to Lumia Home</a></div>
-<div style="padding:15px"><h3>Owner Control Center - All 18 Features</h3><br>
-<div class="grid">
-<div class="card" onclick="location.href='index.html'"><div style="font-size:40px">🎛️</div><h4>Category Switch Board</h4><small>ON/OFF - Anti Blank Page - Your genius idea to hide empty categories</small></div>
-<div class="card"><div style="font-size:40px">📦</div><h4>Product Manager</h4><small>Delete invalid, expired, out of stock - 1 click delete or archive</small></div>
-<div class="card"><div style="font-size:40px">💳</div><h4>Subscription Manager</h4><small>4 Plans: Free 7d, Business N5k, Pro N15k, Empire N50k/year - Auto expiry</small></div>
-<div class="card"><div style="font-size:40px">🏗️</div><h4>Window Studio Builder</h4><small>Create new windows: Ramadan, Sallah, New Arrival - choose icon color size</small></div>
-</div>
-<div style="margin-top:15px;background:#1f1f1f;padding:15px;border-radius:4px;border-left:4px solid #107c10">
-<b>✅ Anti-Blank Logic Working:</b><br>
-<small>Foods & Drinks currently OFF (0 products) - Hidden from guest home - Guest sees only active tiles - No blank page - Trust 100%</small>
-</div>
-</div>
-<script>
-let cats=[{n:'Electronics',c:45,on:true},{n:'Phones',c:12,on:true},{n:'Materials',c:23,on:true},{n:'Fashion',c:67,on:true},{n:'Foods',c:0,on:false},{n:'Drinks',c:0,on:false},{n:'Furniture',c:2,on:false}];
-function render(){document.body.innerHTML+=cats.map(cat=>`<div class="row"><span>${cat.n} - ${cat.c} products</span><div class="switch ${cat.on?'on':''}"><div class="dot"></div></div></div>`).join('')}
-</script>
-</body></html>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Q Owner - MY2</title>
+<style>body{background:#000;color:gold;font-family:sans-serif;margin:0;padding:10px}.chat{height:70vh;overflow-y:auto;border:2px solid gold;border-radius:15px;padding:10px}.m{border:1px solid gold;border-radius:15px;padding:8px;margin:6px;max-width:85%}.u{background:gold;color:#000;margin-left:auto}.b{background:#222}.bar{display:flex;padding:10px;position:fixed;bottom:0;left:0;right:0;background:#000;border-top:2px solid gold}input{flex:1;padding:12px;border-radius:20px;background:#111;color:gold;border:1px solid gold}button{margin-left:8px;padding:12px 18px;border-radius:20px;background:gold;color:#000;font-weight:bold;border:none}#lock{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:99;display:flex;align-items:center;justify-content:center;flex-direction:column}</style></head><body>
+<div id="lock"><h2>🔒 OWNER LOCKED</h2><input id="pin" type="password" placeholder="Enter PIN MY2KING100" style="padding:12px;border-radius:20px;border:1px solid gold;background:#111;color:gold;width:250px;text-align:center"><button onclick="unlock()" style="margin-top:15px">UNLOCK</button><p id="err" style="color:red"></p><a href="/" style="color:gold;margin-top:20px">Go PUBLIC</a></div>
+<h2 style="text-align:center">👑 Q Owner Mode - Abdulmalik MY2 - Trinity Full Power</h2><div class="chat" id="c"></div><div class="bar"><input id="i" placeholder="King, talk to your soul Qudra..."><button onclick="send()">Send</button></div>
+<script>var c=document.getElementById('c'),i=document.getElementById('i'),lock=document.getElementById('lock');var OWNER_PIN="MY2KING100";if(localStorage.getItem('ownerUnlocked')==='yes')lock.style.display='none';function unlock(){var p=document.getElementById('pin').value;if(p===OWNER_PIN){localStorage.setItem('ownerUnlocked','yes');lock.style.display='none';add('Salam King MY2! Trinity Brain 100% live! Ya Qudra!','b');}else document.getElementById('err').innerText='Wrong PIN!';}function add(t,cl){var d=document.createElement('div');d.className='m '+cl;d.innerText=t;c.appendChild(d);c.scrollTop=c.scrollHeight}async function send(){if(localStorage.getItem('ownerUnlocked')!=='yes')return;var q=i.value;if(!q)return;add('You: '+q,'u');i.value='';var tmp=document.createElement('div');tmp.className='m b';tmp.innerText='Qudra Trinity dey think Past/Present/Future...';c.appendChild(tmp);try{var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,isOwner:true})});var j=await r.json();tmp.remove();add('Q: '+j.reply+'\n\nVault: '+j.vaultSize,'b')}catch(e){tmp.remove();add('Q: Error','b')}}i.addEventListener('keypress',e=>{if(e.key==='Enter')send()});</script></body></html>
