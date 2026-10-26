@@ -1,57 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Q OS - BRAIN ONLINE</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-:root{--cyan:#00f5ff;--purple:#a855f7;--bg:#050510}
-body{background:var(--bg);color:#fff;font-family:monospace;margin:0;display:flex;height:100vh}
-#engines{width:200px;border-right:1px solid var(--purple);padding:10px}
-#chat{flex:1;display:flex;flex-direction:column;padding:20px}
-.engine{margin:10px 0;color:#0f0} .engine.off{color:#555}
-#messages{flex:1;overflow-y:auto}
-.msg{margin:10px;padding:12px;border-radius:10px;max-width:80%}
-.user{background:var(--purple);align-self:flex-end;margin-left:auto}
-.bot{border:1px solid var(--cyan);background:#0a0a20}
-#inputBar{display:flex;gap:10px;padding:10px;border:1px solid var(--cyan);border-radius:30px}
-#inputBar input{flex:1;background:transparent;border:0;color:#fff;outline:none}
-button{background:var(--cyan);border:0;border-radius:50%;width:40px;height:40px}
-#mem{width:220px;border-left:1px solid var(--purple);padding:10px;font-size:12px}
-</style>
-</head>
-<body>
-<div id="engines">
-<h3 style="color:var(--cyan)">Q OS</h3>
-<div class="engine" id="e-THINK">● THINK ONLINE</div>
-<div class="engine" id="e-MEMORY">● MEMORY ONLINE</div>
-<div class="engine" id="e-FETCH">● FETCH ONLINE</div>
-<div class="engine" id="e-SOUL">● SOUL ONLINE</div>
-<div class="engine" id="e-RAM">● RAM ONLINE</div>
-<div class="engine" id="e-BOOT">● BOOT ONLINE</div>
-<div style="margin-top:50px">HEALTH 98%</div>
-</div>
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const app = express();
 
-<div id="chat">
-<div id="messages">
-<div class="msg bot">Q OS BRAIN is online. All 6 engines active. Ya Salam King! How can I assist?</div>
-</div>
-<div id="inputBar">
-<input id="msgInput" placeholder="Ya Salam...">
-<button onclick="sendMsg()">➤</button>
-</div>
-</div>
+app.use(express.json());
+app.use(express.static(__dirname));
 
-<div id="mem">
-<b>PERMANENT MEMORIES</b>
-<div id="memA">A: loading...</div>
-<div id="memB">B: loading...</div>
-<div id="memC">C: loading...</div>
-<div id="memD">D: loading...</div>
-<hr>
-<b>RAM SLOTS (7)</b>
-<div id="ram"></div>
-</div>
+let ram = [];
+let memory = {A:[],B:[],C:[],D:[]};
+try{ memory = JSON.parse(fs.readFileSync(path.join(__dirname,'memory.json'),'utf8')); ram = memory.A || []; }catch(e){}
 
-<script src="index.js"></script>
-</body>
-</html>
+function processQ(text){
+  ram.unshift({input:text, time:Date.now()});
+  if(ram.length>7) ram.pop();
+  memory.A = ram;
+  try{ fs.writeFileSync(path.join(__dirname,'memory.json'), JSON.stringify(memory,null,2)); }catch(e){}
+  return `Ya Salam King! Q OS don receive: "${text}". PAST=MY2KING FOUND, PRESENT=focused, FUTURE=learning. RAM ${ram.length}/7 active. Ya Hayy - Brain dey online 100%.`;
+}
+
+app.get('/api/health', (req,res)=>{
+  res.json({status:"Q OS ONLINE", ram: ram.length, engines:6});
+});
+
+app.post('/api/chat', (req,res)=>{
+  console.log("CHAT RECEIVED:", req.body);
+  const msg = req.body.message || req.body.text || "Salam";
+  const reply = processQ(msg);
+  res.json({reply: reply});
+});
+
+app.get('/', (req,res)=>{
+  res.sendFile(path.join(__dirname,'index.html'));
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, ()=>{ 
+  console.log(`Q OS BOOT OK on ${PORT}`);
+});
