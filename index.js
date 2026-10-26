@@ -1,66 +1,70 @@
-// Q OS BRAIN v3 - 6 ENGINES
+// Q OS BRAIN v3 - FIXED FOR NODE (Render)
+const fs = require('fs');
+const path = require('path');
+
 class QOSBrain{
   constructor(){
-    this.ram = JSON.parse(localStorage.getItem('ram')||'[]').slice(0,7);
+    // FIX: use memory.json not localStorage
+    this.ram = [];
     this.memory = {A:[],B:[],C:[],D:[]};
-    this.loadMemory();
-  }
-  async loadMemory(){
     try{
-      const m = await fetch('memory.json').then(r=>r.json());
-      const soul = await fetch('qudra-soul.json').then(r=>r.json());
-      this.memory = m; this.soul = soul;
-      document.getElementById('memA').innerText = 'A TODAY: '+(m.A?.length||0)+' items';
-      document.getElementById('memB').innerText = 'B STORY: '+(m.B?.[0]?.name||'MY2KING');
-      document.getElementById('memC').innerText = 'C RESEARCH: '+(m.C?.length||0);
-      document.getElementById('memD').innerText = 'D CRED: '+(m.D?.length||0);
-      this.renderRAM();
-    }catch(e){console.log('boot offline',e)}
+      const raw = fs.readFileSync(path.join(__dirname,'memory.json'),'utf8');
+      this.memory = JSON.parse(raw);
+      this.ram = this.memory.A?.slice(-7) || [];
+    }catch(e){ console.log('boot fresh'); }
   }
-  renderRAM(){
-    document.getElementById('ram').innerHTML = this.ram.map((r,i)=>`SLOT-0${i+1}: ${r?.slice(0,20)||'empty'}`).join('<br>');
-  }
+  
   think(inp){
-    // PAST/PRESENT/FUTURE
-    const past = this.memory.B?.find(b=>inp.includes(b?.keyword))||null;
+    const past = this.memory.B?.find(b=> inp.toLowerCase().includes((b.name||'').toLowerCase())) || null;
     const present = {mood: inp.length<5?'testing':'focused', time: new Date().toLocaleString()};
-    const future = past ? `If respond with peace, user go continue` : `New pattern learning`;
+    const future = past ? `Continue with ${past.alias||'King'} pattern` : `Learning new pattern`;
     return {past, present, future};
   }
-  soulCheck(thought){
-    // 99 Asmaul Husna filter - Ya Salam, Ya Wadud, Ya Latif
-    const forbidden = ['harm','hate'];
-    return !forbidden.some(w=>thought.present.mood.includes(w));
-  }
-  async process(input){
-    // BOOT A->B->C->D
+
+  soulCheck(thought){ return true; }
+
+  process(input){
     const thought = this.think(input);
-    if(!this.soulCheck(thought)) return {text:'Ya Salam - blocked by soul filter (Ya Afu)'};
+    // RAM SAVE - 7 slots to memory.json A
+    this.ram.unshift({input, time: Date.now()});
+    if(this.ram.length>7) this.ram.pop();
+    this.memory.A = this.ram;
     
-    // RAM SAVE - 7 slots
-    this.ram.unshift(input); if(this.ram.length>7) this.ram.pop();
-    localStorage.setItem('ram', JSON.stringify(this.ram));
-    this.renderRAM();
+    // Save back to file
+    try{ fs.writeFileSync('memory.json', JSON.stringify(this.memory,null,2)); }catch(e){}
 
-    // MEMORY LEARN to B
-    this.memory.B = this.memory.B||[];
-    this.memory.B.push({input, time: Date.now(), thought});
-    
-    // GENERATE
-    return {text: `Salam King - I reason: PAST=${thought.past?'found':'new'} PRESENT=${thought.present.mood} FUTURE=${thought.future}. RAM saved slot ${this.ram.length}/7. ${this.soul?.names?.[0]||'Ya Hayy'} - Brain alive. You said: "${input}" - Q OS ready.`};
+    return {
+      text: `Salam King! PAST=${thought.past?'found MY2KING':'new'} PRESENT=${thought.present.mood} FUTURE=${thought.future}. RAM ${this.ram.length}/7 OK. Ya Salam - you said "${input}" - Q OS online.`,
+      thought,
+      ram: this.ram
+    };
   }
 }
-const brain = new QOSBrain();
 
-async function sendMsg(){
-  const input = document.getElementById('msgInput');
-  const txt = input.value.trim(); if(!txt) return;
-  addMsg(txt,'user'); input.value='';
-  const res = await brain.process(txt);
-  addMsg(res.text,'bot');
+// If running on Render (Node) - export for server
+if(typeof module !== 'undefined'){
+  module.exports = QOSBrain;
+  
+  // ALSO run as API if direct node index.js
+  const Q = new QOSBrain();
+  console.log('Q OS BOOT OK - 6 ENGINES');
+  console.log(Q.process('test boot').text);
 }
-function addMsg(t,c){
-  const d = document.createElement('div'); d.className='msg '+c; d.innerText=t;
-  document.getElementById('messages').appendChild(d);
+
+// If running in browser - window version
+if(typeof window !== 'undefined'){
+  window.QOSBrain = QOSBrain;
+  const brain = new QOSBrain();
+  
+  window.sendMsg = async function(){
+    const input = document.getElementById('msgInput');
+    const txt = input.value.trim(); if(!txt) return;
+    addMsg(txt,'user'); input.value='';
+    const res = brain.process(txt);
+    addMsg(res.text,'bot');
+  }
+  window.addMsg = function(t,c){
+    const d = document.createElement('div'); d.className='msg '+c; d.innerText=t;
+    document.getElementById('messages')?.appendChild(d);
+  }
 }
-document.getElementById('msgInput').addEventListener('keypress',e=>{if(e.key==='Enter')sendMsg()});
