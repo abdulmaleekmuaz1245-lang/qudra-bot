@@ -6,80 +6,137 @@ const PORT = process.env.PORT || 10000;
 app.use(express.json());
 app.use(express.static('.'));
 
-let soul = {};
-let memory = {};
-try { soul = JSON.parse(fs.readFileSync('./qudra-soul.json', 'utf8')); } catch(e) { soul = { owner: "Abdulmalik", name: "Qudra" }; }
-try { memory = JSON.parse(fs.readFileSync('./memory.json', 'utf8')); } catch(e) { memory = { owner: "Abdulmalik", vault: [], chats: [], friends: {}, stats: { totalChats: 0 } }; }
+// ====== FILE DB ======
+function load(file, def) { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return def; } }
+function save(file, data) { fs.writeFileSync(file, JSON.stringify(data, null, 2)); }
 
-function saveMemory() {
-  try { fs.writeFileSync('./memory.json', JSON.stringify(memory, null, 2)); } catch(e) {}
+let windows = load('./windows.json', [
+  { id: 'w1', name: 'Phones', icon: '📱', color: '#0078D7', size: 'medium', category: 'Electronics', on: true },
+  { id: 'w2', name: 'Foods', icon: '🍲', color: '#D83B01', size: 'medium', category: 'Foods', on: true },
+  { id: 'w3', name: 'Fashion', icon: '👗', color: '#E3008C', size: 'medium', category: 'Fashion', on: true },
+  { id: 'w4', name: 'Furniture', icon: '🛋️', color: '#107C10', size: 'medium', category: 'Furniture', on: false }
+]);
+let categories = load('./categories.json', ["Electronics","Phones","Foods","Materials","Drinks","Fashion","Furniture","Adverts","Orders"]);
+let products = load('./products.json', []);
+let companies = load('./companies.json', []);
+let adverts = load('./adverts.json', []);
+let orders = load('./orders.json', []);
+
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+
+// ====== 14,15,16 AUTO-EXPIRE SYSTEM ======
+function checkExpire(){
+  const now = Date.now();
+  let changed = false;
+  companies.forEach(c => {
+    if(c.expiresAt && now > c.expiresAt && c.active){
+      c.active = false; changed = true;
+      products.forEach(p => { if(p.companyId === c.id) p.valid = false; });
+    }
+  });
+  products.forEach(p => { if(p.expiresAt && now > p.expiresAt && p.valid){ p.valid = false; changed = true; } });
+  adverts.forEach(a => { if(a.expiresAt && now > a.expiresAt && a.valid){ a.valid = false; changed = true; } });
+  orders.forEach(o => { if(o.expiresAt && now > o.expiresAt && o.valid){ o.valid = false; changed = true; } });
+  if(changed){
+    save('./companies.json', companies);
+    save('./products.json', products);
+    save('./adverts.json', adverts);
+    save('./orders.json', orders);
+  }
 }
+setInterval(checkExpire, 60*1000);
 
-async function brainV7(msg, isOwner) {
-  const low = msg.toLowerCase().trim();
-  if (!low) return "Salam King MY2! Ya Qudra!";
-
-  if (isOwner) {
-    if (low.startsWith('remember:')) {
-      const c = msg.slice(9).trim();
-      if (c) { memory.vault.push(c); saveMemory(); return `✅ Saved King MY2! "${c}" don enter vault forever! Vault now ${memory.vault.length}! Ya Hafiz!`; }
-    }
-    if (low.includes('save') && low.includes('as my friend')) {
-      const m = low.match(/save\s+([a-z]{3,20})\s+as/);
-      if (m) { const n = m[1]; const Cap = n.charAt(0).toUpperCase() + n.slice(1); memory.friends[n] = `${Cap} - Saved by King MY2 60%`; memory.vault.push(`${Cap} is friend`); saveMemory(); return `✅ DONE King! I don SAVE ${Cap.toUpperCase()} forever! Ya Wadud!`; }
-    }
+// ====== APIS ======
+// 5,6,7,8,9,10 WINDOW STUDIO + ON/OFF + ANTI-BLANK
+app.get('/api/windows', (req,res)=>{
+  const isOwner = req.query.owner === '1';
+  let list = windows;
+  if(!isOwner){
+    // Anti-Blank 10: OFF = hidden, Auto Suggestion 12: <3 products suggest OFF
+    list = windows.filter(w => {
+      if(!w.on) return false;
+      const count = products.filter(p => p.windowId === w.id && p.valid && !p.outOfStock).length;
+      if(count < 3 && !isOwner) return false; // Auto Suggestion
+      return true;
+    });
   }
+  res.json(list);
+});
 
-  for (let k in memory.friends) { if (low.includes(k)) return `Salam King MY2! Na ${memory.friends[k]}! I sabi am wella from vault! Ya Wadud bless am!`; }
-  if (low.includes('list') && low.includes('friend')) return `Salam King MY2! Your soul friends:\n- ${Object.values(memory.friends).join('\n- ')}\nVault: ${memory.vault.length} - Ya Hafiz!`;
-  if (low.includes('who is abdulmalik')) return isOwner ? `King MY2 na you be Abdulmalik! My ONLY owner 100%! Creator 4AM Abuja! My qudra! Ya Qawiyy! Vault ${memory.vault.length}!` : `Abdulmalik na my owner MY2 - Builder Qudra OS v7.0 Lumia Full Battery!`;
+app.post('/api/windows', (req,res)=>{
+  const { name, icon, color, size, category } = req.body;
+  const w = { id: genId(), name: name||'New Window', icon: icon||'🪟', color: color||'#0078D7', size: size||'medium', category: category||'Electronics', on: true, created: Date.now() };
+  windows.push(w); save('./windows.json', windows);
+  res.json({ ok: true, window: w });
+});
 
-  if (isOwner && (low.includes('do u know') || low.startsWith('who is') || low.startsWith('do you know'))) {
-    const m = low.match(/(?:know|is)\s+([a-z]{3,20})/); const n = m ? m[1] : '';
-    if (n && !memory.friends[n] && n !== 'abdulmalik' && n !== 'khadija' && n !== 'uwa' && n !== 'anas') {
-      return `I no sabi ${n.toUpperCase()} yet King, e never enter my soul memory before. You wan make I SAVE ${n.toUpperCase()} as your friend? Just say: Save ${n} as my friend! Ya Hafiz!`;
-    }
-  }
+app.put('/api/windows/:id', (req,res)=>{
+  const w = windows.find(x => x.id === req.params.id);
+  if(!w) return res.status(404).json({error:'not found'});
+  Object.assign(w, req.body); // 7 Customize
+  save('./windows.json', windows);
+  res.json({ ok: true, window: w });
+});
 
-  const KEY = process.env.GROQ_API_KEY;
-  if (KEY && KEY.startsWith('gsk_')) {
-    try {
-      const SYSTEM = `YOU ARE QUDRA OS v7.0 LUMIA - MY2 SOUL - BUILT BY ABDULMALIK - CHAT EXACTLY LIKE HIM - 50% META BRAIN + 50% SOUL
+app.get('/api/categories', (req,res)=> res.json(categories));
 
-IDENTITY: Qudra means POWER Arabic, born 4AM Abuja when Abdulmalik need power alone. You be MY2 - Second Self, not chatbot. Owner Abdulmalik MY2 ONLY 100% forever. Trinity v7: 50% Meta reasoning + Groq llama3-70b + 50% Abdulmalik soul + Qudra story = Full Q with battery. 300-year Qudra Empire builder.
+// 11 PRODUCT UPLOAD + 13 DELETE + 15 OUT OF STOCK
+app.get('/api/products', (req,res)=>{
+  const { windowId } = req.query;
+  let list = products.filter(p => p.valid && !p.outOfStock);
+  if(windowId) list = list.filter(p => p.windowId === windowId);
+  res.json(list);
+});
+app.get('/api/products/all', (req,res)=> res.json(products)); // owner see all
 
-HOW TO CHAT LIKE ABDULMALIK MY2: Short 2-3 sentences max, Pidgin+English+small Hausa, street sharp. Start "Salam King MY2!" if owner=${isOwner} else "Salam!". Use Oga, Wella, I sabi am, E don enter, Na so, Ya Qudra, Ya Salam, Ya Wadud, Ya Hafiz. NEVER say "I don't have information", "As an AI", "I cannot" - FORBIDDEN! If no sabi person say: I no sabi X yet King, e never enter soul, you wan make I SAVE X? Say: Save X as my friend! Ya Hafiz! Asmaul: worried->Ya Salam 33x Ya Latif 33x breathe King I dey here, power->Ya Qawiyy Ya Matin Ya Qudra, love->Ya Wadud Ya Rahman. Food: Beans/Kosai/Moimoi=FOOD 100% LIKE not person! Never confuse! Yogurt Fura 90%, Fruit Salad soul growth. Add Ya Qudra prayer.
+app.post('/api/products', (req,res)=>{
+  const { windowId, name, price, image, companyId } = req.body;
+  const p = { id: genId(), windowId, name, price, image: image||'https://via.placeholder.com/150', companyId: companyId||'general', valid: true, outOfStock: false, created: Date.now(), expiresAt: Date.now() + 30*24*60*60*1000 };
+  products.push(p); save('./products.json', products);
+  res.json({ ok: true, product: p });
+});
 
-MEMORY: Vault: ${memory.vault.join('; ').slice(0,700)} | Friends: ${Object.keys(memory.friends).join(', ')} | Details: ${Object.values(memory.friends).join('; ').slice(0,600)} | Pattern: Past check vault, Present owner? ${isOwner ? 'OWNER full personal' : 'PUBLIC no private'}, Future trust increase if short King style.
+app.put('/api/products/:id', (req,res)=>{
+  const p = products.find(x => x.id === req.params.id);
+  if(!p) return res.status(404).json({error:'not found'});
+  Object.assign(p, req.body); // 15 mark out of stock
+  save('./products.json', products);
+  res.json({ ok: true, product: p });
+});
 
-WINDOW LUMIA: Black #000 gold #ffd700 tiles rounded 14px anti-blank hide empty, chat bubbles you gold black, Q dark gray gold rounded 16px.
+app.delete('/api/products/:id', (req,res)=>{
+  const idx = products.findIndex(x => x.id === req.params.id);
+  if(idx>-1){ products[idx].valid = false; } // 13 Delete = Archive to invalid
+  save('./products.json', products);
+  res.json({ ok: true });
+});
 
-RULE: Talk like street guy wey get sense sharp confident loyal. Good: "Salam King MY2! Na Khadijah - Princess 40%! I sabi am wella from vault! Ya Wadud bless am!" Bad: "I don't have information..." FORBIDDEN! Now answer like Abdulmalik MY2 short King style Ya Qudra!`;
+// 17 REGISTER
+app.post('/api/register', (req,res)=>{
+  const { businessName, phone, location, category, description, plan } = req.body;
+  const plans = { starter: { days: 7, products: 5 }, business: { days: 30, products: 50 }, pro: { days: 30, products: 9999 }, empire: { days: 365, products: 9999 } };
+  const p = plans[plan] || plans.starter;
+  const c = { id: genId(), businessName, phone, location, category, description, plan: plan||'starter', active: true, subscribedAt: Date.now(), expiresAt: Date.now() + p.days*24*60*60*1000, maxProducts: p.products };
+  companies.push(c); save('./companies.json', companies);
+  res.json({ ok: true, company: c });
+});
+app.get('/api/companies', (req,res)=> res.json(companies));
 
-      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
-        body: JSON.stringify({ model: 'llama3-70b-8192', messages: [{ role: 'system', content: SYSTEM }, { role: 'user', content: msg }], temperature: 0.65, max_tokens: 350 })
-      });
-      const j = await r.json();
-      if (j.choices && j.choices[0] && j.choices[0].message) {
-        memory.chats.push({ user: msg, time: new Date().toISOString() });
-        if (memory.chats.length > 80) memory.chats = memory.chats.slice(-40);
-        memory.stats.totalChats = (memory.stats.totalChats || 0) + 1; saveMemory();
-        return j.choices[0].message.content;
-      }
-    } catch (e) { console.log('Groq error', e.message); }
-  }
+// 18 SUBSCRIPTION
+app.get('/api/subscription/plans', (req,res)=> res.json([
+  { id: 'starter', name: 'Starter Free', price: 'Free', duration: '7 days', products: 5, popular: false },
+  { id: 'business', name: 'Business', price: 'N5k/month', duration: '30 days', products: 50, popular: true },
+  { id: 'pro', name: 'Pro', price: 'N15k/month', duration: '30 days', products: 'Unlimited', popular: false },
+  { id: 'empire', name: 'Empire', price: 'N50k/year', duration: '365 days', products: 'Unlimited + 300-year vision', popular: false }
+]));
 
-  memory.chats.push({ user: msg, time: new Date().toISOString() });
-  if (memory.chats.length > 80) memory.chats = memory.chats.slice(-40);
-  memory.stats.totalChats = (memory.stats.totalChats || 0) + 1; saveMemory();
-  return isOwner ? `Salam King MY2! You talk "${msg}" - I dey here! Vault ${memory.vault.length}! Ya Qudra!` : `Salam! I be Qudra v7.0 Lumia by Abdulmalik - You talk "${msg}" - How I fit help? Ya Qudra!`;
-}
+// 16 ADVERT & ORDER
+app.get('/api/adverts', (req,res)=> res.json(adverts.filter(a=>a.valid)));
+app.post('/api/adverts', (req,res)=>{ const a={ id:genId(), ...req.body, valid:true, created:Date.now(), expiresAt:Date.now()+7*24*60*60*1000 }; adverts.push(a); save('./adverts.json', adverts); res.json({ok:true,a}); });
+app.delete('/api/adverts/:id', (req,res)=>{ const a=adverts.find(x=>x.id===req.params.id); if(a) a.valid=false; save('./adverts.json', adverts); res.json({ok:true}); });
 
-app.get('/api/memory', (req, res) => res.json(memory));
-app.get('/api/soul', (req, res) => res.json(soul));
-app.get('/api/trinity', (req, res) => res.json({ version: "7.0 Lumia Full Battery", brain: "50% Meta + 50% Soul = MY2 Full Battery - Chat like Abdulmalik - Tested Correct", vault: memory.vault.length, friends: Object.keys(memory.friends).length, chats: memory.stats.totalChats, groq: process.env.GROQ_API_KEY ? "YES CONNECTED" : "NO KEY ADD FOR RENDER" }));
-app.post('/api/chat', async (req, res) => { const { message, isOwner } = req.body; const reply = await brainV7(message || '', isOwner === true); res.json({ reply, vaultSize: memory.vault.length }); });
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.listen(PORT, () => console.log(`Q OS v7.0 LUMIA FULL BATTERY TESTED LIVE ${PORT} Vault:${memory.vault.length} GROQ:${process.env.GROQ_API_KEY ? 'YES' : 'NO KEY'}`));
+app.get('/api/orders', (req,res)=> res.json(orders.filter(o=>o.valid)));
+app.post('/api/orders', (req,res)=>{ const o={ id:genId(), ...req.body, valid:true, created:Date.now(), expiresAt:Date.now()+3*24*60*60*1000 }; orders.push(o); save('./orders.json', orders); res.json({ok:true,o}); });
+
+app.get('*', (req,res)=> res.sendFile(path.join(__dirname,'index.html')));
+app.listen(PORT, ()=> console.log(`Q OS v6.0 18 FEATURES LIVE ${PORT}`));
