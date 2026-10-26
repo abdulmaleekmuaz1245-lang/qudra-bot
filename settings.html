@@ -1,12 +1,20 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Settings - Qudra OS</title><style>body{font-family:Arial;background:#e6fffa;margin:0;padding:15px}.header{background:linear-gradient(to right,#00b894,#00a085);color:white;padding:15px;border-radius:12px}.card{background:white;padding:15px;border-radius:12px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1)}input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}button{background:#00b894;color:white;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;cursor:pointer}a{color:#00b894;text-decoration:none;font-weight:bold}pre{background:#f0f0f0;padding:10px;border-radius:8px;overflow:auto}</style></head><body><div class="header"><h1>⚙️ Qudra Control Center</h1><p>Change name, price, logo without code - OS Level! Private</p><a href="/" style="color:white">🏠 Q Chat</a> | <a href="/owner" style="color:white">👑 Owner</a> | <a href="/manager" style="color:white">🧠 Manager</a></div>
-<div class="card"><input id="pinInput" placeholder="Owner PIN default 1106" type="password"><button onclick="savePin()" style="background:#333">Unlock</button><span id="pinStatus"></span></div>
-<div class="card"><h2>⚙️ App Settings</h2><input id="appName" placeholder="App Name"><input id="ownerName" placeholder="Owner Name"><input id="price" placeholder="Price"><input id="logo" placeholder="Logo Letter"><input id="motto" placeholder="Motto"><button onclick="save()">💾 Save Settings (Need PIN)</button><div id="status"></div></div>
-<div class="card"><h2>📜 Current Settings (Public)</h2><pre id="current"></pre></div>
-<script>
-let PIN = localStorage.getItem('qudra_pin') || "1106";
-document.getElementById('pinInput').value=PIN;
-function savePin(){PIN=document.getElementById('pinInput').value;localStorage.setItem('qudra_pin',PIN);document.getElementById('pinStatus').innerText="PIN saved: "+PIN; load();}
-async function load(){const s=await fetch('/api/settings').then(r=>r.json());document.getElementById('current').innerText=JSON.stringify(s,null,2);document.getElementById('appName').value=s.appName||'';document.getElementById('ownerName').value=s.ownerName||'';document.getElementById('price').value=s.price||'';document.getElementById('logo').value=s.logo||'';document.getElementById('motto').value=s.motto||'';}
-async function save(){const data={appName:document.getElementById('appName').value,ownerName:document.getElementById('ownerName').value,price:document.getElementById('price').value,logo:document.getElementById('logo').value,motto:document.getElementById('motto').value};const r=await fetch('/api/settings?pin='+PIN,{method:'POST',headers:{'Content-Type':'application/json','x-owner-pin':PIN},body:JSON.stringify(data)});const j=await r.json();document.getElementById('status').innerText=j.success?'✅ Saved!':'❌ '+(j.error||'Failed - check PIN');load();}
-load();
-</script></body></html>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings - Q OS v6.0</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#000;color:#fff}
+.header{background:#5c2d91;padding:15px}.plan{background:#1f1f1f;padding:16px;margin:10px 12px;border-radius:4px;border:2px solid #333}
+.plan.pop{border-color:#0078d7;background:#1a2a40}.btn{background:#0078d7;color:#fff;border:none;padding:10px 16px;width:100%;margin-top:8px}
+input{width:100%;padding:11px;margin-bottom:8px;background:#1f1f1f;border:1px solid #444;color:#fff}
+</style></head><body>
+<div class="header"><h2>⚙️ Settings - Register & Subscription</h2><a href="index.html" style="color:#fff;background:#fff;color:#5c2d91;padding:5px 10px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:bold">← Lumia Home</a></div>
+<div style="padding:12px">
+<h3>Business Profile</h3>
+<input placeholder="Business Name"><input placeholder="Phone WhatsApp"><input placeholder="Location Kano/Abuja/Lagos">
+<h3 style="margin-top:16px">💳 Subscription Plans - 4 Tiers</h3>
+<div class="plan"><h4>Starter - Free 7 Days</h4><small>5 products, 1 category, Q watermark</small><button class="btn">Start Trial</button></div>
+<div class="plan pop"><div style="background:#0078d7;display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px">POPULAR</div><h4>Business - ₦5k/month</h4><small>50 products, 3 categories, WhatsApp order, Priority</small><button class="btn" style="background:#fff;color:#0078d7">Pay & Activate</button></div>
+<div class="plan"><h4>Pro - ₦15k/month</h4><small>Unlimited, all cats, featured, analytics</small><button class="btn">Pay Pro</button></div>
+<div class="plan" style="border-color:#ffb900"><h4>Empire - ₦50k/year (300-year vision)</h4><small>Everything + own window templates + API</small><button class="btn" style="background:#ffb900;color:#000">Pay Yearly</button></div>
+<div style="margin-top:12px;background:#1f1f1f;padding:12px;border-radius:4px"><small><b>Auto Expiry Logic:</b><br>When sub expires, products auto move to Expired Zone - Hidden from guests - Owner must renew or delete/archive. Company can mark product "No longer available" = auto invalid.</small></div>
+</div>
+</body></html>
