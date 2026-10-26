@@ -1,7 +1,7 @@
 {
   "name": "qudra-bot",
-  "version": "6.0.0",
-  "description": "Q OS v6.0 Lumia + Trinity Brain - AI Meta 70% + Groq + Me 30% - Full OS with battery",
+  "version": "7.0.0",
+  "description": "Q OS v7.0 Lumia - 50% Meta + 50% Soul - MY2 Full Battery - Tested Correct",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
