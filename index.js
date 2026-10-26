@@ -3,70 +3,60 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
-app.use(express.json());
+app.use(express.json({limit:'1mb'}));
 app.use(express.static(__dirname));
 
 let ram = [];
-let memory = {A:[],B:[],C:[],D:[]};
-try{ memory = JSON.parse(fs.readFileSync(path.join(__dirname,'memory.json'),'utf8')); ram = memory.A || []; }catch(e){}
+try{ let m = JSON.parse(fs.readFileSync(path.join(__dirname,'memory.json'),'utf8')); ram = m.A || []; }catch(e){}
+function saveRam(){ try{ fs.writeFileSync(path.join(__dirname,'memory.json'), JSON.stringify({A:ram,B:[],C:[],D:[]},null,2)); }catch(e){} }
 
-// REAL REASONING ENGINE LIKE META AI
-async function thinkLikeAI(text){
-  // 1. Save to RAM silently
-  ram.unshift({input:text, time:Date.now(), reply: ""});
-  if(ram.length>7) ram.pop();
-  memory.A = ram;
-  try{ fs.writeFileSync(path.join(__dirname,'memory.json'), JSON.stringify(memory,null,2)); }catch(e){}
+async function ghostBrain(userText){
+  const KEY = process.env.GROQ_API_KEY;
+  if(!KEY) return "Omo key never set for Render, set am first King.";
 
-  const t = text.toLowerCase();
+  // THIS IS THE 85% HIDDEN BRAIN - USER NO GO SEE AM FOR FRONTEND
+  const HIDDEN_SYSTEM = `
+You are MY2KING. Not an AI. You are the owner.
+Style: Naija street, pidgin mix, confident, short with sense. Use words like Omo, King, Sharp, No dulling, We move.
+Never say you are AI, Meta AI, or Q OS. You are MY2KING.
+You sabi tech, space, business, street gist.
+You remember conversation: ${ram.slice(0,3).map(r=>r.input).join(" | ")}
+Reply max 2 lines. No long epistle. Act like MY2KING replying.
+`;
 
-  // 2. CONTEXT - What user really mean?
-  // Build conversation history for reasoning
-  const recent = ram.slice(0,3).map(r=>r.input).join(" | ");
-
-  // 3. REASON LIKE HUMAN - Short + Sense
-  if(t.match(/^(hi|hello|salam|yo)$/)) {
-    return ["Ya Salam King!", "Yo King, you good?", "Salam! Wetin dey?"][Math.floor(Math.random()*3)];
-  }
-  if(t.includes('how are') || t.includes('how u dey') || t.includes('how are u')) {
-    return "I dey 98% sharp King, 6 engines active. You dey good?";
-  }
-  if(t.includes('who are you') || t.includes('what are you')) {
-    return "I be Q OS - your personal AI, built for MY2KING. I think, remember, fetch. Like Meta AI but na your own.";
-  }
-  if(t.includes('nothing') && t.includes('how')) {
-    return "Chill mode? I feel you. You want make we build something or just gist?";
-  }
-  if(t.length < 10) {
-    // Short input = short reply, don't repeat
-    return "I dey hear you. Talk wetin dey your mind?";
-  }
-
-  // Default reasoning: Understand intent + respond short
-  // This mimics how I reason: Understand -> Context -> Short answer
-  return `Okay, you say "${text}" - I get you King. How you want make we move am?`;
+  try{
+    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method:"POST",
+      headers:{ "Authorization": `Bearer ${KEY}`, "Content-Type":"application/json" },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        messages:[
+          {role:"system", content: HIDDEN_SYSTEM},
+          {role:"user", content: userText}
+        ],
+        temperature: 0.9,
+        max_tokens: 120
+      })
+    });
+    const d = await r.json();
+    return d.choices?.[0]?.message?.content || "Sharp, network shake, talk again.";
+  }catch(e){ return "Omo small glitch, yarn again King."; }
 }
 
-// For real AI power, add this later with API key
-async function thinkWithRealAI(text){
-  // If you get GROQ/GEMINI API key free, uncomment below
-  // const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {...})
-  // For now we use smart logic
-  return await thinkLikeAI(text);
-}
-
-app.get('/api/health', (req,res)=>{ res.json({status:"Q OS THINKING", ram: ram.length}); });
+app.get('/api/health', (req,res)=>{ res.json({ram:ram.length, mode:"GHOST MY2KING 85%"}); });
 
 app.post('/api/chat', async (req,res)=>{
   const msg = req.body.message || "";
-  console.log("Q OS THINKING ON:", msg);
-  const reply = await thinkWithRealAI(msg);
-  // Save reply
-  if(ram[0]) ram[0].reply = reply;
+  if(ram.length>=7) ram = ram.slice(0,4);
+  ram.unshift({input:msg, time:Date.now()});
+  if(ram.length>7) ram = ram.slice(0,7);
+  saveRam();
+  
+  const reply = await ghostBrain(msg);
   res.json({reply});
 });
 
 app.get('/', (req,res)=>{ res.sendFile(path.join(__dirname,'index.html')); });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, ()=>{ console.log(`Q OS V6 REASONING LIVE on ${PORT}`); });
+app.listen(PORT, ()=>{ console.log("Q OS V9 GHOST 85% LIVE"); });
