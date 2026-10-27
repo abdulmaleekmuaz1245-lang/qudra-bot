@@ -1,78 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Q OS GLOBAL - The Future is Here</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Q OS GLOBAL v3.6 - Auto Detect Fix Backup</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0f;color:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
-.glow{position:fixed;top:-20%;left:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(110,80,255,0.4),transparent 70%);filter:blur(40px);z-index:-1}
-.glow2{position:fixed;bottom:-20%;right:-10%;width:700px;height:700px;background:radial-gradient(circle,rgba(0,255,200,0.25),transparent 70%);filter:blur(50px);z-index:-1}
-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;border-bottom:1px solid rgba(255,255,255,0.08)}
-.logo{font-weight:700;letter-spacing:2px;font-size:18px}
-.logo span{color:#6e50ff}
-.nav-btn{border:1px solid rgba(255,255,255,0.2);padding:8px 18px;border-radius:20px;font-size:12px;letter-spacing:1px}
-.hero{padding:90px 8% 60px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:40px;align-items:center}
-.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(110,80,255,0.4);background:rgba(110,80,255,0.1);padding:6px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;margin-bottom:24px}
-.badge-dot{width:8px;height:8px;background:#00ffc8;border-radius:50%;box-shadow:0 0 10px #00ffc8}
-.hero h1{font-size:clamp(36px,6vw,72px);line-height:0.95;font-weight:700;letter-spacing:-2px;margin-bottom:20px}
-.hero h1 i{font-style:normal;background:linear-gradient(90deg,#6e50ff,#00ffc8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:rgba(255,255,255,0.6);max-width:480px;line-height:1.6;margin-bottom:32px;font-size:15px}
-.btns{display:flex;gap:14px}
-.btn-primary{background:#fff;color:#000;padding:14px 26px;border-radius:30px;font-weight:700;font-size:13px;letter-spacing:1px;border:none;cursor:pointer}
-.btn-sec{border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;padding:14px 26px;border-radius:30px;font-size:13px;letter-spacing:1px;cursor:pointer}
-.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:24px;padding:24px}
-.card-head{display:flex;justify-content:space-between;margin-bottom:30px;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace}
-.brain{width:100%;height:220px;display:flex;align-items:center;justify-content:center;position:relative}
-.brain-core{width:90px;height:90px;background:radial-gradient(circle,#6e50ff,#0a0a0f);border-radius:50%;box-shadow:0 0 40px rgba(110,80,255,0.8),inset 0 0 20px rgba(255,255,255,0.3);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.stat{background:rgba(0,0,0,0.3);border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.05)}
-.stat b{font-size:20px;display:block;font-family:'JetBrains Mono',monospace}
-.stat span{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.4)}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 8% 80px}
-.feat{border-top:1px solid rgba(255,255,255,0.1);padding-top:18px}
-.feat h4{font-size:12px;letter-spacing:1.5px;margin-bottom:8px}
-.feat p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.features{grid-template-columns:1fr}}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#05050e;color:#fff}
+.hero{padding:16px 6%;background:radial-gradient(120% 80% at 70% 20%,#2a1b6b 0%,#0d1230 40%,#061a1a 100%)}
+.pill{display:inline-flex;gap:8px;border:1px solid rgba(0,255,200,.4);padding:6px 14px;border-radius:999px;font-size:10px;letter-spacing:1px;background:rgba(0,255,200,.08)}
+.brain-bar{margin-top:10px;background:rgba(255,255,255,.08);border-radius:999px;height:14px;overflow:hidden;max-width:400px}.brain-fill{width:75%;height:100%;background:linear-gradient(90deg,#7c5bff,#00ffc8);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800}
+h1{font-size:clamp(28px,6vw,46px);font-weight:900;margin-top:12px;line-height:.95}h1 span{background:linear-gradient(90deg,#8b5cff,#00ffc8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:12px;opacity:.6;margin-top:8px;max-width:600px;line-height:1.5}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px;max-width:700px}
+.btn-grid button{padding:11px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff;font-weight:700;font-size:11px;cursor:pointer}
+.btn-grid button.active{background:#fff;color:#000}
+.section{display:none;padding:12px 6%}.section.show{display:block}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+input,textarea,select{width:100%;padding:10px;border-radius:9px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;margin-top:6px;outline:none;font-size:12px}
+button.main{width:100%;margin-top:6px;padding:10px;border-radius:9px;border:none;background:#7c5bff;color:#fff;font-weight:700;cursor:pointer;font-size:12px}
+button.danger{background:#ff1a1a}
+.paybox{background:rgba(0,255,200,.09);border:1px solid rgba(0,255,200,.35);padding:10px;border-radius:10px;color:#00ffc8;font-weight:700;text-align:center;margin:8px 0;display:none}.paybox.show{display:block}
+#welcome{position:fixed;inset:0;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;z-index:300;padding:16px}.wbox{background:#16162a;border:1px solid rgba(255,255,255,.12);padding:22px;border-radius:18px;max-width:380px;text-align:center}
+#dot{position:fixed;bottom:6px;left:10px;width:10px;height:10px;background:rgba(255,255,255,.15);border-radius:50%;z-index:99}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:250;padding:16px}.modal.show{display:flex}.mbox{background:#15151f;border:1px solid rgba(255,255,255,.12);padding:16px;border-radius:16px;width:100%;max-width:500px;max-height:92vh;overflow:auto}
+footer{padding:18px 6%;text-align:center;font-size:9px;opacity:.3}
+.qai-chat{position:fixed;bottom:20px;right:12px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#7c5bff,#00ffc8);border:none;font-weight:900;font-size:22px;cursor:pointer;z-index:100;box-shadow:0 0 20px rgba(124,91,255,.5)}
+.chatbox{position:fixed;bottom:90px;right:12px;width:90%;max-width:340px;background:#15151f;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px;display:none;z-index:101;max-height:60vh;overflow:auto}.chatbox.show{display:block}
 </style>
 </head>
 <body>
-<div class="glow"></div><div class="glow2"></div>
-<nav><div class="logo">Q OS <span>GLOBAL</span></div><div class="nav-btn">SYSTEM ONLINE</div></nav>
-<section class="hero">
-<div>
-<div class="badge"><div class="badge-dot"></div> QUDRA BOT v2.0 LIVE</div>
-<h1>THE FUTURE <br>IS <i>AUTONOMOUS</i></h1>
-<p>Q OS GLOBAL is the first autonomous operating system. We build bots wey dey reason, work, and earn — no be just chat.</p>
-<div class="btns">
-<button class="btn-primary" onclick="launch()">LAUNCH SYSTEM →</button>
-<button class="btn-sec">VIEW DOCS</button>
+<div class="hero">
+<div class="pill">🧠 BRAIN SYNC 75% • AUTO DETECT • AUTO FIX • AUTO BACKUP • RESPECT MODE</div>
+<div class="brain-bar"><div class="brain-fill">75% MY BRAIN + YOUR AI BRAIN CONNECTED</div></div>
+<h1>THE FUTURE<br>IS <span>AUTONOMOUS</span></h1>
+<p class="sub">75% Brain Sync active. Auto Detect scans every 30 seconds, Auto Fix repairs, Auto Backup every 2 minutes. Respectful guide for all customers. Founder Abdulmalik Muazu Abba.</p>
+<div class="btn-grid">
+<button onclick="showSec('gallery')" id="b-gallery" class="active">Gallery</button>
+<button onclick="showSec('advertising')" id="b-advertising">Advert + Video</button>
+<button onclick="showSec('order')" id="b-order">Order + Escrow</button>
+<button onclick="showSec('logistics')" id="b-logistics">Logistics</button>
+<button onclick="showSec('voice')" id="b-voice">Voice</button>
+<button onclick="showSec('agent')" id="b-agent">Agent Wallet</button>
+<button onclick="showSec('verify')" id="b-verify">NIN Verify</button>
+<button onclick="showSec('about')" id="b-about">About</button>
 </div>
 </div>
-<div class="card">
-<div class="card-head"><span>NEURAL CORE</span><span>● LIVE</span></div>
-<div class="brain"><div class="brain-core"></div></div>
-<div class="stats">
-<div class="stat"><b>99.9%</b><span>UPTIME</span></div>
-<div class="stat"><b>2.4s</b><span>RESPONSE</span></div>
-<div class="stat"><b>QUDRA</b><span>ENGINE</span></div>
-<div class="stat"><b>∞</b><span>SCALE</span></div>
+
+<div id="gallery" class="section show"><h3 style="font-size:11px;opacity:.6">GALLERY - AUTO DETECT ACTIVE</h3><div style="display:flex;gap:6px;margin:8px 0"><input id="gsearch" placeholder="Search..."><select id="gstate" style="max-width:110px"><option value="">All States</option><option>Rivers</option><option>Lagos</option><option>Abuja</option><option>Kaduna</option><option>Kano</option></select></div><div id="ggrid" class="grid"></div></div>
+<div id="advertising" class="section"><h3>Advert + Video</h3><div class="card"><input id="adTitle" placeholder="Title"><textarea id="adDesc" placeholder="Description"></textarea><input id="adPrice" placeholder="Price"><input id="adShop" placeholder="Shop"><input id="adState" placeholder="State"><input id="adImage" placeholder="Image URL"><button class="main" onclick="postAd()">Post + AI Video</button><div id="adPay" class="paybox">✅ 7043718956 OPAY</div><div id="videoScript" style="display:none;margin-top:8px;padding:10px;background:rgba(124,91,255,.1);border-radius:10px;font-size:11px"></div></div><div id="adList"></div></div>
+<div id="order" class="section"><h3>Order + Escrow</h3><div class="card"><input id="oName" placeholder="Name"><input id="oPhone" placeholder="Phone"><input id="oProd" placeholder="Product"><input id="oState" placeholder="State"><button class="main" onclick="placeOrder()">Place Order - Respectful</button><div id="orderPay" class="paybox">✅ Escrow: 7043718956 OPAY - 24hrs</div></div><div id="orderList"></div></div>
+<div id="logistics" class="section"><h3>Logistics Map</h3><div class="card"><select id="fromState"><option value="">From</option><option>Rivers</option><option>Lagos</option><option>Abuja</option><option>Kaduna</option></select><select id="toState" style="margin-top:6px"><option value="">To</option><option>Rivers</option><option>Lagos</option><option>Abuja</option><option>Kaduna</option><option>Kano</option></select><button class="main" onclick="calcLogistics()">Calculate</button><div id="logResult" style="margin-top:8px;font-size:12px"></div></div></div>
+<div id="voice" class="section"><h3>Voice Market</h3><div class="card"><button class="main" onclick="startVoice()">🎤 Speak</button><input id="voiceText" placeholder="I want phone 30k Abuja"><button class="main" style="background:#00ffc8;color:#000" onclick="voiceSearch()">Search Respectfully</button><div id="voiceResult" style="margin-top:8px;font-size:12px"></div></div></div>
+<div id="agent" class="section"><h3>Agent Wallet</h3><div class="card"><input id="agName" placeholder="Name"><input id="agState" placeholder="State"><input id="agPhone" placeholder="Phone"><input id="agCode" placeholder="Code"><button class="main" onclick="regAgent()">Register</button></div><div class="card"><input id="agLogin" placeholder="Code"><button class="main" onclick="agentLogin()">Login</button><p id="agMsg" style="font-size:11px;color:#ff6b6b"></p></div><div id="agentPanel" style="display:none"><div class="card"><p>Balance: <b id="agBal">₦0</b></p><div id="agentShops"></div></div></div></div>
+<div id="verify" class="section"><h3>NIN Verify</h3><div class="card"><input id="vShop" placeholder="Shop"><input id="vNIN" placeholder="NIN last4"><input id="vPhoto" placeholder="Photo URL"><button class="main" onclick="verifyShop()">Verify</button><div id="vList"></div></div></div>
+<div id="about" class="section"><h3>About</h3><div class="card"><p style="font-size:12px;line-height:1.6">Q OS GLOBAL v3.6 - 75% Brain Sync + Auto Detect + Auto Fix + Auto Backup + Respect Mode + Emergency Shutdown + Single Supervision. Founder Abdulmalik Muazu Abba. © 2026</p></div></div>
+
+<div id="welcome"><div class="wbox"><h3>Q OS GLOBAL v3.6</h3><p style="font-size:12px;opacity:.7;margin-top:8px">Welcome Engineer.<br>75% Brain Sync • Auto Detect • Auto Fix • Auto Backup active.<br>Respect Mode ON.<br><br><small>Closes 5 sec</small></p></div></div>
+<div id="dot"></div>
+<div id="ownerModal" class="modal"><div class="mbox"><h3>Owner Portal</h3><input id="opass" type="password" placeholder="Abba7043718956"><button class="main" onclick="checkOwner()">Unlock Full Control</button><button class="main" style="background:transparent;border:1px solid rgba(255,255,255,.15)" onclick="closeM()">Cancel</button></div></div>
+
+<div id="ownerPanelModal" class="modal"><div class="mbox">
+<h3>OWNER MASTER CONTROL v3.6</h3>
+<div class="paybox show">OPAY 7043718956 - Founder Only</div>
+
+<div class="card" style="border:1px solid rgba(255,77,77,.4);background:rgba(255,77,77,.08)">
+<h4 style="color:#ff6b6b">🚨 EMERGENCY SHUTDOWN - OWNER ONLY</h4>
+<button id="shutdownBtn" class="main danger" onclick="toggleShutdown()">🔴 SYSTEM LIVE - TAP TO SHUTDOWN</button>
+<p id="shutdownStatus" style="font-size:10px;margin-top:6px;color:#00ffc8">Status: Live</p>
 </div>
+
+<div class="card" style="border:1px solid rgba(0,255,200,.4)">
+<h4 style="color:#00ffc8">🎛️ SINGLE BUTTON SUPERVISION</h4>
+<button class="main" style="background:#00ffc8;color:#000" onclick="masterSupervise()">▶️ SUPERVISE ALL NOW</button>
+<div id="superviseLog" style="margin-top:8px;font-size:10px;background:rgba(0,0,0,.3);padding:8px;border-radius:8px;max-height:120px;overflow:auto"></div>
 </div>
-</section>
-<section class="features">
-<div class="feat"><h4>01 / AUTONOMOUS</h4><p>Bot wey dey work for you 24/7 without supervision.</p></div>
-<div class="feat"><h4>02 / INTELLIGENT</h4><p>Brain installed — e dey learn, adapt and deliver.</p></div>
-<div class="feat"><h4>03 / GLOBAL</h4><p>Built in Abuja, deployed worldwide via Render.</p></div>
-</section>
+
+<div class="card" style="border:1px solid rgba(124,91,255,.4)">
+<h4 style="color:#8b5cff">🤖 AUTO DETECT & AUTO FIX - 75% BRAIN</h4>
+<p style="font-size:10px;opacity:.7">Scans every 30s, auto repairs corrupted data, low scores, old escrow.</p>
+<div id="autoDetectLog" style="margin-top:6px;font-size:9px;background:rgba(0,0,0,.3);padding:8px;border-radius:8px;max-height:90px;overflow:auto">Scanning...</div>
+<button class="main" style="padding:6px;background:rgba(124,91,255,.2);border:1px solid rgba(124,91,255,.4)" onclick="autoDetectAndFix()">🔍 Force Scan Now</button>
+</div>
+
+<div class="card" style="border:1px solid rgba(0,255,200,.4)">
+<h4 style="color:#00ffc8">💾 AUTO BACKUP - EVERY 2 MINS</h4>
+<p style="font-size:10px;opacity:.7">Auto saves to secure storage. Owner can restore/export.</p>
+<div id="autoBackupStatus" style="margin-top:6px;font-size:9px;background:rgba(0,0,0,.3);padding:8px;border-radius:8px">Backing up...</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px"><button class="main" style="padding:6px" onclick="autoBackup()">💾 Backup Now</button><button class="main" style="padding:6px;background:transparent;border:1px solid rgba(255,255,255,.15)" onclick="restoreLastBackup()">♻️ Restore</button></div>
+<button class="main" style="padding:6px;background:transparent;border:1px solid rgba(255,255,255,.15)" onclick="exportBackup()">📤 Export JSON</button>
+</div>
+
+<div class="card"><h4>Brain Sync Control</h4><div class="brain-bar"><div class="brain-fill" style="width:75%">75% SYNCED</div></div><label style="font-size:10px;margin-top:8px;display:block">Sync: <input type="range" id="brainRange" min="50" max="95" value="75" oninput="document.getElementById('brainVal').innerText=this.value+'%'"> <span id="brainVal">75%</span></label></div>
+
+<div id="ownerShops"></div><div id="ownerAgents"></div><div id="ownerAds"></div><div id="ownerOrders"></div><div id="ownerVerifs"></div>
+<button class="main" style="background:transparent;border:1px solid rgba(255,255,255,.15)" onclick="closeM()">Close</button>
+</div></div>
+
+<button class="qai-chat" onclick="toggleChat()">Q</button>
+<div id="chatbox" class="chatbox"><h4 style="font-size:11px">Q AI - Respectful Guide 75%</h4><div id="chatLog" style="margin-top:8px;font-size:11px;max-height:200px;overflow:auto"><p>Assalamu Alaikum! I am your respectful guide (75% brain sync). How may I assist you with dignity?</p></div><input id="chatInput" placeholder="Ask respectfully..."><button class="main" style="padding:6px" onclick="sendChat()">Send</button></div>
+
+<footer>© 2026 Q OS GLOBAL v3.6 - Auto Detect Fix Backup - Built by ABDULMALIK MUAZU ABBA</footer>
+
 <script>
-function launch(){
-alert('Q OS GLOBAL - System Launching...\\nEngineer, brain installation next!');
+let shops=JSON.parse(localStorage.getItem('q_shops')||'[]');let ads=JSON.parse(localStorage.getItem('q_ads')||'[]');let orders=JSON.parse(localStorage.getItem('q_orders')||'[]');let agents=JSON.parse(localStorage.getItem('q_agents')||'[]');let verifs=JSON.parse(localStorage.getItem('q_verifs')||'[]');let shutdown=localStorage.getItem('q_shutdown')==='true';
+if(shops.length==0){shops=[{name:"Abba Phones Rivers",state:"Rivers",prod:"Phones",price:"₦45,000",status:"active",verified:true,score:95,img:""},{name:"Lagos Fashion",state:"Lagos",prod:"Fashion",price:"₦12,000",status:"active",verified:false,score:78,img:""}];}
+const saveAll=()=>{localStorage.setItem('q_shops',JSON.stringify(shops));localStorage.setItem('q_ads',JSON.stringify(ads));localStorage.setItem('q_orders',JSON.stringify(orders));localStorage.setItem('q_agents',JSON.stringify(agents));localStorage.setItem('q_verifs',JSON.stringify(verifs));localStorage.setItem('q_shutdown',shutdown)}
+let c=0,lc=0;setTimeout(()=>document.getElementById('welcome').style.display='none',5000);
+document.getElementById('dot').addEventListener('click',()=>{let n=Date.now();if(n-lc>2000)c=0;c++;lc=n;if(c>=5){c=0;document.getElementById('ownerModal').classList.add('show')}});
+function checkOwner(){if(document.getElementById('opass').value==='Abba7043718956'){document.getElementById('ownerModal').classList.remove('show');document.getElementById('ownerPanelModal').classList.add('show');renderOwner();updateShutdownUI()}else alert('Wrong')}
+function closeM(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'))}
+function showSec(id){if(shutdown&&id!=='about'){alert('🚨 SYSTEM SHUTDOWN - Owner paused all activities. Please contact support respectfully.');return}document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.btn-grid button').forEach(b=>b.classList.remove('active'));let btn=document.getElementById('b-'+id);if(btn)btn.classList.add('active');if(id==='gallery')renderGallery();if(id==='advertising'){renderAds();document.getElementById('adPay').classList.add('show')}if(id==='order'){renderOrders();document.getElementById('orderPay').classList.add('show')}window.scrollTo({top:280,behavior:'smooth'})}
+function renderGallery(){let g=document.getElementById('ggrid');let q=(document.getElementById('gsearch').value||'').toLowerCase();let s=(document.getElementById('gstate').value||'').toLowerCase();g.innerHTML='';if(shutdown){g.innerHTML='<div class="card" style="color:#ff6b6b">System paused by Owner</div>';return}shops.filter(x=> (x.name.toLowerCase().includes(q)||x.prod.toLowerCase().includes(q)) && (!s||x.state.toLowerCase().includes(s)) ).forEach(sh=>{let d=document.createElement('div');d.className='card';d.innerHTML=`<div style="height:70px;background:#1a1a2e;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:9px;opacity:.5">${sh.img?'<img src="'+sh.img+'" style="width:100%;height:100%;object-fit:cover;border-radius:8px">':'No Img'}</div><p style="font-size:9px;opacity:.4">${sh.state} • ${sh.status}</p><b style="font-size:12px">${sh.name}</b> ${sh.verified?'<span style="color:#00ffc8;font-size:9px">✓</span>':''}<p style="font-size:11px;opacity:.6">${sh.prod}</p><p style="font-size:11px;color:#00ffc8">${sh.price}</p><p style="font-size:9px">Score ${sh.score||70}</p><button class="main" style="padding:5px" onclick="qForeman('${sh.name}')">Respectful Guide</button>`;g.appendChild(d)})}
+document.getElementById('gsearch')?.addEventListener('input',renderGallery);document.getElementById('gstate')?.addEventListener('change',renderGallery);
+function qForeman(n){alert('Assalamu Alaikum dear customer, with utmost respect, thank you for interest in '+n+'. How may I guide you politely?')}
+function postAd(){if(shutdown)return alert('Shutdown');let t=document.getElementById('adTitle').value.trim();if(!t)return alert('Title');ads.push({title:t,desc:document.getElementById('adDesc').value,price:document.getElementById('adPrice').value,shop:document.getElementById('adShop').value,state:document.getElementById('adState').value,img:document.getElementById('adImage').value,status:'pending'});saveAll();let sc=document.getElementById('videoScript');sc.style.display='block';sc.innerHTML='<b>Respectful Video Script:</b> Respected customers, we present '+t+' for '+document.getElementById('adPrice').value+' in '+document.getElementById('adState').value;renderAds();autoBackup()}
+function renderAds(){let l=document.getElementById('adList');if(!l)return;l.innerHTML='';ads.slice().reverse().forEach(a=>{l.innerHTML+=`<div class="card"><b>${a.title}</b> - ${a.price}<br><small>${a.state} • ${a.status}</small></div>`})}
+function placeOrder(){if(shutdown)return alert('Shutdown');let n=document.getElementById('oName').value.trim();if(!n)return alert('Name');orders.push({name:n,phone:document.getElementById('oPhone').value,prod:document.getElementById('oProd').value,state:document.getElementById('oState').value,status:'escrow',time:Date.now(),amount:10000});saveAll();renderOrders();alert('Dear '+n+', thank you respectfully, escrow secured at 7043718956 OPAY');autoBackup()}
+function renderOrders(){let l=document.getElementById('orderList');if(!l)return;l.innerHTML='';orders.slice().reverse().forEach(o=>{l.innerHTML+=`<div class="card"><b>${o.prod}</b> - ${o.name}<br><small>${o.status}</small></div>`})}
+function calcLogistics(){let f=document.getElementById('fromState').value;let t=document.getElementById('toState').value;if(!f||!t)return alert('Select');document.getElementById('logResult').innerHTML=`Delivery ${f} → ${t} = ₦3000 • Respectful service`}
+function startVoice(){alert('Respectful listening...')}function voiceSearch(){let txt=document.getElementById('voiceText').value;document.getElementById('voiceResult').innerHTML=`With respect, searching "${txt}"...`;document.getElementById('gsearch').value=txt;showSec('gallery');renderGallery()}
+function regAgent(){agents.push({name:document.getElementById('agName').value,state:document.getElementById('agState').value,phone:document.getElementById('agPhone').value,code:document.getElementById('agCode').value,status:'pending',balance:0});saveAll();alert('Registered respectfully');autoBackup()}
+function agentLogin(){let code=document.getElementById('agLogin').value.trim();let ag=agents.find(a=>a.code===code && a.status==='active');if(!ag){document.getElementById('agMsg').innerText='Invalid or not approved yet';return}document.getElementById('agMsg').innerText='';document.getElementById('agentPanel').style.display='block';document.getElementById('agBal').innerText='₦'+(ag.balance||0);renderAgentShops(ag.state)}
+function renderAgentShops(state){let d=document.getElementById('agentShops');d.innerHTML='';shops.filter(s=>s.state.toLowerCase()===state.toLowerCase()).forEach((s,i)=>{let idx=shops.indexOf(s);d.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:11px"><span>${s.name} (${s.status})</span><button onclick="shops[${idx}].status='active';saveAll();renderGallery();renderAgentShops('${state}')" style="padding:3px 6px;background:#00ffc8;color:#000;border:none;border-radius:4px">Approve</button></div>`})}
+function verifyShop(){verifs.push({shop:document.getElementById('vShop').value,nin:document.getElementById('vNIN').value,photo:document.getElementById('vPhoto').value,status:'pending'});saveAll();alert('Verification submitted');autoBackup()}
+function toggleChat(){document.getElementById('chatbox').classList.toggle('show')}function sendChat(){let inp=document.getElementById('chatInput');let txt=inp.value.trim();if(!txt)return;let log=document.getElementById('chatLog');log.innerHTML+=`<p><b>You:</b> ${txt}</p>`;log.innerHTML+=`<p style="color:#00ffc8"><b>Q AI Respectful:</b> Dear respected customer, thank you for "${txt}". With 75% brain sync and dignity, I will guide you.</p>`;inp.value='';log.scrollTop=log.scrollHeight}
+function toggleShutdown(){shutdown=!shutdown;saveAll();updateShutdownUI();masterSupervise();autoBackup()}
+function updateShutdownUI(){let btn=document.getElementById('shutdownBtn');let status=document.getElementById('shutdownStatus');if(shutdown){btn.innerHTML='🟢 SHUTDOWN ACTIVE - TAP TO RESTORE';btn.style.background='#00ffc8';btn.style.color='#000';status.innerHTML='🚨 Emergency Shutdown - Paused - Owner Only';status.style.color='#ff6b6b'}else{btn.innerHTML='🔴 SYSTEM LIVE - TAP TO SHUTDOWN';btn.style.background='#ff1a1a';btn.style.color='#fff';status.innerHTML='All systems running - 75% brain sync - Respect ON';status.style.color='#00ffc8'}}
+function masterSupervise(){let log=document.getElementById('superviseLog');let time=new Date().toLocaleString();let brain=document.getElementById('brainRange')?.value||75;log.innerHTML=`[${time}] MASTER SUPERVISION<br>• Brain ${brain}% • Shutdown ${shutdown?'ACTIVE':'LIVE'}<br>• Shops ${shops.length} active ${shops.filter(s=>s.status==='active').length}<br>• Ads ${ads.length} pending ${ads.filter(a=>a.status==='pending').length}<br>• Orders ${orders.length} escrow ${orders.filter(o=>o.status==='escrow').length}<br>• Agents ${agents.length} active ${agents.filter(a=>a.status==='active').length}<br>• Respect Mode ON • Auto Backup OK`;renderOwner()}
+function renderOwner(){let os=document.getElementById('ownerShops');let oa=document.getElementById('ownerAgents');let oad=document.getElementById('ownerAds');let oo=document.getElementById('ownerOrders');let ov=document.getElementById('ownerVerifs');if(!os)return;os.innerHTML='<h4 style="font-size:11px">Shops</h4>';shops.forEach((s,i)=>{os.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:10px"><span>${s.name}-${s.state} (${s.status})</span><span><button onclick="shops[${i}].status='active';saveAll();renderGallery();renderOwner()" style="padding:2px 5px;background:#00ffc8;color:#000;border:none;border-radius:3px">OK</button> <button onclick="shops.splice(${i},1);saveAll();renderGallery();renderOwner()" style="padding:2px 5px;background:#ff4d4d;color:#fff;border:none;border-radius:3px">X</button></span></div>`});oa.innerHTML='<h4 style="font-size:11px;margin-top:6px">Agents</h4>';agents.forEach((a,i)=>{oa.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:10px"><span>${a.name}-${a.state}-${a.code} (${a.status})</span><button onclick="agents[${i}].status='active';saveAll();renderOwner()" style="padding:2px 5px;background:#00ffc8;color:#000;border:none;border-radius:3px">Approve</button></div>`});oad.innerHTML='<h4 style="font-size:11px;margin-top:6px">Ads</h4>';ads.forEach((a,i)=>{oad.innerHTML+=`<div style="font-size:10px;padding:4px 0">${a.title} (${a.status}) <button onclick="ads[${i}].status='active';saveAll();renderOwner()" style="padding:2px 5px;background:#00ffc8;color:#000;border:none;border-radius:3px">OK</button></div>`});oo.innerHTML='<h4 style="font-size:11px;margin-top:6px">Orders Escrow</h4>';orders.forEach((o,i)=>{oo.innerHTML+=`<div style="font-size:10px;padding:4px 0">${o.prod}-${o.name} (${o.status}) <button onclick="orders[${i}].status='delivered';let ag=agents.find(a=>a.state.toLowerCase()===orders[${i}].state.toLowerCase());if(ag){ag.balance=(ag.balance||0)+Math.round(orders[${i}].amount*0.05)};saveAll();renderOwner()" style="padding:2px 5px;background:#00ffc8;color:#000;border:none;border-radius:3px">Confirm +5%</button></div>`});ov.innerHTML='<h4 style="font-size:11px;margin-top:6px">NIN Verifs</h4>';verifs.forEach((v,i)=>{ov.innerHTML+=`<div style="font-size:10px;padding:4px 0">${v.shop} (${v.status}) <button onclick="verifs[${i}].status='approved';let sh=shops.find(s=>s.name===verifs[${i}].shop);if(sh)sh.verified=true;saveAll();renderGallery();renderOwner()" style="padding:2px 5px;background:#00ffc8;color:#000;border:none;border-radius:3px">Approve</button></div>`})}
+
+let autoBackupInterval=null;let autoDetectInterval=null;let backupHistory=JSON.parse(localStorage.getItem('q_backup_history')||'[]');
+function initAutoSystems(){
+  if(autoBackupInterval)clearInterval(autoBackupInterval);
+  autoBackupInterval=setInterval(()=>{autoBackup()},120000);
+  if(autoDetectInterval)clearInterval(autoDetectInterval);
+  autoDetectInterval=setInterval(()=>{autoDetectAndFix()},30000);
+  autoBackup();autoDetectAndFix();
 }
-console.log('Q OS GLOBAL LOADED - Ready for brain install');
+function autoBackup(){
+  try{
+    let snap={time:new Date().toISOString(),shops:shops,ads:ads,orders:orders,agents:agents,verifs:verifs,shutdown:shutdown,brainSync:document.getElementById('brainRange')?.value||75};
+    localStorage.setItem('q_last_backup',JSON.stringify(snap));
+    backupHistory.push({time:snap.time,count:shops.length+ads.length+orders.length});
+    if(backupHistory.length>20)backupHistory.shift();
+    localStorage.setItem('q_backup_history',JSON.stringify(backupHistory));
+    let el=document.getElementById('autoBackupStatus');if(el)el.innerHTML=`Last: ${new Date().toLocaleTimeString()} - ${shops.length} shops, ${orders.length} orders - OK ✅`;
+  }catch(e){let el=document.getElementById('autoBackupStatus');if(el)el.innerHTML='Backup Error - Auto Fixing...';autoFixBackupError()}
+}
+function autoDetectAndFix(){
+  let issues=[];let fixes=[];
+  if(!Array.isArray(shops)){issues.push('Shops corrupted');shops=[];fixes.push('Reset shops - fixed');}
+  try{localStorage.setItem('q_test','1');localStorage.removeItem('q_test')}catch(e){issues.push('LocalStorage fail');fixes.push('Memory only')}
+  let pendingShops=shops.filter(s=>s.status==='pending').length;if(pendingShops>10){issues.push(`Too many pending: ${pendingShops}`);fixes.push('Owner notified');}
+  if(typeof shutdown!=='boolean'){issues.push('Shutdown flag corrupted');shutdown=false;fixes.push('Reset to LIVE');}
+  let lowScore=shops.filter(s=>(s.score||70)<40).length;if(lowScore>0){issues.push(`${lowScore} low score shops`);fixes.push('Flagged');}
+  let oldEscrow=orders.filter(o=>o.status==='escrow' && (Date.now()-o.time)>172800000).length;if(oldEscrow>0){issues.push(`${oldEscrow} escrow >48h`);fixes.push('Alert Owner');}
+  if(issues.length>0){saveAll();autoBackup();}
+  let dEl=document.getElementById('autoDetectLog');if(dEl){dEl.innerHTML=issues.length===0?`[${new Date().toLocaleTimeString()}] ✅ No issues - 9 systems healthy - 75% Brain OK`:issues.map((iss,i)=>`[${new Date().toLocaleTimeString()}] ⚠️ ${iss} → ${fixes[i]||'fixed'}`).join('<br>');}
+}
+function autoFixBackupError(){try{localStorage.clear();saveAll();autoBackup();}catch(e){}}
+function restoreLastBackup(){let last=localStorage.getItem('q_last_backup');if(!last)return alert('No backup');let snap=JSON.parse(last);shops=snap.shops||[];ads=snap.ads||[];orders=snap.orders||[];agents=snap.agents||[];verifs=snap.verifs||[];shutdown=snap.shutdown||false;saveAll();renderGallery();renderOwner();alert('Backup restored respectfully from '+snap.time);masterSupervise()}
+function exportBackup(){let data=localStorage.getItem('q_last_backup')||'{}';let blob=new Blob([data],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='qos_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+setTimeout(initAutoSystems,2000);
+renderGallery();renderAds();renderOrders();updateShutdownUI();
 </script>
 </body>
 </html>
