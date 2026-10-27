@@ -1,160 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Q OS GLOBAL - 36 States Marketplace</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#f5f5f5;color:#111}
-header{background:#000;color:#fff;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
-.search{margin:10px auto;padding:12px;width:95%;max-width:500px;border-radius:25px;border:1px solid #ccc;display:block}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:10px}
-.card{background:#fff;border-radius:12px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,.1)}
-.card button{margin-top:8px;padding:8px 15px;border:none;border-radius:20px;background:#000;color:#fff}
-.btns{display:flex;justify-content:space-around;padding:15px;position:fixed;bottom:0;width:100%;background:#fff;border-top:1px solid #ddd;z-index:15}
-.btns button{padding:10px 12px;border:none;border-radius:20px;background:#000;color:#fff;font-size:11px}
-#welcome{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:9999;color:#fff}
-#welcome .box{background:#111;padding:25px;border-radius:15px;text-align:center;max-width:320px}
-.portal{display:none;position:fixed;inset:0;background:#fff;z-index:100;overflow:auto;padding:20px}
-.portal.active{display:block}
-input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
-.q-ai{position:fixed;bottom:70px;right:15px;background:#000;color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;z-index:20}
-#secretDot{position:absolute;left:5px;bottom:5px;width:12px;height:12px;background:#eee;border-radius:50%;opacity:.4}
-footer{padding:60px 10px 80px;text-align:center;font-size:12px;color:#777;position:relative}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q OS GLOBAL | 36 States - One Market</title>
 </head>
 <body>
-<header>
-<h1>Q OS GLOBAL</h1>
-<p>36 States • One Market • Powered by Q AI</p>
-</header>
-<input class="search" id="search" placeholder="Search product, shop, state..." onkeyup="filterShops()">
-<div class="grid" id="shopGrid"></div>
-<div class="btns">
-<button onclick="openPortal('home')">Home</button>
-<button onclick="openPortal('agent')">Agent</button>
-<button onclick="openPortal('addShop')">Add Shop</button>
-<button onclick="openPortal('sub')">Pay</button>
-</div>
-<div class="q-ai" onclick="chatQ()">Q</div>
+  <header>
+    <h1>Q OS GLOBAL</h1>
+    <p>36 States • One Market • Powered by Q AI</p>
+  </header>
 
-<div id="welcome"><div class="box">
-<h2>Welcome to Q OS GLOBAL</h2>
-<p style="margin:12px 0;font-size:14px">I am <b>ABDULMALIK MUAZU ABBA</b>, Founder of Qudra Platform. We dey connect 36 states shops for one place. Buy & sell easy with Q AI.</p>
-<p style="font-size:11px;opacity:.7">Loading...</p>
-</div></div>
+  <section id="search-hub">
+    <input type="search" placeholder="Search product, shop, state...">
+    <div class="filters">
+      <select><option>All 36 States</option><option>Rivers</option><option>Lagos</option></select>
+      <select><option>All Products</option></select>
+    </div>
+  </section>
 
-<div id="ownerPortal" class="portal">
-<h2>Owner Portal - ABDULMALIK</h2>
-<input type="password" id="ownerPass" placeholder="Enter owner password">
-<button onclick="checkOwner()" style="padding:10px;background:#000;color:#fff;border:none;border-radius:8px;width:100%">Unlock</button>
-<div id="ownerContent" style="display:none;margin-top:15px">
-<p><b>Master Switch:</b> <select><option>ON - Site Live</option><option>OFF - Maintenance</option></select></p>
-<p><b>Subscription Price:</b> <input value="10000"></p>
-<p><b>Payment Account (Hidden):</b> <input value="7043718956 OPAY - ABDULMALIK MUAZU ABBA" readonly></p>
-<p><b>Location Control:</b></p><div id="states"></div>
-<p><b>Pending Shops:</b></p><div id="pending"></div>
-<button onclick="closePortal('ownerPortal')" style="margin-top:15px;padding:10px;width:100%">Close</button>
-</div>
-</div>
+  <main>
+    <section>
+      <h2>Featured Shops</h2>
+      <div class="shop-grid">
+        <article class="shop-card">
+          <h3>Shop Name</h3>
+          <p>Port Harcourt, Rivers</p>
+          <button>Enter Shop</button>
+        </article>
+      </div>
+    </section>
+  </main>
 
-<div id="agentPortal" class="portal">
-<h2>Agent Portal</h2>
-<p style="font-size:12px">Only You + Agents fit edit shop details</p>
-<input id="agentState" placeholder="Your State e.g Kaduna" onkeyup="renderAgent()">
-<div id="agentShops"></div>
-<button onclick="closePortal('agentPortal')" style="margin-top:15px;padding:10px;width:100%">Close</button>
-</div>
+  <section id="agent-zone" hidden><h2>Agent Control</h2></section>
+  <section id="add-shop-form" hidden><h2>Register New Shop</h2></section>
+  <section id="pay-hub" hidden><h2>Q Pay</h2></section>
 
-<div id="addShopPortal" class="portal">
-<h2>Add Shop (Agent/Owner Only)</h2>
-<input id="sName" placeholder="Shop Name">
-<input id="sState" placeholder="State">
-<input id="sAddr" placeholder="Address">
-<input id="sPhone" placeholder="Shop Phone">
-<button onclick="addShop()" style="padding:10px;background:#000;color:#fff;border:none;width:100%;border-radius:8px">Submit for Approval (Pending)</button>
-<button onclick="closePortal('addShopPortal')" style="margin-top:10px;padding:10px;width:100%">Close</button>
-</div>
-
-<div id="subPortal" class="portal">
-<h2>Pay Subscription</h2>
-<p>Subscription: N10,000 / month per shop</p>
-<div style="background:#f0f0f0;padding:15px;border-radius:10px;margin:10px 0">
-<p><b>Pay To:</b></p>
-<p style="font-size:22px;color:green;font-weight:bold">7043718956</p>
-<p>OPAY - ABDULMALIK MUAZU ABBA</p>
-<p style="font-size:11px;margin-top:8px">This account show only here (hidden rule active).</p>
-</div>
-<button onclick="closePortal('subPortal')" style="padding:10px;width:100%">Close</button>
-</div>
-
-<footer>
-Copyright © 2026 Q OS GLOBAL - Qudra Platform<br>Founder: ABDULMALIK MUAZU ABBA
-<div id="secretDot" onclick="secretClick()"></div>
-</footer>
-
-<script>
-setTimeout(()=>{document.getElementById('welcome').style.display='none'},5000);
-let shops = JSON.parse(localStorage.getItem('qos_shops')||'[]');
-if(shops.length==0){
-shops=[{name:"Abba Electronics",state:"Kaduna",addr:"Kaduna Central",phone:"080",status:"approved"},{name:"Lagos Fashion",state:"Lagos",addr:"Ikeja",phone:"080",status:"approved"}];
-localStorage.setItem('qos_shops',JSON.stringify(shops));
-}
-function renderShops(list=shops){
-const grid=document.getElementById('shopGrid');grid.innerHTML='';
-list.filter(s=>s.status=='approved').forEach(s=>{
-grid.innerHTML+=`<div class="card"><h4>${s.name}</h4><p>${s.state}</p><p style="font-size:11px">${s.addr}</p><button>View</button></div>`;
-});
-}
-renderShops();
-function filterShops(){
-let q=document.getElementById('search').value.toLowerCase();
-renderShops(shops.filter(s=>s.name.toLowerCase().includes(q)||s.state.toLowerCase().includes(q)));
-}
-function openPortal(p){
-if(p=='home'){window.scrollTo(0,0)}
-if(p=='agent'){document.getElementById('agentPortal').classList.add('active');renderAgent()}
-if(p=='addShop'){document.getElementById('addShopPortal').classList.add('active')}
-if(p=='sub'){document.getElementById('subPortal').classList.add('active')}
-}
-function closePortal(id){document.getElementById(id).classList.remove('active')}
-function addShop(){
-let s={name:document.getElementById('sName').value,state:document.getElementById('sState').value,addr:document.getElementById('sAddr').value,phone:document.getElementById('sPhone').value,status:"pending"};
-shops.push(s);localStorage.setItem('qos_shops',JSON.stringify(shops));
-alert('Shop added as PENDING');closePortal('addShopPortal');renderShops();
-}
-let clicks=0,last=0;
-function secretClick(){
-let now=Date.now();if(now-last>2000)clicks=0;clicks++;last=now;
-if(clicks>=5){document.getElementById('ownerPortal').classList.add('active');clicks=0}
-}
-function checkOwner(){
-if(document.getElementById('ownerPass').value=='Abba7043718956'){
-document.getElementById('ownerContent').style.display='block';renderOwner();
-}else alert('Wrong password');
-}
-function renderOwner(){
-let statesDiv=document.getElementById('states');statesDiv.innerHTML='';
-["Kaduna","Lagos","Abuja","Kano","Rivers"].forEach(st=>{
-statesDiv.innerHTML+=`<div>${st} <select><option>ON</option><option>OFF</option></select></div>`;
-});
-let pend=document.getElementById('pending');pend.innerHTML='';
-shops.filter(s=>s.status=='pending').forEach((s)=>{
-pend.innerHTML+=`<div>${s.name} - ${s.state} <button onclick="approve(${shops.indexOf(s)})">Approve</button></div>`;
-});
-}
-function approve(idx){shops[idx].status='approved';localStorage.setItem('qos_shops',JSON.stringify(shops));renderOwner();renderShops();}
-function renderAgent(){
-let div=document.getElementById('agentShops');div.innerHTML='';
-let state=document.getElementById('agentState').value||'';
-let list=state==''?shops:shops.filter(s=>s.state.toLowerCase().includes(state.toLowerCase()));
-list.forEach((s)=>{
-div.innerHTML+=`<div style="background:#f9f9f9;padding:10px;margin:5px 0;border-radius:8px">${s.name} (${s.status}) <button onclick="editShop(${shops.indexOf(s)})">Edit</button></div>`;
-});
-}
-function editShop(idx){let n=prompt('New name',shops[idx].name);if(n){shops[idx].name=n;localStorage.setItem('qos_shops',JSON.stringify(shops));renderAgent();renderShops();}}
-function chatQ(){alert('Q AI: Only you + Agents fit edit shop details');}
-</script>
+  <button id="q-fab">Q</button>
+  <nav>
+    <button>Home</button>
+    <button>Agent</button>
+    <button>Add Shop</button>
+    <button>Pay</button>
+  </nav>
 </body>
 </html>
