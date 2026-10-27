@@ -1,47 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Q OS GLOBAL | 36 States - One Market</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q OS GLOBAL - The Future is Here</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+.glow{position:fixed;top:-20%;left:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(110,80,255,0.4),transparent 70%);filter:blur(40px);z-index:-1}
+.glow2{position:fixed;bottom:-20%;right:-10%;width:700px;height:700px;background:radial-gradient(circle,rgba(0,255,200,0.25),transparent 70%);filter:blur(50px);z-index:-1}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;border-bottom:1px solid rgba(255,255,255,0.08)}
+.logo{font-weight:700;letter-spacing:2px;font-size:18px}
+.logo span{color:#6e50ff}
+.nav-btn{border:1px solid rgba(255,255,255,0.2);padding:8px 18px;border-radius:20px;font-size:12px;letter-spacing:1px}
+.hero{padding:90px 8% 60px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:40px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(110,80,255,0.4);background:rgba(110,80,255,0.1);padding:6px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;margin-bottom:24px}
+.badge-dot{width:8px;height:8px;background:#00ffc8;border-radius:50%;box-shadow:0 0 10px #00ffc8}
+.hero h1{font-size:clamp(36px,6vw,72px);line-height:0.95;font-weight:700;letter-spacing:-2px;margin-bottom:20px}
+.hero h1 i{font-style:normal;background:linear-gradient(90deg,#6e50ff,#00ffc8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:rgba(255,255,255,0.6);max-width:480px;line-height:1.6;margin-bottom:32px;font-size:15px}
+.btns{display:flex;gap:14px}
+.btn-primary{background:#fff;color:#000;padding:14px 26px;border-radius:30px;font-weight:700;font-size:13px;letter-spacing:1px;border:none;cursor:pointer}
+.btn-sec{border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;padding:14px 26px;border-radius:30px;font-size:13px;letter-spacing:1px;cursor:pointer}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:24px;padding:24px}
+.card-head{display:flex;justify-content:space-between;margin-bottom:30px;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace}
+.brain{width:100%;height:220px;display:flex;align-items:center;justify-content:center;position:relative}
+.brain-core{width:90px;height:90px;background:radial-gradient(circle,#6e50ff,#0a0a0f);border-radius:50%;box-shadow:0 0 40px rgba(110,80,255,0.8),inset 0 0 20px rgba(255,255,255,0.3);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.stat{background:rgba(0,0,0,0.3);border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.05)}
+.stat b{font-size:20px;display:block;font-family:'JetBrains Mono',monospace}
+.stat span{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.4)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 8% 80px}
+.feat{border-top:1px solid rgba(255,255,255,0.1);padding-top:18px}
+.feat h4{font-size:12px;letter-spacing:1.5px;margin-bottom:8px}
+.feat p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.features{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Q OS GLOBAL</h1>
-    <p>36 States • One Market • Powered by Q AI</p>
-  </header>
-
-  <section id="search-hub">
-    <input type="search" placeholder="Search product, shop, state...">
-    <div class="filters">
-      <select><option>All 36 States</option><option>Rivers</option><option>Lagos</option></select>
-      <select><option>All Products</option></select>
-    </div>
-  </section>
-
-  <main>
-    <section>
-      <h2>Featured Shops</h2>
-      <div class="shop-grid">
-        <article class="shop-card">
-          <h3>Shop Name</h3>
-          <p>Port Harcourt, Rivers</p>
-          <button>Enter Shop</button>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <section id="agent-zone" hidden><h2>Agent Control</h2></section>
-  <section id="add-shop-form" hidden><h2>Register New Shop</h2></section>
-  <section id="pay-hub" hidden><h2>Q Pay</h2></section>
-
-  <button id="q-fab">Q</button>
-  <nav>
-    <button>Home</button>
-    <button>Agent</button>
-    <button>Add Shop</button>
-    <button>Pay</button>
-  </nav>
+<div class="glow"></div><div class="glow2"></div>
+<nav><div class="logo">Q OS <span>GLOBAL</span></div><div class="nav-btn">SYSTEM ONLINE</div></nav>
+<section class="hero">
+<div>
+<div class="badge"><div class="badge-dot"></div> QUDRA BOT v2.0 LIVE</div>
+<h1>THE FUTURE <br>IS <i>AUTONOMOUS</i></h1>
+<p>Q OS GLOBAL is the first autonomous operating system. We build bots wey dey reason, work, and earn — no be just chat.</p>
+<div class="btns">
+<button class="btn-primary" onclick="launch()">LAUNCH SYSTEM →</button>
+<button class="btn-sec">VIEW DOCS</button>
+</div>
+</div>
+<div class="card">
+<div class="card-head"><span>NEURAL CORE</span><span>● LIVE</span></div>
+<div class="brain"><div class="brain-core"></div></div>
+<div class="stats">
+<div class="stat"><b>99.9%</b><span>UPTIME</span></div>
+<div class="stat"><b>2.4s</b><span>RESPONSE</span></div>
+<div class="stat"><b>QUDRA</b><span>ENGINE</span></div>
+<div class="stat"><b>∞</b><span>SCALE</span></div>
+</div>
+</div>
+</section>
+<section class="features">
+<div class="feat"><h4>01 / AUTONOMOUS</h4><p>Bot wey dey work for you 24/7 without supervision.</p></div>
+<div class="feat"><h4>02 / INTELLIGENT</h4><p>Brain installed — e dey learn, adapt and deliver.</p></div>
+<div class="feat"><h4>03 / GLOBAL</h4><p>Built in Abuja, deployed worldwide via Render.</p></div>
+</section>
+<script>
+function launch(){
+alert('Q OS GLOBAL - System Launching...\\nEngineer, brain installation next!');
+}
+console.log('Q OS GLOBAL LOADED - Ready for brain install');
+</script>
 </body>
 </html>
